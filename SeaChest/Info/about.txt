@@ -1,0 +1,5 @@
+SeaChest Info - Historical generic activity logs (like total bytes written and
+power on hours) and performance logs (like temperature) are available for
+analytical review.  Identification and inquiry data stored on the drive is also
+provided.  A view of SMART and device statistics is available when supported by
+the drive.
