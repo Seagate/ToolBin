@@ -1,0 +1,5 @@
+SeaChest Erase - The focus is on data erasure.  There are many different
+choices for erasing data from simple boot track erase to full cryptographic
+erasure (when supported).  Be sure to back up important data before using this
+tool.  Seagate is not responsible for lost user data.  This tool only works on
+Seagate drives.
