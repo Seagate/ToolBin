@@ -1,0 +1,5 @@
+SeaChest GenericTests - Read Tests are the original disk drive diagnostic which
+is to just read every sector on the drive, sequentially.  This tool offers
+several common read tests which can be defined by either time or range.  In
+addition, the Long Generic test has the ability to repair problem sectors,
+possibly eliminating an unnecessary drive return.
