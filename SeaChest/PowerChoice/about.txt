@@ -1,0 +1,2 @@
+SeaChest PowerChoice - Seagate disk drives offer a multitude of options to
+manage power.  This tool manipulates the various power modes.
