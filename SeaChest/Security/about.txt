@@ -1,0 +1,4 @@
+SeaChest Security - Various settings are available on modern Seagate disk
+drives which may be locked and unlocked.  These settings may interact with the
+operating systems and systems BIOS.  Options also include cryptographic erase
+for Self-Encrypting Drives (SED).
