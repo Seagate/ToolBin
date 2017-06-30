@@ -1,0 +1,5 @@
+SeaChest FormatUnit - Storage products which utilize the SAS, SCSI or Fibre
+Channel interfaces are able to perform a full low-level media format in the
+field.  The SCSI Format Unit command offers many specialty options to
+accommodate a variety of conditions and to fine tune the procedure.  This
+complex command deserves its own "break out" utility.
