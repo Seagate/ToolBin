@@ -1,0 +1,3 @@
+SeaChest Configure - Tools to control various settings on the drives are
+brought together into this one tool.  Typical commands, for example, include
+Write Cache and Read Lookahead Cache enable or disable.
