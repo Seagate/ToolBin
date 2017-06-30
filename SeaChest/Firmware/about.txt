@@ -1,0 +1,5 @@
+SeaChest Firmware - Seagate products are run by firmware.  Having the latest
+firmware can improve performance and or reliability of your product.  Seagate
+recommends applying new firmware to enhance the performance and or reliability
+of your drive.  Most products may see one or two firmware updates within the
+early life of the product.
