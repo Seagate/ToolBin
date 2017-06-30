@@ -1,0 +1,5 @@
+SeaChest SMART - This tool provides a closer look at the collected SMART
+attributes data.  SMART stands for Self-Monitoring, Analysis and Reporting
+Technology.  Short Drive Self Test is included as one of the standard SMART
+commands. In addition, the DST & Clean test has the ability to repair problem
+sectors, possibly eliminating an unnecessary drive return.
