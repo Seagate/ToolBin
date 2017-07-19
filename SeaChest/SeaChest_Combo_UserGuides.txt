@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 18-Jun-2017
+Date last edit: 17-Jul-2017
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -24,12 +24,12 @@ Sample Output
 END USER LICENSE AGREEMENT
 
 
-SeaChest_Basics.Lin.txt                                   Revision: 18-Jun-2017
+SeaChest_Basics.Lin.txt                                   Revision: 14-Jul-2017
 ===============================================================================
  SeaChest_Basics for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Basics Version: 2.6.0
- Build Date: Jun 14 2017
+ SeaChest_Basics Version: 2.7.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest Basics diagnostic software.
 
@@ -385,7 +385,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -393,6 +395,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --hours [hours]
                 Use this option to specify a time in hours for a timed
@@ -635,13 +639,18 @@ v2.6.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      drives like it is supposed to causing duplicate drives to
                      show up.  --idd now supports SAS.  --idd [short | long |
                      repair]  replaces '70 | 71 | 72' syntax. --abortIDD added.
+v2.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_Configure.Lin.txt                                Revision: 18-Jun-2017
+SeaChest_Configure.Lin.txt                                Revision: 14-Jul-2017
 ===============================================================================
  SeaChest_Configure for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Configure Version: 1.8.0
- Build Date: Jun 14 2017
+ SeaChest_Configure Version: 1.10.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Configure diagnostic software.
 
@@ -776,6 +785,27 @@ Utility arguments
                 the read look ahead feature.  This change is not preserved over
                 power cycles.
 
+        --sctReadTimer [info | value] (SATA Only) (Seagate Only)
+                Use this option to set the read command timer value for
+                synchronous commands and NCQ commands with in-order data
+                delivery enabled. Note: this timer starts at the time that the
+                drive processes the command, not the time it is received. This
+                timer value is volatile and is cleared at each power cycle. Use
+                the "info" argument to get the current status of the read
+                timer. A value of 0 means that all possible error recovery will
+                be performed before returning status. Other values should
+                include a unit to know the time to use. If no unit is provided,
+                it is assumed to be the value * 100 ms. The maximum time that
+                can be specified is 1 hour, 49 minutes, 13 seconds. Note: On
+                some SAT HBAs/bridges, status will not be able to be
+                                determined due to HBA/bridge limitations.
+
+                Ex1: --sctReadTimer 15s for a 15 second timer.
+                Ex2: --sctReadTimer 15000ms for a 15 second timer expressed in
+                     milliseconds
+                Ex2: --sctReadTimer 150 for a 15 second timer with no units
+                     specified
+
         --writeCache [info | enable | disable]
                 Use this option to enable or disable write cache support on a
                 drive.  Use the "info" argument to get the current status of
@@ -789,23 +819,47 @@ Utility arguments
                 the setting is non-volatile. Use this with the --volatile flag
                 to make the setting volatile. When using this option, the
                 --writeCache will always return success, but no write cache
-                changes will occur. Using the "default" argument returns the
-                drive to default settings and allowing the --writeCache option
-                to work again. Use the "info" argument to get the current
-                status of the write cache feature.
+                changes will occur. This follows ATA spec. Using the "default"
+                argument returns the drive to default settings and allowing the
+                --writeCache option to work again. Use the "info" argument to
+                get the current status of the write cache feature. Note: On
+                some SAT HBAs/bridges, status will not be able to be determined
+                due to HBA/bridge limitations.
 
         --sctWriteCacheReordering [info | enable | disable | default]
                 (SATA Only) (Seagate Only)
-                Use this option to enable or disable write cache support on a
-                drive using SMART command transport. When using this option,
-                the setting is non-volatile. Use this with the --volatile flag
-                to make the setting volatile. Use the "info" argument to get
-                the current status of the write cache feature.
+                Use this option to enable or disable write cache reordering
+                support on a drive using SMART command transport. Write cache
+                reordering allows the drive to reorder moving data out of cache
+                to media for better performance on synchronous commands.
+                Asynchronous commands are only affected when in-order data
+                delivery is enabled. When using this option, the setting is
+                non-volatile. Use this with the --volatile flag to make the
+                setting volatile. Use the "info" argument to get the current
+                status of the write cache reordering feature. Note: On some SAT
+                HBAs/bridges, status will not be able to be determined due to
+                HBA/bridge limitations.
 
-                Write Cache Reordering is enabled by default and allows the
-                drive to reorder moving data out of cache to media for better
-                performance on synchronous commands. Asynchronous commands are
-                only affected when in-order data delivery is enabled.
+        --sctWriteTimer [info | value] (SATA Only) (Seagate Only)
+                Use this option to set the write command timer value for
+                synchronous commands and NCQ commands with in-order data
+                delivery enabled. Note: this timer starts at the time that the
+                drive processes the command, not the time it is received. This
+                timer value is volatile and is cleared at each power cycle. Use
+                the "info" argument to get the current status of the write
+                timer. A value of 0 means that all possible error recovery will
+                be performed before returning status. Other values should
+                include a unit to know the time to use. If no unit is provided,
+                it is assumed to be the value * 100 ms. The maximum time that
+                can be specified is 1 hour, 49 minutes, 13 seconds. Note: On
+                some SAT HBAs/bridges, status will not be able to be determined
+                due to HBA/bridge limitations.
+
+                Ex1: --sctWriteTimer 15s for a 15 second timer.
+                Ex2: --sctWriteTimer 15000ms for a 15 second timer expressed in
+                     milliseconds
+                Ex2: --sctWriteTimer 150 for a 15 second timer with no units
+                     specified
 
         --lowCurrentSpinup [ enable | disable ]  (SATA Only) (Seagate Only)
                 Use this option to enable or disable the low current spinup
@@ -887,7 +941,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -895,6 +951,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --forceATA
                 Using this option will force the current drive to be treated as
@@ -1010,13 +1068,19 @@ v1.8.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      values from the SCT status log or device statistics log.
                      Adds the child drive matching options --childModelMatch,
                      --childOnlyFW, and --childNewFW.
+v1.9.0  06-Jul-2017  Added --sctReadTimer, --sctWriteTimer.
+v1.10.0 14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_Erase.Lin.txt                                    Revision: 18-Jun-2017
+SeaChest_Erase.Lin.txt                                    Revision: 14-Jul-2017
 ===============================================================================
 SeaChest_Erase for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Erase Version: 1.6.0
- Build Date: Jun 14 2017
+ SeaChest_Erase Version: 1.7.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Erase diagnostic software.
 
@@ -1218,7 +1282,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -1226,6 +1292,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --hours [hours]
                 Use this option to specify a time in hours for a timed
@@ -1770,13 +1838,18 @@ v1.6.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      --childOnlyFW, and --childNewFW.  Bug fix with
                      --showEraseSupport showing non-ascii characters.  Added
                      --showPhysicalElementStatus and --removePhysicalElement.
+v1.10.0 14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_Firmware.Lin.txt                                 Revision: 18-Jun-2017
+SeaChest_Firmware.Lin.txt                                 Revision: 14-Jul-2017
 ===============================================================================
  SeaChest_Firmware for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Firmware Version: 2.4.0
- Build Date: Jun 14 2017
+ SeaChest_Firmware Version: 2.5.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Firmware diagnostic software.
 
@@ -1991,7 +2064,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -1999,12 +2074,15 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --newFW [firmware revision]
                 Use this option to skip drives matching the provided firmware
                 revision. This option will only do an exact match. This option
                 should be used to skip performing an update if a drive already
-                has this firmware revision loaded.
+                has this firmware revision loaded. The option --childNewFW may
+                be used to match drives in USB enclosures.
 
         --forceATA
                 Using this option will force the current drive to be treated as
@@ -2182,13 +2260,18 @@ v2.4.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      drives like it is supposed to causing duplicate drives to
                      show up.  Adds the child drive matching options
                      --childModelMatch, --childOnlyFW, and --childNewFW.
+v2.5.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_FormatUnit.Lin.txt                               Revision: 18-Jun-2017
+SeaChest_FormatUnit.Lin.txt                               Revision: 14-Jul-2017
 ===============================================================================
 SeaChest_FormatUnit for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_FormatUnit Version: 0.0.2
- Build Date: Jun 14 2017
+ SeaChest_FormatUnit Version: 1.0.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_FormatUnit diagnostic software.
 
@@ -2393,7 +2476,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -2401,6 +2486,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --forceATA
                 Using this option will force the current drive to be treated as
@@ -2625,13 +2712,18 @@ v0.0.2  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      values from the SCT status log or device statistics log.
                      Adds the child drive matching options --childModelMatch,
                      --childOnlyFW, and --childNewFW.
+v1.0.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_GenericTests.Lin.txt                             Revision: 18-Jun-2017
+SeaChest_GenericTests.Lin.txt                             Revision: 14-Jul-2017
 ===============================================================================
  SeaChest GenericTests for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_GenericTests Version: 1.6.0
- Build Date: Jun 14 2017
+ SeaChest_GenericTests Version: 1.7.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_GenericTests diagnostic software.
 
@@ -2909,7 +3001,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -2917,6 +3011,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --hours [hours]
                 Use this option to specify a time in hours for a timed
@@ -3089,13 +3185,25 @@ v1.5.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
                      for SAS features. --userGenericStart now able to use timed
                      options.
 v1.5.1  15-May-2017  1_14_3 libraries.  Fixed issue with --userGenericRange.
+v1.6.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+                     should exit with code = 1; added detection of parallel ATA
+                     and SCSI speeds; temperature data on ATA now uses the
+                     values from the SCT status log or device statistics log.
+                     Adds the child drive matching options --childModelMatch,
+                     --childOnlyFW, and --childNewFW.  Bug fix user generic
+                     test start LBA gets reset when a defect is encountered.
+v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_Info.Lin.txt                                     Revision: 18-Jun-2017
+SeaChest_Info.Lin.txt                                     Revision: 14-Jul-2017
 ===============================================================================
  SeaChest_Info for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Info Version: 1.2.0
- Build Date: Jun 14 2017
+ SeaChest_Info Version: 1.3.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Info diagnostic software.
 
@@ -3283,7 +3391,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -3291,6 +3401,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --forceATA
                 Using this option will force the current drive to be treated as
@@ -3358,13 +3470,24 @@ v1.1.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
                      passthrough IOCTLs.
 v1.1.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
                      for SAS features.
+v1.2.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+                     should exit with code = 1; added detection of parallel ATA
+                     and SCSI speeds; temperature data on ATA now uses the
+                     values from the SCT status log or device statistics log.
+                     Adds the child drive matching options --childModelMatch,
+                     --childOnlyFW, and --childNewFW.
+v1.3.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_PowerChoice.Lin.txt                              Revision: 18-Jun-2017
+SeaChest_PowerChoice.Lin.txt                              Revision: 14-Jul-2017
 ===============================================================================
  SeaChest_PowerChoice for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_PowerChoice Version: 1.6.0
- Build Date: Jun 14 2017
+ SeaChest_PowerChoice Version: 1.7.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_PowerChoice diagnostic software.
 
@@ -3647,7 +3770,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -3655,6 +3780,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --forceATA
                 Using this option will force the current drive to be treated as
@@ -3790,13 +3917,24 @@ v1.5.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
                      passthrough IOCTLs. EPCfeature now supports SAS.
 v1.5.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
                      for SAS features.
+v1.6.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+                     should exit with code = 1; added detection of parallel ATA
+                     and SCSI speeds; temperature data on ATA now uses the
+                     values from the SCT status log or device statistics log.
+                     Adds the child drive matching options --childModelMatch,
+                     --childOnlyFW, and --childNewFW.
+v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_Security.Lin.txt                                 Revision: 18-Jun-2017
+SeaChest_Security.Lin.txt                                 Revision: 14-Jul-2017
 ===============================================================================
  SeaChest_Security for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Security Version: 1.5.0
- Build Date: Jun 14 2017
+ SeaChest_Security Version: 1.6.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Security diagnostic software.
 
@@ -4006,7 +4144,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -4014,6 +4154,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --forceATA
                 Using this option will force the current drive to be treated as
@@ -4213,13 +4355,25 @@ v1.4.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
                      passthrough IOCTLs.
 v1.4.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
                      for SAS features. --tcgInfo now reports Use State.
+v1.5.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+                     should exit with code = 1; added detection of parallel ATA
+                     and SCSI speeds; temperature data on ATA now uses the
+                     values from the SCT status log or device statistics log.
+                     Adds the child drive matching options --childModelMatch,
+                     --childOnlyFW, and --childNewFW.  Added "Data Access" to
+                     --tcgInfo.  Added --showLockedRegions.
+v1.6.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
-SeaChest_SMART.Lin.txt                                    Revision: 18-Jun-2017
+SeaChest_SMART.Lin.txt                                    Revision: 14-Jul-2017
 ===============================================================================
  SeaChest_SMART for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_SMART Version: 1.8.0
- Build Date: Jun 14 2017
+ SeaChest_SMART Version: 1.9.0
+ Build Date: Jul 14 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_SMART diagnostic software.
 
@@ -4553,7 +4707,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -4561,6 +4717,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --forceATA
                 Using this option will force the current drive to be treated as
@@ -4727,6 +4885,20 @@ v1.5.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
 v1.6.0  02-May-2017  1_14_3 libraries.  Adds --seagateClean.
 v1.6.1  15-May-2017  Refinements to --seagateClean.  Fixed an exit code for
                      unknown options
+v1.7.0  01-Jun-2017  Adds --seagateClean.
+v1.8.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+                     should exit with code = 1; added detection of parallel ATA
+                     and SCSI speeds; temperature data on ATA now uses the
+                     values from the SCT status log or device statistics log.
+                     Adds the child drive matching options --childModelMatch,
+                     --childOnlyFW, and --childNewFW.  --idd now supports SAS.
+                     --idd [short | long | repair]  replaces '70 | 71 | 72'
+                     syntax. --abortIDD added.   --setMRIE added.
+v1.9.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
 
 Sections below are common to all tools:
 
@@ -4737,6 +4909,18 @@ Utility arguments
                 /dev/sg? assignments. Shows model, serial and firmware
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
+
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
 
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
@@ -4837,7 +5021,9 @@ Utility Options
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
                 model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
 
                 Note: See the section below 'Tool Usage Hints' for information
                 about defining multiple device handles.
@@ -4845,6 +5031,8 @@ Utility Options
         --onlyFW [firmware revision]
                 Use this option to run on all drives matching the provided
                 firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
 
         --hours [hours]
                 Use this option to specify a time in hours for a timed
@@ -4882,6 +5070,28 @@ Utility Options
                 Using this option will force the current drive to be treated as
                 a SCSI drive. Only SCSI commands will be used to talk to the
                 drive.
+
+        --csmiIgnorePort  (Windows only)
+                Use this option to force setting the "ignore Port" flag for the
+                port identifier in a CSMI passthrough command. This option can
+                be combined with --csmiUsePort which will force the passthrough
+                to rely on only the SAS address. This flag is intended to help
+                troubleshoot or improve CSMI compatibility on systems that are
+                otherwise not functional.
+
+        --csmiUsePort  (Windows only)
+                Use this option to force setting the "Use Port" flag for the
+                PHY identifier in a CSMI passthrough command. This option can
+                be combined with --csmiIgnorePort which will force the
+                passthrough to rely on only the SAS address. This flag is
+                intended to help troubleshoot or improve CSMI compatibility on
+                systems that are otherwise not functional.
+
+        --csmiVerbose  (Windows only)
+                Use this option to show some verbose output when running the
+                tool on a CSMI handle. The debugging information shown will be
+                specific to the CSMI passthrough mechanism and may be useful
+                when troubleshooting system/driver compatibility issues.
 
 Return codes
 ============
