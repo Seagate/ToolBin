@@ -1,11 +1,11 @@
-ReadMeFirst.SeaChest.txt                                  Revision: 20-Jun-2017
+ReadMeFirst.SeaChest.txt                                  Revision: 16-Jul-2017
 ===============================================================================
  Seagate Utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
 ===============================================================================
 Please READ ME FIRST
 
-Thank you for downloading SeaChest Utilities, build 14-June-2017
+Thank you for downloading SeaChest Utilities, build 14-July-2017
 
 This is a limited Engineering Preview Release, just prior to being made
 available to the general public.
