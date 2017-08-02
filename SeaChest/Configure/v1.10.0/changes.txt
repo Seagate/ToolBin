@@ -1,7 +1,7 @@
 ===============
 Version History
 ===============
-v1.0.0  02-May-2016  1_9_1 libraries.  SeaChest_Configure Linux, initial beta
+v1.0.0  02-May-2016  1_9_1 libraries.  SeaChest_Configure Windows, initial beta
                      test release.  Branched from SeaChest_Basics v2.0.0.
                      Added --lowCurrentSpinup
 v1.1.1  19-May-2016  1_9_2 libraries fixed scan information from ATAPI devices.
@@ -20,7 +20,7 @@ v1.3.1  14-Jul-2016  1_10_1 libraries adds SMART and power management
                      size fixes, SAS device statistics, Win32 IOCTL
                      pass-through fix on Win8 and higher. Added support for
                      maxLBA keyword.
-v1.4.0  01-Sep-2016  1_11_1 libraries add updates to various printed message,
+v1.4.0  01-Sep-2016  1_11_1 libraries updates to various printed message,
                      minor bug fixes. Fixed --SATInfo command.
 v1.4.0  21-Sep-2016  1_11_2 libraries updates adds --forceATADMA, --forceATAPIO
                      and --forceATAUDMA  (SATA Only).
@@ -37,23 +37,19 @@ v1.5.1  13-Dec-2016  1_11_10 libraries fixes a problem when using maxLBA without
                      setting, and Sanitize erase patterns.
 v1.7.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
                      22.5Gb/s physical bus speeds, support for double buffered
-                     passthrough IOCTLs. Add --sasPhy, --sscFeature. New -F,
-                     --scanFlags [options: ignoreCSMI allowDuplicates] for
-                     Windows tools. Add CSMI support to all Windows version
-                     tools.
+                     passthrough IOCTLs. Add --sasPhy, --sscFeature.
 v1.7.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
                      for SAS features.
 v1.8.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      should exit with code = 1; added detection of parallel ATA
                      and SCSI speeds; temperature data on ATA now uses the
                      values from the SCT status log or device statistics log.
-                     Bug fix where the "-d all" was not filtering out csmi
-                     drives like it is supposed to causing duplicate drives to
-                     show up.  Adds the child drive matching options
-                     --childModelMatch, --childOnlyFW, and --childNewFW.
+                     Adds the child drive matching options --childModelMatch,
+                     --childOnlyFW, and --childNewFW.
 v1.9.0  06-Jul-2017  Added --sctReadTimer, --sctWriteTimer.
 v1.10.0 14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Sense Data Reporting feature enabled, changes to how we
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.10.0 27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
