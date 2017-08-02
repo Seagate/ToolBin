@@ -1,9 +1,9 @@
-SeaChest_GenericTests.Win.txt                             Revision: 14-Jul-2017
+SeaChest_GenericTests.Win.txt                             Revision: 26-Jul-2017
 ===============================================================================
  SeaChest GenericTests for Windows - Seagate drive utilities
  Copyright (c) 2015 Seagate Technology LLC, All Rights Reserved
  SeaChest_GenericTests Version: 1.7.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_GenericTests diagnostic software.
 
@@ -388,7 +388,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-test-will-erase ... etc
+        --confirm I-understand-this-command-will-erase ... etc
 
         --repairOnFly           (Seagate Only)
                 Use this option to repair any bad sectors found during a long
@@ -918,6 +918,7 @@ v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
 =======================================
 About SeaChest Command Line Diagnostics
