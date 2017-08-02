@@ -55,3 +55,4 @@ v1.6.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.6.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
