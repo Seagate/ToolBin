@@ -1,11 +1,11 @@
-ReadMeFirst.SeaChest.txt                                  Revision: 16-Jul-2017
+ReadMeFirst.SeaChest.txt                                  Revision: 30-Jul-2017
 ===============================================================================
  Seagate Utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
 ===============================================================================
 Please READ ME FIRST
 
-Thank you for downloading SeaChest Utilities, build 14-July-2017
+Thank you for downloading SeaChest Utilities, build 27-July-2017
 
 This is a limited Engineering Preview Release, just prior to being made
 available to the general public.
@@ -146,7 +146,7 @@ PORTION OF THIS PRODUCT (INCLUDING, BUT NOT LIMITED TO, THE SOFTWARE AND
 ASSOCIATED FILES (THE "SOFTWARE"), HARDWARE ("HARDWARE"), DISK (S), OR OTHER
 MEDIA) (COLLECTIVELY, THE "PRODUCT") YOU AND YOUR COMPANY ACCEPT ALL THE
 TERMS AND CONDITIONS OF THIS EULA.  IF YOU ACQUIRE THIS PRODUCT FOR YOUR
-COMPANY’S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
+COMPANYâ€™S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
 HAS THE AUTHORITY TO LEGALLY BIND YOUR COMPANY TO THIS EULA.  IF YOU DO NOT
 AGREE, DO NOT CLICK "I AGREE" AND DO NOT DOWNLOAD, SET-UP, INSTALL OR USE THE
 SOFTWARE.
@@ -274,14 +274,14 @@ TO, AND IN NO EVENT WILL SEAGATE'S TOTAL CUMULATIVE DAMAGES EXCEED, THE FEES
 PAID BY THE LICENSEE TO SEAGATE FOR THE PRODUCT.  ADDITIONALLY, IN NO EVENT
 SHALL SEAGATE'S LICENSORS OR SUPPLIERS BE LIABLE FOR ANY DAMAGES OF ANY KIND.
 
-8.  Privacy.  Seagate’s collection, use and disclosure of personally
+8.  Privacy.  Seagateâ€™s collection, use and disclosure of personally
 identifiable information in connection with your use of the Product is
-governed by Seagate’s Privacy Policy which is located at
+governed by Seagateâ€™s Privacy Policy which is located at
 http://www.seagate.com/legal-privacy/privacy-policy/As further described in
-Seagate’s Privacy Policy, certain Products may include a Product dashboard
+Seagateâ€™s Privacy Policy, certain Products may include a Product dashboard
 which allows users to manage Product settings, including but not limited to
 use of anonymous statistical usage data in connection with personally
-identifiable information. You agree to Seagate’s collection, use, and
+identifiable information. You agree to Seagateâ€™s collection, use, and
 disclosure of your data in accordance with the Product dashboard settings
 selected by you for the Product, or in the case of transfer as described in
 Section 11, you agree to the settings selected by the prior licensee unless
