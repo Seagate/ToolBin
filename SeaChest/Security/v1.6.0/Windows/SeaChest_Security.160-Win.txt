@@ -1,9 +1,9 @@
-SeaChest_Security.Win.txt                                 Revision: 14-Jul-2017
+SeaChest_Security.Win.txt                                 Revision: 26-Jul-2017
 ===============================================================================
  SeaChest_Security for Windows - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_Security Version: 1.6.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Security diagnostic software.
 
@@ -303,7 +303,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-test-will-erase ... etc
+        --confirm I-understand-this-command-will-erase ... etc
 
         --revert
                 This command is very fast at less than one (1) second. It
@@ -800,6 +800,7 @@ v1.6.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.6.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
 =======================================
 About SeaChest Command Line Diagnostics
