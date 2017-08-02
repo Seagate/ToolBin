@@ -1,21 +1,19 @@
 ===============
 Version History
 ===============
-
-v0.0.1  12-Aug-2014  SeaChest Windows, initial beta test release
-v0.0.2  13-Aug-2014  Stability improvement
-v0.0.3  05-Sep-2014  System scan improvements
-v0.0.5  08-Oct-2014  Added set max capacity (destroke) and restore native max
-                     for SATA. Fixed a bug where -i would crash on an Intel
-                     RAID device.  Added SMART Trip (MRIE) determination for
-                     SAS drives.  Added options to manage drive power
-                     settings.  Added a spin down command.  Added option to set
-                     the SATA drive default maximum interface speed.  Added SAS
-                     drive worldwide number to device information.  Added set
-                     max capacity (destroke) and restore native max for SAS.
-                     Added Sanitize Freezelock for SATA.  Added data erasure
-                     options controlled by range of LBA or by time. Added
-                     option to manage SAS LED activity on power pin 11.
+v0.0.6  12-Aug-2014  Added set max capacity (destroke) and restore native max
+                     for SATA.
+v0.0.7  13-Aug-2014  Fixed a bug where -i would crash on an Intel RAID device.
+                     Added SMART Trip (MRIE) determination for SAS drives.
+v0.0.8  30-Sep-2014  Added options to manage drive power settings.  Added a
+                     spin down command.  Added option to set the SATA drive
+                     default maximum interface speed.  Added SAS drive
+                     worldwide number to device information.  Added set max
+                     capacity (destroke) and restore native max for SAS.  Added
+                     Sanitize Freezelock for SATA.
+v0.0.9  06-Oct-2014  Added data erasure options controlled by range of LBA or
+                     by time. Added option to manage SAS LED activity on power
+                     pin 11.
 v1.0.0  20-Oct-2014  Activated support for externally attached USB storage
                      devices.  This support applies to USB-SATA bridges that
                      support 16 byte SAT Passthrough Command Descriptor Blocks
@@ -37,15 +35,16 @@ v1.0.2  20-Nov-2014  SATA Sanitize Overwrite fix and new message when the
                      device using UNMAP when startLBA is 0 and no endLBA is
                      given.
 v1.0.3  04-Dec-2014  Added -F, --scanFlags option which allows selection of
-                     specific interfaces.  Added --echoCommandLine.
+                     different device handles and specific interfaces.  Added
+                     --echoCommandLine
 v1.0.4  17-Apr-2015  Added --transitionPower for SATA and SAS.  Modified
-                     --checkPower to not disturb the current power mode of the
-                     drive.
+                     --checkPowerMode to not disturb the current power mode
+                     of the drive. (Linux only)
 v1.0.5  14-Jul-2015  Added --testUnitReady for SATA and SAS.  New name is
                      SeaChest Basics.  Improved device discovery. Added "info"
                      to Read Look Ahead and Write Cache feature management,
                      shows the current setting.
-v1.0.6  12-Aug-2015  Improved device discovery.  Corrections to verbose output.
+v1.0.6  12-Aug-2015  Improved device discovery. Corrections to verbose output.
                      Bug related to setting read look ahead and write cache
                      have been fixed for SAS.
 v1.1.0  12-Oct-2015  1_7_0 libraries.  Added enhanced version information.
@@ -102,10 +101,7 @@ v2.3.2  13-Dec-2016  1_11_10 libraries fixes a problem when using maxLBA without
                      setting, and Sanitize erase patterns.
 v2.4.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
                      22.5Gb/s physical bus speeds, support for double buffered
-                     passthrough IOCTLs. Add --hideLBACounter, --sasPhy. New
-                     -F, --scanFlags [options: ignoreCSMI allowDuplicates] for
-                     Windows tools. Add CSMI support to all Windows version
-                     tools.
+                     passthrough IOCTLs. Add --hideLBACounter, --sasPhy.
 v2.4.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
                      for SAS features.
 v2.5.0  01-Jun-2017  Adds the child drive matching options --childModelMatch,
@@ -114,12 +110,11 @@ v2.6.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      should exit with code = 1; added detection of parallel ATA
                      and SCSI speeds; temperature data on ATA now uses the
                      values from the SCT status log or device statistics log.
-                     Bug fix where the "-d all" was not filtering out csmi
-                     drives like it is supposed to causing duplicate drives to
-                     show up.  --idd now supports SAS.  --idd [short | long |
-                     repair]  replaces '70 | 71 | 72' syntax. --abortIDD added.
+                     --idd now supports SAS.  --idd [short | long | repair]
+                     replaces '70 | 71 | 72' syntax. --abortIDD added.
 v2.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Sense Data Reporting feature enabled, changes to how we
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v2.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
