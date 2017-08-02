@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 17-Jul-2017
+Date last edit: 26-Jul-2017
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -24,12 +24,12 @@ Sample Output
 END USER LICENSE AGREEMENT
 
 
-SeaChest_Basics.Lin.txt                                   Revision: 14-Jul-2017
+SeaChest_Basics.Lin.txt                                   Revision: 26-Jul-2017
 ===============================================================================
  SeaChest_Basics for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_Basics Version: 2.7.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest Basics diagnostic software.
 
@@ -441,7 +441,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-test-will-erase ... etc
+        --confirm I-understand-this-command-will-erase ... etc
 
         --overwrite [starting LBA | maxLBA]
                 Use this option to start an overwrite erase at the specified
@@ -644,13 +644,14 @@ v2.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v2.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_Configure.Lin.txt                                Revision: 14-Jul-2017
+SeaChest_Configure.Lin.txt                                Revision: 26-Jul-2017
 ===============================================================================
  SeaChest_Configure for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_Configure Version: 1.10.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Configure diagnostic software.
 
@@ -985,7 +986,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-test-will-erase ... etc
+        --confirm I-understand-this-command-will-erase ... etc
 
         --provision [newMaxLBA | maxLBA]        (Seagate Only)
                 Provision your drive to a new max LBA to any value less than
@@ -1074,13 +1075,14 @@ v1.10.0 14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.10.0 27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_Erase.Lin.txt                                    Revision: 14-Jul-2017
+SeaChest_Erase.Lin.txt                                    Revision: 26-Jul-2017
 ===============================================================================
 SeaChest_Erase for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_Erase Version: 1.7.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Erase diagnostic software.
 
@@ -1338,7 +1340,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-test-will-erase ... etc
+        --confirm I-understand-this-command-will-erase ... etc
 
         --performQuickestErase (Seagate Only)
                 This option checks the drive to determine which methods of data
@@ -1838,18 +1840,19 @@ v1.6.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      --childOnlyFW, and --childNewFW.  Bug fix with
                      --showEraseSupport showing non-ascii characters.  Added
                      --showPhysicalElementStatus and --removePhysicalElement.
-v1.10.0 14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Sense Data Reporting feature enabled, changes to how we
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_Firmware.Lin.txt                                 Revision: 14-Jul-2017
+SeaChest_Firmware.Lin.txt                                 Revision: 26-Jul-2017
 ===============================================================================
  SeaChest_Firmware for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_Firmware Version: 2.5.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Firmware diagnostic software.
 
@@ -2265,13 +2268,14 @@ v2.5.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v2.5.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_FormatUnit.Lin.txt                               Revision: 14-Jul-2017
+SeaChest_FormatUnit.Lin.txt                               Revision: 26-Jul-2017
 ===============================================================================
 SeaChest_FormatUnit for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_FormatUnit Version: 1.0.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_FormatUnit diagnostic software.
 
@@ -2520,7 +2524,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-test-will-erase ... etc
+        --confirm I-understand-this-test-command-erase ... etc
 
         --formatUnit [current | new sector size]    (SAS Only) (Seagate Only)
                 This option will start a format unit operation on a SAS drive
@@ -2717,13 +2721,14 @@ v1.0.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.0.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_GenericTests.Lin.txt                             Revision: 14-Jul-2017
+SeaChest_GenericTests.Lin.txt                             Revision: 26-Jul-2017
 ===============================================================================
  SeaChest GenericTests for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_GenericTests Version: 1.7.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_GenericTests diagnostic software.
 
@@ -3057,7 +3062,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-test-will-erase ... etc
+        --confirm I-understand-this-command-will-erase ... etc
 
         --repairOnFly           (Seagate Only)
                 Use this option to repair any bad sectors found during a long
@@ -3197,13 +3202,14 @@ v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_Info.Lin.txt                                     Revision: 14-Jul-2017
+SeaChest_Info.Lin.txt                                     Revision: 26-Jul-2017
 ===============================================================================
  SeaChest_Info for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_Info Version: 1.3.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Info diagnostic software.
 
@@ -3481,13 +3487,14 @@ v1.3.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.3.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_PowerChoice.Lin.txt                              Revision: 14-Jul-2017
+SeaChest_PowerChoice.Lin.txt                              Revision: 26-Jul-2017
 ===============================================================================
  SeaChest_PowerChoice for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_PowerChoice Version: 1.7.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_PowerChoice diagnostic software.
 
@@ -3928,13 +3935,14 @@ v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_Security.Lin.txt                                 Revision: 14-Jul-2017
+SeaChest_Security.Lin.txt                                 Revision: 26-Jul-2017
 ===============================================================================
  SeaChest_Security for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_Security Version: 1.6.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Security diagnostic software.
 
@@ -4188,7 +4196,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-test-will-erase ... etc
+        --confirm I-understand-this-command-will-erase ... etc
 
         --revert
                 This command is very fast at less than one (1) second. It
@@ -4367,13 +4375,14 @@ v1.6.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.6.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_SMART.Lin.txt                                    Revision: 14-Jul-2017
+SeaChest_SMART.Lin.txt                                    Revision: 26-Jul-2017
 ===============================================================================
  SeaChest_SMART for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
  SeaChest_SMART Version: 1.9.0
- Build Date: Jul 14 2017
+ Build Date: Jul 27 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_SMART diagnostic software.
 
@@ -4899,6 +4908,7 @@ v1.9.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
+v1.9.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
 Sections below are common to all tools:
 
