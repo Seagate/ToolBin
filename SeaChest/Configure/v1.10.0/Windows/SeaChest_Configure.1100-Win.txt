@@ -1,4 +1,4 @@
-SeaChest_Configure.Win.txt                                Revision: 26-Jul-2017
+SeaChest_Configure.Win.txt                                Revision: 07-Sep-2017
 ===============================================================================
  SeaChest_Configure for Windows - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
@@ -175,12 +175,13 @@ Utility arguments
                 timer value is volatile and is cleared at each power cycle. Use
                 the "info" argument to get the current status of the read
                 timer. A value of 0 means that all possible error recovery will
-                be performed before returning status. Other values should
-                include a unit to know the time to use. If no unit is provided,
-                it is assumed to be the value * 100 ms. The maximum time that
-                can be specified is 1 hour, 49 minutes, 13 seconds. Note: On
-                some SAT HBAs/bridges, status will not be able to be
-                                determined due to HBA/bridge limitations.
+                be performed before returning status (i.e. the Read Command
+                Timer is disabled). Other values should include a unit to know
+                the time to use. If no unit is provided, it is assumed to be
+                the value * 100 ms. The maximum time that can be specified is 1
+                hour, 49 minutes, 13 seconds. Note: On some SAT HBAs/bridges,
+                status will not be able to be determined due to HBA/bridge
+                limitations.
 
                 Ex1: --sctReadTimer 15s for a 15 second timer.
                 Ex2: --sctReadTimer 15000ms for a 15 second timer expressed in
@@ -237,12 +238,13 @@ Utility arguments
                 timer value is volatile and is cleared at each power cycle. Use
                 the "info" argument to get the current status of the write
                 timer. A value of 0 means that all possible error recovery will
-                be performed before returning status. Other values should
-                include a unit to know the time to use. If no unit is provided,
-                it is assumed to be the value * 100 ms. The maximum time that
-                can be specified is 1 hour, 49 minutes, 13 seconds. Note: On
-                some SAT HBAs/bridges, status will not be able to be determined
-                due to HBA/bridge limitations.
+                be performed before returning status (i.e. the Write Command
+                Timer is disabled). Other values should include a unit to know
+                the time to use. If no unit is provided, it is assumed to be
+                the value * 100 ms. The maximum time that can be specified is 1
+                hour, 49 minutes, 13 seconds. Note: On some SAT HBAs/bridges,
+                status will not be able to be determined due to HBA/bridge
+                limitations.
 
                 Ex1: --sctWriteTimer 15s for a 15 second timer.
                 Ex2: --sctWriteTimer 15000ms for a 15 second timer expressed in
@@ -256,7 +258,7 @@ Utility arguments
                 available on every drive.
 
         --puisFeature [enable | disable]  (SATA Only) (Seagate Only)
-                Use this option to enable or disable the power up in standby
+                Use this option to enable or disable the Power Up In Standby
                 (PUIS) feature on SATA drives.
                 Note: If this is configured on the drive with a jumper, this
                       command will fail.
