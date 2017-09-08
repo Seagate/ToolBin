@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 26-Jul-2017
+Date last edit: 07-Sep-2017
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -93,6 +93,18 @@ Utility arguments
                 /dev/sg? assignments. Shows model, serial and firmware
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
+
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
 
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
@@ -195,7 +207,7 @@ Utility arguments
                 Start an In Drive Diagnostic (IDD) test on a Seagate SATA
                 drive. Not all tests are supported by all products. If a
                 selected test is not supported, the utility will return
-                a error code meaning "not supported".
+                an error code meaning "not supported".
 
                 short:   Reset and Recalibration test. Be careful running this
                          test on the boot device.
@@ -646,7 +658,7 @@ v2.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      note the capital S) aggressive system scan.
 v2.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
 
-SeaChest_Configure.Lin.txt                                Revision: 26-Jul-2017
+SeaChest_Configure.Lin.txt                                Revision: 07-Sep-2017
 ===============================================================================
  SeaChest_Configure for Linux - Seagate drive utilities
  Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
@@ -688,6 +700,18 @@ Utility arguments
                 /dev/sg? assignments. Shows model, serial and firmware
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
+
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
 
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
@@ -794,12 +818,13 @@ Utility arguments
                 timer value is volatile and is cleared at each power cycle. Use
                 the "info" argument to get the current status of the read
                 timer. A value of 0 means that all possible error recovery will
-                be performed before returning status. Other values should
-                include a unit to know the time to use. If no unit is provided,
-                it is assumed to be the value * 100 ms. The maximum time that
-                can be specified is 1 hour, 49 minutes, 13 seconds. Note: On
-                some SAT HBAs/bridges, status will not be able to be
-                                determined due to HBA/bridge limitations.
+                be performed before returning status (i.e. the Read Command
+                Timer is disabled). Other values should include a unit to know
+                the time to use. If no unit is provided, it is assumed to be
+                the value * 100 ms. The maximum time that can be specified is 1
+                hour, 49 minutes, 13 seconds. Note: On some SAT HBAs/bridges,
+                status will not be able to be determined due to HBA/bridge
+                limitations.
 
                 Ex1: --sctReadTimer 15s for a 15 second timer.
                 Ex2: --sctReadTimer 15000ms for a 15 second timer expressed in
@@ -849,12 +874,13 @@ Utility arguments
                 timer value is volatile and is cleared at each power cycle. Use
                 the "info" argument to get the current status of the write
                 timer. A value of 0 means that all possible error recovery will
-                be performed before returning status. Other values should
-                include a unit to know the time to use. If no unit is provided,
-                it is assumed to be the value * 100 ms. The maximum time that
-                can be specified is 1 hour, 49 minutes, 13 seconds. Note: On
-                some SAT HBAs/bridges, status will not be able to be determined
-                due to HBA/bridge limitations.
+                be performed before returning status (i.e. the Write Command
+                Timer is disabled). Other values should include a unit to know
+                the time to use. If no unit is provided, it is assumed to be
+                the value * 100 ms. The maximum time that can be specified is 1
+                hour, 49 minutes, 13 seconds. Note: On some SAT HBAs/bridges,
+                status will not be able to be determined due to HBA/bridge
+                limitations.
 
                 Ex1: --sctWriteTimer 15s for a 15 second timer.
                 Ex2: --sctWriteTimer 15000ms for a 15 second timer expressed in
@@ -868,7 +894,7 @@ Utility arguments
                 available on every drive.
 
         --puisFeature [enable | disable]  (SATA Only) (Seagate Only)
-                Use this option to enable or disable the power up in standby
+                Use this option to enable or disable the Power Up In Standby
                 (PUIS) feature on SATA drives.
                 Note: If this is configured on the drive with a jumper, this
                       command will fail.
@@ -1132,6 +1158,18 @@ Utility arguments
                 /dev/sg? assignments. Shows model, serial and firmware
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
+
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
 
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
@@ -1905,6 +1943,18 @@ Utility arguments
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
 
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
+
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
                 options listed below. Multiple options can be combined.
@@ -2349,6 +2399,18 @@ Utility arguments
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
 
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
+
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
                 options listed below. Multiple options can be combined.
@@ -2792,6 +2854,18 @@ Utility arguments
                 /dev/sg? assignments. Shows model, serial and firmware
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
+
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
 
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
@@ -3287,6 +3361,18 @@ Utility arguments
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
 
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
+
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
                 options listed below. Multiple options can be combined.
@@ -3558,6 +3644,18 @@ Utility arguments
                 /dev/sg? assignments. Shows model, serial and firmware
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
+
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
 
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
@@ -3989,6 +4087,18 @@ Utility arguments
                 /dev/sg? assignments. Shows model, serial and firmware
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
+
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
 
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
@@ -4470,6 +4580,18 @@ Utility arguments
                 numbers. If your device is not listed on a scan immediately
                 after booting, then wait 10 seconds and run it again.
 
+        -S, --Scan   (note the capital letter S)
+                This option is the same as --scan or -s, however it will also
+                perform a low level rescan to pick up other devices. This
+                low-level rescan may wake devices from low power states and may
+                cause the OS to re-enumerate them. Use this diagnostic option
+                when a device is plugged in and not discovered in a normal scan.
+
+                NOTE: A low-level rescan may not be available on all interfaces
+                or all OSs.  The low-level rescan is not guaranteed to find
+                additional devices in the system when the device is unable to
+                come to a ready state.
+
         -F, --scanFlags [option list]
                 Use this option with -s to control the output from scan with the
                 options listed below. Multiple options can be combined.
@@ -4626,7 +4748,7 @@ Utility arguments
                 Start an In Drive Diagnostic (IDD) test on a Seagate SATA
                 drive. Not all tests are supported by all products. If a
                 selected test is not supported, the utility will return
-                a error code meaning "not supported".
+                an error code meaning "not supported".
 
                 short:   Reset and Recalibration test. Be careful running this
                          test on the boot device.
