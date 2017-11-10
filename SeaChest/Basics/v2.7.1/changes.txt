@@ -1,0 +1,144 @@
+===============
+Version History
+===============
+v0.0.6  12-Aug-2014  Added set max capacity (destroke) and restore native max
+                     for SATA.
+v0.0.7  13-Aug-2014  Fixed a bug where -i would crash on an Intel RAID device.
+                     Added SMART Trip (MRIE) determination for SAS drives.
+v0.0.8  30-Sep-2014  Added options to manage drive power settings.  Added a
+                     spin down command.  Added option to set the SATA drive
+                     default maximum interface speed.  Added SAS drive
+                     worldwide number to device information.  Added set max
+                     capacity (destroke) and restore native max for SAS.  Added
+                     Sanitize Freezelock for SATA.
+v0.0.9  06-Oct-2014  Added data erasure options controlled by range of LBA or
+                     by time. Added option to manage SAS LED activity on power
+                     pin 11.
+v1.0.0  20-Oct-2014  Activated support for externally attached USB storage
+                     devices.  This support applies to USB-SATA bridges that
+                     support 16 byte SAT Passthrough Command Descriptor Blocks
+                     (CDBs). This means that many older USB devices will not be
+                     recognized.  Added time estimate to Long DST information.
+                     Added Write Cache and Read Cache enable disable commands.
+                     Added ATA Security Password Disable (see notes above for
+                     limitations and details).  Added USB child drive
+                     information option.  Added HDD annualized workload rate
+                     (Odometer) for SATA to the device information output.
+                     Added SSD provisioning.
+v1.0.1  30-Oct-2014  Better detection of Seagate products within USB enclosure.
+                     SAS Sanitize command completion status fixed.
+v1.0.2  20-Nov-2014  SATA Sanitize Overwrite fix and new message when the
+                     command is not supported.  Shortened DeviceInformation to
+                     DeviceInfo.  Typos fixed. SATA SMART attributes clean up
+                     and raw values reorganized. Added Power On Hours to USB
+                     devices. eraseRange on SAS SSD now supports the entire
+                     device using UNMAP when startLBA is 0 and no endLBA is
+                     given.
+v1.0.3  04-Dec-2014  Added -F, --scanFlags option which allows selection of
+                     different device handles and specific interfaces.  Added
+                     --echoCommandLine
+v1.0.4  17-Apr-2015  Added --transitionPower for SATA and SAS.  Modified
+                     --checkPowerMode to not disturb the current power mode
+                     of the drive. (Linux only)
+v1.0.5  14-Jul-2015  Added --testUnitReady for SATA and SAS.  New name is
+                     SeaChest Basics.  Improved device discovery. Added "info"
+                     to Read Look Ahead and Write Cache feature management,
+                     shows the current setting.
+v1.0.6  12-Aug-2015  Improved device discovery. Corrections to verbose output.
+                     Bug related to setting read look ahead and write cache
+                     have been fixed for SAS.
+v1.1.0  12-Oct-2015  1_7_0 libraries.  Added enhanced version information.
+                     Modified Short DST command line polling arguments to match
+                     those of SeaChest_SMART.  Converted Overwrite, Trim and
+                     Unmap erase commands to match those in SeaChest_Erase.
+                     Removed Sanitize, ATA Security Erase commands and
+                     --disableATASecurityPW, see SeaChest_Erase utility for
+                     these operations.  Removed PowerChoice settings commands,
+                     see SeaChest_PowerChoice for these operations.  Added
+                     --downloadMode to provide greater control over firmware
+                     control options. download.  Added -sat12byte to increase
+                     compatibility.  Added --SATInfo to compare ATA vs SCSI
+                     identification differences.
+v1.1.1  22-Mar-2016  1_9_1 libraries.  Added new verbosity level. Added
+                     --onlySeagate restriction.
+v2.0.0  02-May-2016  Added --modelMatch and --onlyFW filters. Added logic
+                     change for --overwrite and --trim commands to assume Max
+                     LBA (end of the drive) as the range when the erase range
+                     is not specified.  --longDST removed, now only available
+                     in SeaChest_SMART.
+v2.0.2  19-May-2016  1_9_2 libraries fixed scan information from ATAPI devices.
+                     Fixed a bug where we could accidentally clear some stored
+                     identify data from the device structure. Fixed continuing
+                     on when there was a permission denied error opening a
+                     drive. Removed Long DST from Help. Fixed --checkPowerMode
+                     always returning "active" on SAT interfaces (SATA over
+                     SAS).
+v2.0.3  15-Jun-2016  1_9_3 libraries fixed issues with ATA secure erase
+                     commands. Fixed bugs with --modelMatch and --onlyFW
+                     filters.
+v2.1.0  06-Jul-2016  1_10_0 libraries add --forceATA and --forceSCSI.  Added
+                     --displayLBA.
+v2.1.1  14-Jul-2016  1_10_1 libraries adds SMART and power management
+                     functions, format polling, endianess detection, buffer
+                     size fixes, SAS device statistics, Win32 IOCTL
+                     pass-through fix on Win8 and higher. Added support for
+                     maxLBA keyword.
+v2.2.0  01-Sep-2016  1_11_1 libraries updates to various printed message,
+                     minor bug fixes. Fixed --SATInfo command.
+v2.2.2  21-Sep-2016  1_11_2 libraries updates adds --forceATADMA, --forceATAPIO
+                     and --forceATAUDMA  (SATA Only).
+v2.3.0  10-Oct-2016  1_11_4 libraries updates. Support for multiple devices.
+                     Added --activateFW.
+v2.3.0  25-Oct-2016  1_11_5 libraries updates improved LaCie  detection, adds
+                     SAT Vendor ID, SAT Product ID, and SAT Product Revision to
+                     the -i --SATInfo output.
+v2.3.1  27-Oct-2016  1_11_6 libraries updates WWN detection.  Added
+                     --enableLegacyUSBPassthrough
+v2.3.1  03-Nov-2016  1_11_7 libraries fixed issue with SAS EPC power mode
+                     settings.
+v2.3.2  13-Dec-2016  1_11_10 libraries fixes a problem when using maxLBA without
+                     the corresponding command range option, SAS power mode
+                     setting, and Sanitize erase patterns.
+v2.4.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
+                     22.5Gb/s physical bus speeds, support for double buffered
+                     passthrough IOCTLs. Add --hideLBACounter, --sasPhy.
+v2.4.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
+                     for SAS features.
+v2.5.0  01-Jun-2017  Adds the child drive matching options --childModelMatch,
+                     --childOnlyFW, and --childNewFW.
+v2.6.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+                     should exit with code = 1; added detection of parallel ATA
+                     and SCSI speeds; temperature data on ATA now uses the
+                     values from the SCT status log or device statistics log.
+                     --idd now supports SAS.  --idd [short | long | repair]
+                     replaces '70 | 71 | 72' syntax. --abortIDD added.
+v2.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
+v2.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v2.7.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v2.7.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v2.7.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Added showing the SMART trip failure reason when
+                     possible.
+v2.7.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v2.7.1  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v2.7.1  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v2.7.1  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
+
