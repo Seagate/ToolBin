@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 07-Sep-2017
+Date last edit: 27-Oct-2017
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -8,10 +8,10 @@ _Basics
 _Configure
 _Erase
 _Fimrware
-_FormatUnit
+_Format
 _GenericTests
 _Info
-_PowerChoice
+_PowerControl
 _Security
 _SMART
 
@@ -24,12 +24,12 @@ Sample Output
 END USER LICENSE AGREEMENT
 
 
-SeaChest_Basics.Lin.txt                                   Revision: 26-Jul-2017
+SeaChest_Basics.Lin.txt                                   Revision: 04-Nov-2017
 ===============================================================================
  SeaChest_Basics for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Basics Version: 2.7.0
- Build Date: Jul 27 2017
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Basics Version: 2.7.1
+ Build Date: Nov 02 2017
 ===============================================================================
 Welcome to Seagate's SeaChest Basics diagnostic software.
 
@@ -657,13 +657,36 @@ v2.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v2.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v2.7.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v2.7.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v2.7.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Added showing the SMART trip failure reason when
+                     possible.
+v2.7.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v2.7.1  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v2.7.1  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v2.7.1  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
 SeaChest_Configure.Lin.txt                                Revision: 07-Sep-2017
 ===============================================================================
  SeaChest_Configure for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Configure Version: 1.10.0
- Build Date: Jul 27 2017
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Configure Version: 1.11.0
+ Build Date: Nov 02 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Configure diagnostic software.
 
@@ -1102,13 +1125,35 @@ v1.10.0 14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v1.10.0 27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.10.0 19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.10.0 25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v1.11.0 10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Removed --setSectorSize now in SeaChest_Format.
+v1.11.0 12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.11.0 26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v1.11.0 31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.11.0 02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
-SeaChest_Erase.Lin.txt                                    Revision: 26-Jul-2017
+SeaChest_Erase.Lin.txt                                    Revision: 04-Nov-2017
 ===============================================================================
 SeaChest_Erase for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Erase Version: 1.7.0
- Build Date: Jul 27 2017
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Erase Version: 1.7.3
+ Build Date: Nov 02 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Erase diagnostic software.
 
@@ -1619,12 +1664,23 @@ command set.
                 This option will start a format unit operation on a SAS drive
                 Use "current" to perform a format unit operation with the
                 Sector size currently being used, otherwise enter a new sector
-                size to use upon format completion. Valid sector sizes are
-                listed in the device Product Manual.  This command will erase
-                all data on the drive. The security initialize feature is not
-                used and protection information will not be set. Combine this
-                option with --poll or --progress to check for completion status
-                until the format is complete.
+                size to use upon format completion.
+
+                Valid sector sizes are given by the --showSupportedSectorSizes
+                command (see above) or  listed in the device Product Manual.
+                This command will erase all data on the drive. The security
+                initialize feature is not used and protection information will
+                not be set. Combine this option with --poll or --progress to
+                check for completion status until the format is complete.
+
+                Warning: Once a Format Unit command is started it must be
+                allowed to finish in order to calculate the total number of
+                logical blocks (LBAs) at the finish.  If the sector size has
+                changed then there will be a corresponding change to the total
+                number of LBAs. If a device stops a Format Unit before it
+                completes then the device will report a "Corrupted Format"
+                sense code, "03-31".  Restart the format and allow it to finish
+                to correct this error.
 
         --fastFormat [fast format mode] (SAS Only) (SBC4 required)
                 You must use this option with the --formatUnit option to run a
@@ -1645,6 +1701,9 @@ command set.
                         logical sector size quickly. Media may or may not be
                         read accessible until a write has been performed to
                         the media.
+
+                Example: --formatUnit 512 --fastFormat 1 --confirm I-... etc
+                Example: --formatUnit 4096 --fastFormat 1 --confirm I-... etc
 
         --pattern [repeat:asciinospaces | random | increment:startValue |
              file:filename]
@@ -1884,13 +1943,36 @@ v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v1.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.7.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.7.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v1.7.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Added remanufacturing time for SCSI.
+v1.7.3  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+                     Added detection of current SAS format protection mode.
+v1.7.3  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v1.7.3  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.7.3  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
-SeaChest_Firmware.Lin.txt                                 Revision: 26-Jul-2017
+SeaChest_Firmware.Lin.txt                                 Revision: 04-Nov-2017
 ===============================================================================
  SeaChest_Firmware for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Firmware Version: 2.5.0
- Build Date: Jul 27 2017
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Firmware Version: 2.5.1
+ Build Date: Nov 02 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Firmware diagnostic software.
 
@@ -2064,6 +2146,13 @@ Utility arguments
                 drivers in the system. Smaller values are more likely to be
                 compatible, but also slower. Use this option if the default
                 used by the tool is not working correctly for firmware updates.
+
+        --firmwareSlot/--fwBufferID slot#               (Seagate Only)
+                Use this option to specify a firmware slot (NVMe) or a buffer
+                ID (SCSI) along with the --downloadMode (SCSI) or --activateFW
+                (NVMe & SCSI) options.  If this option is not used, a value of
+                zero will be used instead, which means the drive will
+                automatically select the slot number.
 
 Utility Options
 ===============
@@ -2319,15 +2408,39 @@ v2.5.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v2.5.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v2.5.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v2.5.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v2.5.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Added option to specify a buffer ID or FW slot,
+                     file name added to the output of --showFileHash. Added
+                     --firmwareSlot and --fwBufferID.
+v2.5.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v2.5.2  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v2.5.2  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v2.5.2  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
-SeaChest_FormatUnit.Lin.txt                               Revision: 26-Jul-2017
+SeaChest_Format.Lin.txt                                   Revision: 04-Nov-2017
 ===============================================================================
-SeaChest_FormatUnit for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_FormatUnit Version: 1.0.0
- Build Date: Jul 27 2017
+SeaChest_Format for Linux - Seagate drive utilities
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Format Version: 1.1.0
+ Build Date: Nov 02 2017
 ===============================================================================
-Welcome to Seagate's SeaChest_FormatUnit diagnostic software.
+Welcome to Seagate's SeaChest_Format diagnostic software.
 
 Storage products which utilize the SAS, SCSI or Fibre Channel interfaces are
 able to perform a full low-level media format in the field.  These three
@@ -2364,7 +2477,7 @@ finish.
 Please see the section below "About the SCSI Format Unit Command" for
 additional information.
 
-NOTE: SeaChest_FormatUnit may not be fully functional on non-Seagate drives.
+NOTE: SeaChest_Format may not be fully functional on non-Seagate drives.
 
 This User Guide file contains important information about SeaChest_FormatUnit.
 Please read this entire file before using this software.
@@ -2378,18 +2491,18 @@ your possession.   To protect yourself from potential liability and to protect
 the previous owner's privacy, you should remove all data by performing a data
 erasure on this drive.
 
-Be very careful because using SeaChest_FormatUnit will cause data loss. Seagate
+Be very careful because using SeaChest_Format will cause data loss. Seagate
 is not responsible for lost user data.
 
 Usage
 =====
-        SeaChest_FormatUnit [-d <sg_device>] {arguments} {options}
+        SeaChest_Format [-d <sg_device>] {arguments} {options}
 
 Examples
 ========
-        SeaChest_FormatUnit --scan
-        SeaChest_FormatUnit -d /dev/sg2 -i
-        SeaChest_FormatUnit --device /dev/sg1 --sanitize info
+        SeaChest_Format --scan
+        SeaChest_Format -d /dev/sg2 -i
+        SeaChest_Format --device /dev/sg1 --showSupportedSectorSizes
 
 Utility arguments
 =================
@@ -2506,11 +2619,11 @@ Utility Options
                 Example: -v 3 or --verbose 3
 
         -q, --quiet
-                Run SeaChest_FormatUnit in quiet mode. This is the same as -v0
+                Run SeaChest_Format in quiet mode. This is the same as -v0
                 or --verbose 0
 
         -V, --version
-                Show SeaChest_FormatUnit version and copyright information & exit
+                Show SeaChest_Format version and copyright information & exit
 
         --license
                 Display the Seagate End User License Agreement (EULA).
@@ -2592,12 +2705,23 @@ Seagate is not responsible for lost user data.
                 This option will start a format unit operation on a SAS drive
                 Use "current" to perform a format unit operation with the
                 Sector size currently being used, otherwise enter a new sector
-                size to use upon format completion. Valid sector sizes are
-                listed in the device Product Manual.  This command will erase
-                all data on the drive. The security initialize feature is not
-                used and protection information will not be set. Combine this
-                option with --poll or --progress to check for completion status
-                until the format is complete.
+                size to use upon format completion.
+
+                Valid sector sizes are given by the --showSupportedSectorSizes
+                command (see above) or  listed in the device Product Manual.
+                This command will erase all data on the drive. The security
+                initialize feature is not used and protection information will
+                not be set. Combine this option with --poll or --progress to
+                check for completion status until the format is complete.
+
+                Warning: Once a Format Unit command is started it must be
+                allowed to finish in order to calculate the total number of
+                logical blocks (LBAs) at the finish.  If the sector size has
+                changed then there will be a corresponding change to the total
+                number of LBAs. If a device stops a Format Unit before it
+                completes then the device will report a "Corrupted Format"
+                sense code, "03-31".  Restart the format and allow it to finish
+                to correct this error.
 
         --fastFormat [fast format mode] (SAS Only) (SBC4 required)
                 You must use this option with the --formatUnit option to run a
@@ -2619,15 +2743,8 @@ Seagate is not responsible for lost user data.
                         read accessible until a write has been performed to
                         the media.
 
-        --defaultFormat       (SAS Only)
-                Use this option to perform a device's default format
-                operation.  This in an option flag to the above formatUnit
-                command.  This sets the 'format options valid' bit to zero,
-                meaning the device performs it's default format options.
-                Note: This mode may take a long time to complete.
-                Note2: When this option is specified, only the --fastFormat and
-                       --discardGList options will be used. All others are
-                       ignored.
+                Example: --formatUnit 512 --fastFormat 1 --confirm I-... etc
+                Example: --formatUnit 4096 --fastFormat 1 --confirm I-... etc
 
         --disableCertification       (SAS Only)
                 Use this option to disable the certification operation when
@@ -2784,13 +2901,38 @@ v1.0.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v1.0.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.0.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.0.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v1.1.0  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Added --setSectorSize moved from
+                     SeaChest_Configure. Name change from SeaChest_FormatUnit
+                     to SeaChest_Format.
+v1.1.0  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.2.0  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives. Removed --defaultFormat since that is now the
+                     default behavior until other flags are added.
+v1.2.0  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.2.0  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
-SeaChest_GenericTests.Lin.txt                             Revision: 26-Jul-2017
+SeaChest_GenericTests.Lin.txt                             Revision: 04-Nov-2017
 ===============================================================================
  SeaChest GenericTests for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_GenericTests Version: 1.7.0
- Build Date: Jul 27 2017
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_GenericTests Version: 1.7.1
+ Build Date: Nov 02 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_GenericTests diagnostic software.
 
@@ -2845,7 +2987,7 @@ Examples
 ========
         SeaChest_GenericTests --scan
         SeaChest_GenericTests -d /dev/sg2 -i
-        SeaChest_GenericTests -d /dev/sg1 --shortDST poll
+        SeaChest_GenericTests -d /dev/sg1 --deviceInfo
 
 Utility arguments
 =================
@@ -3277,13 +3419,35 @@ v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v1.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.7.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.7.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v1.7.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help.
+v1.7.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.7.1  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v1.7.1  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.7.1  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
-SeaChest_Info.Lin.txt                                     Revision: 26-Jul-2017
+SeaChest_Info.Lin.txt                                     Revision: 04-Nov-2017
 ===============================================================================
  SeaChest_Info for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Info Version: 1.3.0
- Build Date: Jul 27 2017
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Info Version: 1.3.1
+ Build Date: Nov 02 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Info diagnostic software.
 
@@ -3574,22 +3738,44 @@ v1.3.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v1.3.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.3.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.3.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v1.3.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help.
+v1.3.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.3.1  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v1.3.1  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.3.1  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
-SeaChest_PowerChoice.Lin.txt                              Revision: 26-Jul-2017
+SeaChest_PowerControl.Lin.txt                             Revision: 04-Nov-2017
 ===============================================================================
- SeaChest_PowerChoice for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_PowerChoice Version: 1.7.0
- Build Date: Jul 27 2017
+ SeaChest_PowerControl for Linux - Seagate drive utilities
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_PowerControl Version: 1.8.2
+ Build Date: Nov 02 2017
 ===============================================================================
-Welcome to Seagate's SeaChest_PowerChoice diagnostic software.
+Welcome to Seagate's SeaChest_PowerControl diagnostic software.
 
 Optimization within the framework of a complex company data center requires
 dynamic technology. As storage capacity demands increase due to virtualization
 and growing volumes of data, managing power usage in an intelligent way is
 critical for reducing Total Cost of Ownership (TCO).
 
-There are, roughly, two general frameworks for disk drive power management.
+There are, roughly, three general frameworks for disk drive power management.
 The earlier specification is part of Advanced Power Management (APM) which
 provided controls over many devices in a system, including disk drives.  APM
 has since been replaced by a new framework called Extended Power Controls
@@ -3614,7 +3800,11 @@ to a 54% reduction in the amount of energy used.
 
 See the section below "How PowerChoice Technology Works"
 
-This User Guide file contains important information about SeaChest_powerChoice.
+The third and newest drive power management framework exists for SATA drives
+and is named PowerBalance.  Seagate's PowerBalance feature will adjust drive
+performance during random operations to reduce power consumption of the drive.
+
+This User Guide file contains important information about SeaChest_PowerControl.
 Please read this entire file before using this software.
 
 SeaChest is a comprehensive, easy-to-use command line diagnostic tool that
@@ -3629,13 +3819,13 @@ cause data loss. Seagate is not responsible for lost user data.
 
 Usage
 =====
-        SeaChest_PowerChoice [-d <sg_device>] {arguments} {options}
+        SeaChest_PowerControl [-d <sg_device>] {arguments} {options}
 
 Examples
 ========
-        SeaChest_PowerChoice --scan
-        SeaChest_PowerChoice -d /dev/sg2 -i
-        SeaChest_PowerChoice -d /dev/sg1 --deviceInfo
+        SeaChest_PowerControl --scan
+        SeaChest_PowerControl -d /dev/sg2 -i
+        SeaChest_PowerControl -d /dev/sg1 --deviceInfo
 
 Utility arguments
 =================
@@ -3822,6 +4012,38 @@ Utility arguments
         --disableAPM   (SATA Only)
                 Use this option to disable the current Advanced Power Management
                 (APM) level of a device
+
+        --powerBalanceFeature [ info | enable | disable ]   (SATA Only)(Seagate Only)
+                Use this option to see the state of the Seagate PowerBalance
+                feature or to change its state. Seagate's PowerBalance feature
+                will adjust drive performance during random operations to
+                reduce power consumption of the drive.
+                    info - will display the state of the PowerBalance feature
+                           on the screen
+                    enable - use this to enable PowerBalance
+                    disable - use this to disable PowerBalance
+                Note: SAS products should use the --setPowerConsumption option
+                instead.
+
+        --sataDAPSfeature [info | enable | disable ]    (SATA Only)
+                Use this option to enable or disable the SATA Device Automatic
+                Partial To Slumber Transitions (DAPS) feature. Use the "info"
+                option to see the current state of the DIPM feature on the
+                device. The use of this feature requires that the DIPM feature
+                is enabled.
+
+                NOTE: Please ensure that the host adapter/controller/driver can
+                handle this before enabling it, otherwise the drive link may go
+                down and the device will not be able to communicate.
+
+        --sataDIPMfeature [info | enable | disable ]    (SATA Only)
+                Use this option to enable or disable the SATA Device Initiated
+                Power Management (DIPM) feature. Use the "info" option to see
+                the current state of the DIPM feature on the device.
+
+                NOTE: Please ensure that the host adapter/controller/driver can
+                handle this before enabling it, otherwise the drive link may go
+                down and the device will not be able to communicate.
 
 Utility Options
 ===============
@@ -4034,13 +4256,38 @@ v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v1.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.7.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.8.1  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+                     Added --powerBalanceFeature, --sataDAPSfeature and
+                     --sataDIPMfeature, all of which are SATA only.
+v1.8.2  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Name change from SeaChest_PowerChoice to
+                     SeaChest_PowerControl.
+v1.8.2  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.8.2  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v1.8.2  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.8.2  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
-SeaChest_Security.Lin.txt                                 Revision: 26-Jul-2017
+SeaChest_Security.Lin.txt                                 Revision: 04-Nov-2017
 ===============================================================================
  SeaChest_Security for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_Security Version: 1.6.0
- Build Date: Jul 27 2017
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Security Version: 1.6.1
+ Build Date: Nov 02 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_Security diagnostic software.
 
@@ -4486,13 +4733,35 @@ v1.6.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v1.6.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.6.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.6.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v1.6.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help.
+v1.6.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.6.1  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v1.6.1  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.6.1  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
-SeaChest_SMART.Lin.txt                                    Revision: 26-Jul-2017
+SeaChest_SMART.Lin.txt                                    Revision: 04-Nov-2017
 ===============================================================================
  SeaChest_SMART for Linux - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
- SeaChest_SMART Version: 1.9.0
- Build Date: Jul 27 2017
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_SMART Version: 1.9.1
+ Build Date: Nov 02 2017
 ===============================================================================
 Welcome to Seagate's SeaChest_SMART diagnostic software.
 
@@ -5031,6 +5300,29 @@ v1.9.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
 v1.9.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.9.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.9.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v1.9.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Added showing the SMART trip failure reason when
+                     possible.
+v1.9.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.9.1  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives.
+v1.9.1  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.9.1  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
 
 Sections below are common to all tools:
 
@@ -5253,7 +5545,7 @@ SEAGATE    /dev/sg1     ST1000NM0011       ZAA15VAS          SN03
 
 All utility arguments will require you to identify the specific drive by
 providing the sg device handle (-d, --device).
-For example, SeaChest_Basics -d /dev/sg1 --shortDST poll
+For example, SeaChest_Basics -d /dev/sg1 --shortDST --poll
 
 You may combine multiple tests with a single command line.  For example,
 SeaChest_Basics -d /dev/sg0 -i --smartCheck runs both identify and SMART.
@@ -5315,8 +5607,8 @@ A dot slash is a dot followed immediately by a forward slash (./). It is used
 in Linux to execute a compiled program in the current directory when it is not
 a built-in command or found in your path.
 
-For example, ./SeaChest -d /dev/sg0 --shortDST poll
-or, sudo ./SeaChest -d /dev/sg0 --shortDST poll
+For example, ./SeaChest -d /dev/sg0 --shortDST --poll
+or, sudo ./SeaChest -d /dev/sg0 --shortDST --poll
 
 Shut down the files system and remove the power with the command:
 poweroff
@@ -5347,7 +5639,7 @@ sg devices include the following interfaces: SATA, USB, SCSI (SCSI, SAS and FC)
 
 Add the command word 'time' on the same command line before the SeaChest
 command to see how much time it takes to run a test.
-For example, time ./SeaChest -d /dev/sg0 --shortDST poll
+For example, time ./SeaChest -d /dev/sg0 --shortDST --poll
 
 When drives are not detected by SeaChest
 ----------------------------------------
@@ -5361,6 +5653,21 @@ compiled into the kernel), then you will get sg devices that we can scan and
 find. Once you run the modprobe command and sg is successfully loaded, then you
 can re-run "ls /dev/sg*" and see SG device nodes. SeaChest tools should then be
 able to find devices once again.
+
+How to control the amount of runtime kernel messages
+----------------------------------------------------
+When testing more drives than a system can hold, careful use of host adapters
+and hot-plugging batches of drives (but never to direct motherboard
+connections!) can help speed the process.  The Linux operating system will
+display various system error messages, or none, when storage devices are
+powered down and exchanged with the next drives.  The amount of information
+contained in the OS error messages can be reviewed using the Linux utility
+command "sysctl kernel.printk".  The default setting is defined by the
+particular distro.  Tiny Core Linux, for example may set "4 4 1 7".  To hide
+hot-plugging messages try "3 4 1 7", to increase the messaging to include
+device details like model numbers try "6 4 1 7".  The command to set is 'sudo
+sysctl -w kernel.printk="6 4 1 7"'.  See man sysctl - "configure kernel
+parameters at runtime" for more.
 
 ================
 Tool Usage Hints - Windows
@@ -5378,7 +5685,7 @@ SEAGATE    PD1      ST1000NM0011        ZAA15VAS          SN03
 All utility arguments will require you to identify the specific drive by
 providing the physical device handle (-d, --device).
 
-For example, SeaChest_Basics -d PD2 --shortDST poll
+For example, SeaChest -d PD2 --shortDST --poll
 
 You may combine multiple tests with a single command line.  For example,
 SeaChest_Basics -d PD0 -i --smartCheck runs both identify and SMART.
@@ -5500,8 +5807,8 @@ SATA HDD Device Information:
 
 [sysop@localhost ~]$ sudo ./SeaChest_Basics -i -d /dev/sg1
 ===============================================================================
- SeaChest_Basics - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest - Seagate drive utilities
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST4000DX001-1CE168
         Serial Number: ZQ3034X7R
@@ -5575,8 +5882,8 @@ SATA SSD Device Information:
 
 [sysop@localhost ~]$ sudo ./SeaChest_Basics -d /dev/sg1 -i
 ===============================================================================
- SeaChest_Basics - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest - Seagate drive utilities
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST120FP0021
         Serial Number: PQ57011BD
@@ -5641,8 +5948,8 @@ SAS HDD Device Information:
 
 [sysop@localhost ~]$ sudo ./SeaChest_Basics -i -d /dev/sg2
 ===============================================================================
- SeaChest_Basics - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest - Seagate drive utilities
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST4000NM0043
         Serial Number: Z1QZ04KVG
@@ -5704,8 +6011,8 @@ SAS SSD: Device Information
 
 [sysop@localhost ~]$ sudo ./SeaChest_Basics -d /dev/sg3 -i
 ===============================================================================
- SeaChest_Basics - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest - Seagate drive utilities
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST400FM0053
         Serial Number: P3QF13026
@@ -5777,7 +6084,7 @@ Reminder: Seagate Support does not help to analyze SMART attributes.
 [sysop@localhost ~]$ sudo ./SeaChest_x64 -d /dev/sg0 --smartAttributes
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
 Attribute Name:                   Status: Nominal: Worst:     Raw (hex):
   1 Read Error Rate               0x000F    0x75    0x63      0x0000000969AFB4
@@ -5859,7 +6166,7 @@ recommends applying new firmware to enhance the performance and or reliability
 of your drive.  Most products may see one or two firmware updates within the
 early life of the product.
 
-SeaChest FormatUnit - Storage products which utilize the SAS, SCSI or Fibre
+SeaChest Format - Storage products which utilize the SAS, SCSI or Fibre
 Channel interfaces are able to perform a full low-level media format in the
 field.  The SCSI Format Unit command offers many specialty options to
 accommodate a variety of conditions and to fine tune the procedure.  This
