@@ -1,11 +1,11 @@
-ReadMeFirst.SeaChest.txt                                  Revision: 30-Jul-2017
+ReadMeFirst.SeaChest.txt                                  Revision: 29-Oct-2017
 ===============================================================================
  Seagate Utilities
- Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
 Please READ ME FIRST
 
-Thank you for downloading SeaChest Utilities, build 27-July-2017
+Thank you for downloading SeaChest Utilities, build 26-Oct-2017
 
 This is a limited Engineering Preview Release, just prior to being made
 available to the general public.
@@ -17,18 +17,24 @@ English language only and use "command line arguments" to define the various
 tasks and specific devices.  SeaChest Utilities are available for both Linux
 and Windows environments.
 
-Linux versions of SeaChest Utilities are available as stand alone 32 or 64-bit
-executables you can copy to your own system.  Windows OS versions of SeaChest
-Utilities are installed through a typical setup wizard and can be removed via
-the Control Panel.  Versions for FreeBSD, PowerPC and Solaris are available by
-request.
+Standalone executables
+----------------------
+Linux and Windows static versions of SeaChest Utilities are available as stand
+alone 32 or 64-bit executables you can copy to your own system.  Windows OS
+versions of SeaChest Utilities may also be installed through a typical setup
+wizard and can be removed via the Control Panel.  Versions for FreeBSD, PowerPC
+and Solaris are available by request.
 
+Bootable USB maker
+------------------
 A tool to create a bootable USB flash drive version of SeaChest is available in
 the "USB boot maker" folder.  This EXE runs from Windows and will require a
 dedicated USB flash drive.  Any data on the USB flash drive will be lost when
 the USB boot maker tool runs.  The bootable flash drive boots to the 32-bit or
 64-bit Tiny Core Linux distribution.
 
+About SeaChest Utilities
+------------------------
 SeaChest Utilities supports non-RAID SATA, SAS and USB interface drives.
 
 The other files in the ZIP download are:
@@ -54,7 +60,7 @@ more in-depth functionality in specific areas. These are:
         performance and or reliability of your drive.  Most products may see
         one or two firmware updates within the early life of the product.
 
-        SeaChest FormatUnit - Storage products which utilize the SAS, SCSI or
+        SeaChest Format - Storage products which utilize the SAS, SCSI or
         Fibre Channel interfaces are able to perform a full low-level media
         format in the field.  SCSI command devices are able to rescan the
         surface of the media while managing defective sectors (if any) and even
@@ -75,7 +81,7 @@ more in-depth functionality in specific areas. These are:
         stored on the drive is also provided.  A view of SMART and device
         statistics is available when supported by the drive.
 
-        SeaChest PowerChoice - Seagate disk drives offer a multitude of options
+        SeaChest PowerControl - Seagate disk drives offer a multitude of options
         to manage power.  This tool manipulates the various power modes.
 
         SeaChest Security - Various settings are available on modern Seagate
@@ -132,8 +138,7 @@ usage and acknowledgement licenses, and our Linux USB Boot Maker FAQ can be
 found at:
 http://support.seagate.com/firmware/usbbootmaker_faq.html
 
-Copyright (c) 2017 Seagate Technology LLC. All rights reserved.
-
+Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ======================================================================
 
                         END USER LICENSE AGREEMENT
@@ -146,7 +151,7 @@ PORTION OF THIS PRODUCT (INCLUDING, BUT NOT LIMITED TO, THE SOFTWARE AND
 ASSOCIATED FILES (THE "SOFTWARE"), HARDWARE ("HARDWARE"), DISK (S), OR OTHER
 MEDIA) (COLLECTIVELY, THE "PRODUCT") YOU AND YOUR COMPANY ACCEPT ALL THE
 TERMS AND CONDITIONS OF THIS EULA.  IF YOU ACQUIRE THIS PRODUCT FOR YOUR
-COMPANYâ€™S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
+COMPANY’S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
 HAS THE AUTHORITY TO LEGALLY BIND YOUR COMPANY TO THIS EULA.  IF YOU DO NOT
 AGREE, DO NOT CLICK "I AGREE" AND DO NOT DOWNLOAD, SET-UP, INSTALL OR USE THE
 SOFTWARE.
@@ -274,14 +279,14 @@ TO, AND IN NO EVENT WILL SEAGATE'S TOTAL CUMULATIVE DAMAGES EXCEED, THE FEES
 PAID BY THE LICENSEE TO SEAGATE FOR THE PRODUCT.  ADDITIONALLY, IN NO EVENT
 SHALL SEAGATE'S LICENSORS OR SUPPLIERS BE LIABLE FOR ANY DAMAGES OF ANY KIND.
 
-8.  Privacy.  Seagateâ€™s collection, use and disclosure of personally
+8.  Privacy.  Seagate’s collection, use and disclosure of personally
 identifiable information in connection with your use of the Product is
-governed by Seagateâ€™s Privacy Policy which is located at
+governed by Seagate’s Privacy Policy which is located at
 http://www.seagate.com/legal-privacy/privacy-policy/As further described in
-Seagateâ€™s Privacy Policy, certain Products may include a Product dashboard
+Seagate’s Privacy Policy, certain Products may include a Product dashboard
 which allows users to manage Product settings, including but not limited to
 use of anonymous statistical usage data in connection with personally
-identifiable information. You agree to Seagateâ€™s collection, use, and
+identifiable information. You agree to Seagate’s collection, use, and
 disclosure of your data in accordance with the Product dashboard settings
 selected by you for the Product, or in the case of transfer as described in
 Section 11, you agree to the settings selected by the prior licensee unless
