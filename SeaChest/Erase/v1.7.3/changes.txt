@@ -87,16 +87,16 @@ v1.7.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
                      error history (ISL). Updated copyright notice, invalid
                      command line options now only display an error instead of
                      long help. Added remanufacturing time for SCSI.
-v1.7.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.7.3  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
                      Added detection of current SAS format protection mode.
-v1.7.1  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+v1.7.3  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
                      that don't show as SATA and don't support the SAT VPD
                      page; added Automatic fallback to 12byte CDBs during
                      initial device discovery;  integrated fixes for SAS
                      firmware download and fixes for SAS LongDST time
                      calculation; added detection of TCG Pyrite and Opalite
                      drives.
-v1.7.1  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+v1.7.3  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
                      on some LSI adapters, corrects firmware download issue
                      under Windows 10 API.
-v1.7.1  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
+v1.7.3  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
