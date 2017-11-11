@@ -1,4 +1,4 @@
-SeaChestUtilitiesParallel.Win.txt                         Revision: 23-Aug-2017
+SeaChestUtilitiesParallel.Win.txt                         Revision: 24-Oct-2017
 ===============================================================================
 Information About Running SeaChest Utilities in Parallel on Multiple Devices
 
@@ -36,7 +36,7 @@ diagnostics routines.  Will there be memory issues?  What is the safe number of
 parallel tests to run at one time?  Is the power supply ready to support
 numerous active drives?  Will there be network issues when the tasks are on
 different systems?  What should be the response when a drive fails a diagnostic
-test?  Do you have a  way to identify and kill an unresponsive instance of the
+test?  Do you have a way to identify and kill an unresponsive instance of the
 tests?  Will there be clean up routines and processes that need be halted when
 the tests are finished?  These are only a few of the many obvious questions
 that need to be considered before implementing a parallel testing plan.

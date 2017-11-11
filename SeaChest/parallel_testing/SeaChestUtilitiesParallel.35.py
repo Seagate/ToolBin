@@ -5,7 +5,7 @@
 SeaChestUtilitiesParallel.35.py - Seagate drive utilities
 Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 v0.3
-Date last edit: 02-Oct-2017
+Date last edit: 20-Oct-2017
 ================================================================================
 
 Demonstrates how to perform tasks in parallel using Python scripts.
@@ -35,7 +35,7 @@ diagnostics routines.  Will there be memory issues?  What is the safe number of
 parallel tests to run at one time?  Is the power supply ready to support
 numerous active drives?  Will there be network issues when the tasks are on
 different systems?  What should be the response when a drive fails a diagnostic
-test?  Do you have a  way to identify and kill an unresponsive instance of the
+test?  Do you have a way to identify and kill an unresponsive instance of the
 tests?  Will there be clean up routines and processes that need be halted when
 the tests are finished?  These are only a few of the many obvious questions
 that need to be considered before implementing a parallel testing plan.
@@ -197,7 +197,7 @@ def get_device_list(devArg):
 
 def issue_device_cmd(util_name, cmd_line, device):  # subprocess.Popen with line by line stdout review
     from subprocess import Popen
-    return_code = ''    
+    return_code = ''
     err_msg = ""
     cmd = [util_name, '-d', device] + shlex.split(cmd_line)
     #print (cmd)
@@ -211,12 +211,9 @@ def issue_device_cmd(util_name, cmd_line, device):  # subprocess.Popen with line
         for line in p.stdout:  # get specific details about particular errors
             line = line.rstrip() # clean off the \n
             #print (line)  #  let's you see stuff
-            if ("unknown option" in line) or ("unrecognized option" in line):  # return_code == 1
-            #if "unknown option"  in line:  # return_code == 1
-                #print line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '')
-                #err_msg = "unknown option" + line.partition("unknown option")[2]
-                err_msg = "Unknown option" + line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '')
-                print (err_msg)
+            if ("invalid option" in line) or ("unknown option" in line) or ("unrecognized option" in line):  # return_code == 1
+                err_msg = "Unknown option" + line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '') + line.partition("invalid option")[2].replace("'", '')
+                #print (err_msg)
                 break
             if "Error: Could"  in line:  # return_code == 2
                 err_msg = "Error: Could" + line.partition("Error: Could")[2]
@@ -244,7 +241,7 @@ def issue_device_cmd(util_name, cmd_line, device):  # subprocess.Popen with line
     else:
         if return_code not in [0,1,2]:
             #err_msg = "Unknown error"
-            print ('', end='')            
+            print ('', end='')
             #p.kill()
     #print return_code
     #print err_msg
@@ -362,10 +359,8 @@ def issue_device_cmd2(util_name, cmd_line, return_dict, device):  # subprocess.P
         for line in p.stdout:  # get specific details about particular errors
             line = line.rstrip() # clean off the \n
             #print (line)  #  let's you see stuff
-            if ("unknown option" in line) or ("unrecognized option" in line):  # return_code == 1
-            #if "unknown option"  in line:  # return_code == 1
-                #err_msg = "unknown option" + line.partition("unknown option")[2]
-                err_msg = "Unknown option" + line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '')
+            if ("invalid option" in line) or ("unknown option" in line) or ("unrecognized option" in line):  # return_code == 1
+                err_msg = "Unknown option" + line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '') + line.partition("invalid option")[2].replace("'", '')
                 #print (err_msg)
                 break
             if "Error: Could"  in line:  # return_code == 2
@@ -392,7 +387,7 @@ def issue_device_cmd2(util_name, cmd_line, return_dict, device):  # subprocess.P
     else:
         if return_code not in [0,1,2]:
             #err_msg = "Unknown error"
-            print ('', end='')            
+            print ('', end='')
             #p.send_kill()
     #print return_code
     #print err_msg
@@ -446,8 +441,9 @@ def multiprocess_pull(devices):
     for k, v in return_dict.items():
         print (' ', k,  '[Return code:', v[0], ']', round(v[1], 3), 'seconds')
         if "Unknown option" in str(v[0]):
-        	   print ()
-        	   sys.exit(1)
+            print ("Aborting test!")
+            print ()
+            sys.exit(1)
     print("Multi-processes tasks took: ", str(round(stop_time - start_time, 3)), " seconds\n") 
 
 #================================================================================
@@ -535,7 +531,7 @@ def map_pull(devices):
     #print (return_dict.values())
     #print (return_dict)
     for k, v in return_dict.items():  # as in key value pairs
-        print (' ', k,  '[Return code:', v[0], ']', round(v[1], 3), 'seconds')        
+        print (' ', k,  '[Return code:', v[0], ']', round(v[1], 3), 'seconds')
         if "Unknown option" in str(v[0]):
             print ("Aborting test!")
             print ("")
@@ -543,7 +539,7 @@ def map_pull(devices):
     stop_time = time.time()
     total_time = stop_time - start_time
     print ("Map Threaded tasks took: ", (round(total_time, 3)), u"seconds")
-                                         
+
     # or supposedly instead of the above four pool lines, these two: with ThreadPoolExecutor(max_workers=2) as executor:
     #   executor.map(issue_device_cmd2, params)
 
@@ -555,9 +551,9 @@ if __name__ == '__main__':
     #print (globals())
     #Main Function so to speak
     if is_windows():
-        print ("\n\tFork the Task(s) - Demonstrates ways to perform tasks in parallel")
+        print ("\n\tDemonstrates ways to perform SeaChest tasks in parallel")
     elif is_linux():
-        print("\033[1;37m\n\tFork the Task(s) - Demonstrates ways to perform tasks in parallel\033[0m")
+        print("\033[1;37m\n\tDemonstrates ways to perform SeaChest tasks in parallel\033[0m")
     #if "idlelib" in sys.modules: is a test when working in Windows IDLE, not effective in Linux
     if "idlelib" in sys.modules:
         # NOTE: not sure why but in IDLE for some reason -v0 is necessary to get individual Multi-Process test times
@@ -605,8 +601,8 @@ if __name__ == '__main__':
         print ("--onlySeagate, --modelMatch, --onlyFW, --childModelMatch, --childOnlyFW\n")
         print ("Before running this Python script, first run any SeaChest tool with the --scan or -s option to see \na list of storage devices in the system.\n")
         sys.exit(1)
-    if len(devices):    
-        print("Run on these %s storage devices: " %(len(devices)), end=' ') 
+    if len(devices):
+        print("Run on these %s storage devices: " %(len(devices)), end=' ')
         for dev in devices:
             print((dev), end=' ')
             print(" ", end=' ')
@@ -614,8 +610,8 @@ if __name__ == '__main__':
         print ("Command: ", tool, command_line)
 
         #1 Comment-out the following if _not_ needed timing for a sequential 
-        #print("\nStarting a Sequential task")
-        #sequential_pull(devices)
+        print("\nStarting a Sequential task")
+        sequential_pull(devices)
         #sys.exit(1)
 
         #2 Comment-out the following if _not_ needed timing for a threaded 

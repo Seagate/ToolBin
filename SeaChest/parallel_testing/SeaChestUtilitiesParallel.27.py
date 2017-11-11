@@ -5,7 +5,7 @@ u"""
 SeaChestUtilitiesParallel.27.py - Seagate drive utilities
 Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 v0.3
-Date last edit: 02-Oct-2017
+Date last edit: 20-Oct-2017
 ================================================================================
 
 Demonstrates how to perform tasks in parallel using Python scripts.
@@ -35,7 +35,7 @@ diagnostics routines.  Will there be memory issues?  What is the safe number of
 parallel tests to run at one time?  Is the power supply ready to support
 numerous active drives?  Will there be network issues when the tasks are on
 different systems?  What should be the response when a drive fails a diagnostic
-test?  Do you have a  way to identify and kill an unresponsive instance of the
+test?  Do you have a way to identify and kill an unresponsive instance of the
 tests?  Will there be clean up routines and processes that need be halted when
 the tests are finished?  These are only a few of the many obvious questions
 that need to be considered before implementing a parallel testing plan.
@@ -216,10 +216,9 @@ def issue_device_cmd(util_name, cmd_line, device):  # subprocess.Popen with line
         for line in iter(p.stdout.readline, b''):  # get specific details about particular errors
             line = line.rstrip() # clean off the \n
             #print line  #  let's you see stuff
-            if ("unknown option" in line) or ("unrecognized option" in line):  # return_code == 1
-                #print line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '')
-                err_msg = "Unknown option" + line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '')
-                print err_msg
+            if ("invalid option" in line) or ("unknown option" in line) or ("unrecognized option" in line):  # return_code == 1
+                err_msg = "Unknown option" + line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '') + line.partition("invalid option")[2].replace("'", '')
+                #print err_msg
                 break
             if "Error: Could"  in line:  # return_code == 2
                 err_msg = "Error: Could" + line.partition("Error: Could")[2]
@@ -293,7 +292,7 @@ def sequential_pull(devices):
 import threading
 
 class dev_thread(threading.Thread):
-    
+
     def __init__(self, name):
         threading.Thread.__init__(self)
         self.name = name
@@ -353,9 +352,8 @@ def issue_device_cmd2(util_name, cmd_line, return_dict, device):  # subprocess.P
         for line in iter(p.stdout.readline, b''):  # get specific details about particular errors
             line = line.rstrip() # clean off the \n
             #print line  #  let's you see stuff
-            if ("unknown option" in line) or ("unrecognized option" in line):  # return_code == 1
-                #print line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '')
-                err_msg = "Unknown option" + line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '')
+            if ("invalid option" in line) or ("unknown option" in line) or ("unrecognized option" in line):  # return_code == 1
+                err_msg = "Unknown option" + line.partition("unknown option")[2] + line.partition("unrecognized option")[2].replace("'", '') + line.partition("invalid option")[2].replace("'", '')
                 #print err_msg
                 break
             if "Error: Could"  in line:  # return_code == 2
@@ -491,7 +489,7 @@ def pp_pull(devices):
 
         #looks like:
         #* PD2 [Return code: (2, 'Error: Could not open handle to \\\\.\\PhysicalDrive2') ] 0.031  seconds
-     
+
 #================================================================================
 
 # http://chriskiehl.com/article/parallelism-in-one-line/
@@ -527,7 +525,7 @@ def map_pull(devices):
     stop_time = time.time()
     total_time = stop_time - start_time
     print u"Map Threaded tasks took: ", (round(total_time, 3)), u"seconds"
-                                         
+
     # or supposedly instead of the above four pool lines, these two: with ThreadPoolExecutor(max_workers=2) as executor:
     #   executor.map(issue_device_cmd2, params)
 
@@ -538,9 +536,9 @@ if __name__ == u'__main__':
 
     #Main Function so to speak
     if is_windows():
-        print u"\n\tFork the Task(s) - Demonstrates ways to perform tasks in parallel"
+        print u"\n\tDemonstrates ways to perform SeaChest tasks in parallel"
     elif is_linux():
-        print u"\033[1;37m\n\tFork the Task(s) - Demonstrates ways to perform tasks in parallel\033[0m"
+        print u"\033[1;37m\n\tDemonstrates ways to perform SeaChest tasks in parallel\033[0m"
     #if "idlelib" in sys.modules: is a test when working in Windows IDLE, not effective in Linux
     if "idlelib" in sys.modules:
         #sys.argv = [sys.argv[0], 'SeaChest_GenericTests', 'all', '--randomTest', '--seconds', '5', '--hideLBA']
@@ -589,8 +587,8 @@ if __name__ == u'__main__':
         print u"--onlySeagate, --modelMatch, --onlyFW, --childModelMatch, --childOnlyFW\n"
         print u"Before running this Python script, first run any SeaChest tool with the --scan or -s option to see \na list of storage devices in the system.\n"
         sys.exit(1)
-    if len(devices):    
-        print u"Run on these %s storage devices: " %(len(devices)), 
+    if len(devices):
+        print u"Run on these %s storage devices: " %(len(devices)),
         for dev in devices:
             print (dev),
             print u" ",
@@ -598,8 +596,8 @@ if __name__ == u'__main__':
         print u"Command: ", tool, command_line
 
         #1 Comment-out the following if _not_ needed timing for a sequential 
-        #print u"\nStarting a Sequential task"
-        #sequential_pull(devices)
+        print u"\nStarting a Sequential task"
+        sequential_pull(devices)
         #sys.exit(1)
 
         #2 Comment-out the following if _not_ needed timing for a threaded 
