@@ -1,0 +1,43 @@
+===============
+Version History
+===============
+v0.0.1  23-May-2017  1_14_3 libraries.  SeaChest_FormatUnit initial beta
+                     test release.  Branched from SeaChest_Erase v1.4.0.
+v0.0.2  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+                     should exit with code = 1; added detection of parallel ATA
+                     and SCSI speeds; temperature data on ATA now uses the
+                     values from the SCT status log or device statistics log.
+                     Adds the child drive matching options --childModelMatch,
+                     --childOnlyFW, and --childNewFW.
+v1.0.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+                     Sense Data Reporting feature enabled, changes to how we
+                     interpret the completion status from the drive, new Sense
+                     Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
+                     note the capital S) aggressive system scan.
+v1.0.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.0.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+                     reading remanufacture time for SAS when the drive reports
+                     a time, fixed SAS --abortDST.
+v1.0.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+                     SAS adapters, added NVMe read, write & Flush commands.
+v1.1.0  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     device, SAT library strings, and fixes to Read-Buffer
+                     error history (ISL). Updated copyright notice, invalid
+                     command line options now only display an error instead of
+                     long help. Added --setSectorSize moved from
+                     SeaChest_Configure. Name change from SeaChest_FormatUnit
+                     to SeaChest_Format.
+v1.1.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.2.0  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     that don't show as SATA and don't support the SAT VPD
+                     page; added Automatic fallback to 12byte CDBs during
+                     initial device discovery;  integrated fixes for SAS
+                     firmware download and fixes for SAS LongDST time
+                     calculation; added detection of TCG Pyrite and Opalite
+                     drives. Removed --defaultFormat since that is now the
+                     default behavior until other flags are added.
+v1.2.0  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     on some LSI adapters, corrects firmware download issue
+                     under Windows 10 API.
+v1.2.0  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
+
