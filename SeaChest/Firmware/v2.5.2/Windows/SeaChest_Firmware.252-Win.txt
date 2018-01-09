@@ -1,7 +1,7 @@
-SeaChest_Firmware.Win.txt                                 Revision: 04-Nov-2017
+SeaChest_Firmware.Win.txt                                 Revision: 03-Jan-2018
 ===============================================================================
  SeaChest_Firmware for Windows - Seagate drive utilities
- Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  SeaChest_Firmware Version: 2.5.2
  Build Date: Nov 02 2017
 ===============================================================================
@@ -188,6 +188,16 @@ Utility arguments
                 (NVMe & SCSI) options.  If this option is not used, a value of
                 zero will be used instead, which means the drive will
                 automatically select the slot number.
+
+        --calculateFileHash [file]
+                Use this option to calculate the hash of a file. The following
+                hashes are computed and shown on the screen:
+                    MD5
+                    SHA1
+                    SHA2_224
+                    SHA2_256
+                    SHA2_384
+                    SHA2_512
 
 Utility Options
 ===============
@@ -478,7 +488,8 @@ careful using SeaChest_Firmware. Power failure during a firmware download will
 cause data loss. Seagate is not responsible for lost user data.
 
 Finally, you may optionally add a hash check calculation on the firmware data
-file to the SeaChest_Firmware configuration file.  Simply, run a MD5
+file to the SeaChest_Firmware configuration file.  Simply, run the
+--calculateFileHash option on the firmware data file.  For example, run a MD5
 calculation on the file and then add "@MD5=61b33014f2d2a4f9553f6ef64fb82e31"
 (substituting your calculation) immediately following the file name, before the
 semi-colon (;).  For example:
@@ -486,7 +497,8 @@ semi-colon (;).  For example:
 ST4000DX001-1CE168;$FWREV$CC43;BarracudaXT-CC44.LOD@MD5=61b33014f2d2a4f9553f6ef64fb82e31;$FWREV$CC44
 
 SeaChest_Firmware will compare its own MD5 calculation to the value in the
-configuration file and if they do not match then the procedure will abort.
+configuration file and if they do not match then the procedure will abort.  Six
+types of hash calculations are supported up to SHA2_512.
 
 ===================
 General Usage Hints
@@ -828,6 +840,7 @@ v1.1.0  14-Jul-2016  1_10_1 libraries adds SMART and power management
 v2.0.3  16-Aug-2016  Adds --fwdlInfo, --activateFW, --fwdlConfig and
                      --fwdlSegSize.  Add user defined configuration
                      files.
+v2.0.4  23-Aug-2016  Adds --calculateFileHash.
 v2.1.0  01-Sep-2016  1_11_1 libraries updates to various printed message,
                      minor bug fixes. Fixed --SATInfo command. After firmware
                      download messages improved. Logic to exclude using both

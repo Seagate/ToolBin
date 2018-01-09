@@ -1,7 +1,7 @@
-SeaChest_Format.Lin.txt                                   Revision: 04-Nov-2017
+SeaChest_Format.Lin.txt                                   Revision: 04-Jan-2018
 ===============================================================================
  SeaChest_Format for Linux - Seagate drive utilities
- Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  SeaChest_Format Version: 1.2.0
  Build Date: Nov 02 2017
 ===============================================================================
@@ -166,7 +166,8 @@ Utility arguments
 
         --showSupportedProtectionTypes (SAS Only)
                 Use this option to view the supported protection types for a
-                device.
+                device. Run -i or --deviceInfo to see current protection type,
+                if any.
 
 Utility Options
 ===============
@@ -362,7 +363,13 @@ Seagate is not responsible for lost user data.
 
         --protectionType [ 0 | 1 | 2 | 3 ]       (SAS Only)
                 Use this option to specify the protection type to format the
-                medium with.
+                medium with.  Use with --formatUnit option.
+                
+                Protection type 0 = FMTPINFO=0 AND "Protection Field Usage"=0
+                Protection type 1 = FMTPINFO=2 AND "Protection Field Usage"=0
+                Protection type 2 = FMTPINFO=3 AND "Protection Field Usage"=0
+                Protection type 3 = FMTPINFO=3 AND "Protection Field Usage"=1
+
                 Note: Not all devices support protection types.
 
         --pattern [repeat:asciinospaces | random | increment:startValue |
