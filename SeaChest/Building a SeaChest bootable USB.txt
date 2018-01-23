@@ -1,6 +1,7 @@
+Building a SeaChest Bootable USB.txt                      Revision: 23-Jan-2018
 ==========================================================================================
  Seagate Utilities
- Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ==========================================================================================
 
 Building a SeaChest bootable USB
@@ -13,6 +14,10 @@ Within the ZIP file, locate the "USB boot maker" folder.  This EXE runs from
 Windows and will require a dedicated USB flash drive.  Any data on the USB
 flash drive will be lost when the USB boot maker tool runs.  The bootable flash
 drive boots to the 32-bit or 64-bit Tiny Core Linux distribution.
+
+KNOWN LIMITATION: The Seagate USB boot maker tool needs a USB flash drive of
+      size 256MiB or larger but less than 32GiB.  The USB flash drive must be
+      formatted to FAT32 (in this size range they usually are).
 
 See the SeaChest text files in the USB flash drive root directory for specific
 usage instructions.
@@ -135,7 +140,7 @@ usage and acknowledgement licenses, and our Linux USB Boot Maker FAQ can be
 found at:
 http://support.seagate.com/firmware/usbbootmaker_faq.html
 
-Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ======================================================================
 
                         END USER LICENSE AGREEMENT
