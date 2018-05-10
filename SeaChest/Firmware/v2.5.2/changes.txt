@@ -21,6 +21,7 @@ v1.1.0  14-Jul-2016  1_10_1 libraries adds SMART and power management
 v2.0.3  16-Aug-2016  Adds --fwdlInfo, --activateFW, --fwdlConfig and
                      --fwdlSegSize.  Add user defined configuration
                      files.
+v2.0.4  23-Aug-2016  Adds --calculateFileHash.
 v2.1.0  01-Sep-2016  1_11_1 libraries updates to various printed message,
                      minor bug fixes. Fixed --SATInfo command. After firmware
                      download messages improved. Logic to exclude using both
@@ -86,4 +87,21 @@ v2.5.2  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
                      on some LSI adapters, corrects firmware download issue
                      under Windows 10 API.
 v2.5.2  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
-
+v2.5.2  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
+                     USB flash drives, support for early 90's PATA drives that
+                     don't support LBA mode, bug fix where the last digit of
+                     the SCSI Unit Serial Number was being dropped, additional
+                     logic for deferred download completion status. --scan
+                     --onlySeagate for just Seagate drives in a large system,
+                     Long Drive Self Test Time in the -i output, write protect
+                     status has been added for SCSI and NVMe in the -i output,
+                     IDD enhancements for SAS, IDD enhancements to allow
+                     captive mode on SATA, added USB Hacks to better support
+                     some odd-ball USB devices and prevent crashes and improve
+                     performance for some operations on them by issuing test
+                     unit ready commands when something fails during device
+                     discovery, automatic fall back to SAT 10 byte commands
+                     during device discovery to help work with some USB
+                     devices, some Legacy SCSI support enhancements (partially
+                     from USB hacks development), enhanced SD to SG mapping in
+                     Linux.
