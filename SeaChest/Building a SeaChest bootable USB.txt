@@ -1,4 +1,4 @@
-Building a SeaChest Bootable USB.txt                      Revision: 10-May-2018
+Building a SeaChest Bootable USB.txt                      Revision: 29-May-2018
 ==========================================================================================
  Seagate Utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -8,7 +8,8 @@ Building a SeaChest bootable USB
 ================================
 A tool to create a bootable USB flash drive version of SeaChest is available
 from the Seagate public website at this link:
-https://apps1.seagate.com/downloads/certificate.html?key=19044734837
+https://www.seagate.com/support/software/seachest/
+http://support.seagate.com/seachest/SeaChestUtilities.zip
 
 Within the ZIP file, locate the "USB boot maker" folder.  This EXE runs from
 Windows and will require a dedicated USB flash drive.  Any data on the USB
