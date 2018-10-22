@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 08-May-2018
+Date last edit: 18-Oct-2018
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -24,12 +24,12 @@ Sample Output
 END USER LICENSE AGREEMENT
 
 
-SeaChest_Basics.Lin.txt                                   Revision: 08-May-2018
+SeaChest_Basics.Lin.txt                                   Revision: 18-Oct-2018
 ===============================================================================
  SeaChest_Basics for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Basics Version: 2.7.2
- Build Date: May 07 2018
+ SeaChest_Basics Version: 2.7.3
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest Basics diagnostic software.
 
@@ -133,7 +133,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -324,13 +324,16 @@ Utility arguments
                 operation. Use the -i command to learn the port identifier and
                 phy speeds for a device.
 
-        --readyLED [on | off | default] (SAS Only)
+        --readyLED [info | on | off | default] (SAS Only)
                 Use this option to change the behavior of pin 11, the ready
-                LED. Setting to "on" means we are setting the bit to 1 on mode
-                page 19h. See the SPL spec for details on how this changes LED
-                behavior. Setting to "off" sets the ready LED bit to 0. Using
-                "default" reads the drive default setting and sets the bit
-                according to defaults.
+                LED. See the SPL spec for full details on how this changes LED
+                behavior.
+                    info - gets the current state of the ready LED.
+                    on - sets the ready LED to usually off unless
+                         processing a command.
+                    off - sets the ready LED to usually on unless
+                          processing a command
+                    default - sets the ready LED to the drive's default value
 
         --readLookAhead [info | enable | disable]
                 Use this option to enable or disable read look-ahead support on
@@ -395,7 +398,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -708,13 +711,26 @@ v2.7.2  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux.
+v2.7.3  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command.
+v2.7.3  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_Configure.Lin.txt                                Revision: 08-May-2018
+SeaChest_Configure.Lin.txt                                Revision: 18-Oct-2018
 ===============================================================================
  SeaChest_Configure for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Configure Version: 1.12.0
- Build Date: May 07 2018
+ SeaChest_Configure Version: 1.12.2
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_Configure diagnostic software.
 
@@ -787,7 +803,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -847,13 +863,16 @@ Utility arguments
                 operation. Use the -i option to learn more about the supported
                 phys.
 
-        --readyLED [on | off | default] (SAS Only)
+        --readyLED [info | on | off | default] (SAS Only)
                 Use this option to change the behavior of pin 11, the ready
-                LED. Setting to "on" means we are setting the bit to 1 on mode
-                page 19h. See the SPL spec for details on how this changes LED
-                behavior. Setting to "off" sets the ready LED bit to 0. Using
-                "default" reads the drive default setting and sets the bit
-                according to defaults.
+                LED. See the SPL spec for full details on how this changes LED
+                behavior.
+                    info - gets the current state of the ready LED.
+                    on - sets the ready LED to usually off unless
+                         processing a command.
+                    off - sets the ready LED to usually on unless
+                          processing a command
+                    default - sets the ready LED to the drive's default value
 
         --readLookAhead [info | enable | disable]
                 Use this option to enable or disable read look-ahead support on
@@ -975,11 +994,6 @@ Utility arguments
                       command will fail.
                 Note2: Not all products support this feature.
 
-        --showSupportedSectorSizes
-                This option will show the supported sector sizes of a device if
-                it reports them. If the device does not report supported sector
-                sizes, please consult your product manual.
-
         --sscFeature [info | default | enable | disable] (SATA Only) (Seagate Only)
                 Use this option to change or view the SSC (Spread Spectrum
                 Clocking) mode on a Seagate SATA drive. Only change this
@@ -990,6 +1004,20 @@ Utility arguments
                 default - set to drive default mode
                 enable - enable SSC
                 disable - disable SSC
+
+        --freeFall [info | enable | disable | sensitivity value]  (SATA only)
+                Use this option to configure the Free Fall control feature
+                found on some SATA drives. This feature allows the drive to
+                take action if it detects it is in free fall to protect the
+                data from harm due to a drop.
+
+                info - use this to see the current sensitivity value
+                enable - this option will set the sensitivity to the vendor's
+                        recommended value.
+                disable - this will disable the free fall control feature.
+                sensitivity value - set a value between 1 and 255 to control
+                        how sensitive the detection is. A value of zero will
+                        set the vendor's recommended value.
 
 Utility Options
 ===============
@@ -1038,7 +1066,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -1101,29 +1129,6 @@ Seagate is not responsible for lost user data.
                 when supported by the device, including SSDs.  For most HDDs
                 this test will write 0's to the device and possibly take a very
                 long time to complete.
-
-        --setSectorSize [new sector size]        (Seagate Only)
-                This option is only available for drives that support sector
-                size changes. On SATA Drives, the Set Sector Configuration
-                command must be supported. On SAS Drives, Fast Format must be
-                supported. A format unit can be used on SAS instead of this
-                option to perform a long format and adjust sector size. Use the
-                --showSupportedSectorSizes option to see the sector sizes the
-                drive reports supporting. If this option doesn't list anything,
-                please consult your product manual. This option should be used
-                to quickly change between 5xxE and 4xxx sector sizes. Using
-                this option to change from 512 to 520 or similar is not
-                recommended at this time due to limited drive support.
-
-                This option can be used to quickly change the the logical
-                sector size between 5xx emulation and 4xxx native logical block
-                sizes. Resulting LBA (sector) count is either /8 or *8 the
-                current Read Capacity or Identify, depending on the direction
-                of the conversion.  In the case of SAS, this is a fast format
-                unit command keeping existing data in the physical sector. The
-                media may be readable, but data may be unspecified or may
-                return errors on read access according to it's error processing
-                algorithms.
 
 ===============
 Version History
@@ -1217,13 +1222,26 @@ v1.12.0 19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux.
+v1.12.2 21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command. Add --freeFall
+v1.12.2 18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_Erase.Lin.txt                                    Revision: 08-May-2018
+SeaChest_Erase.Lin.txt                                    Revision: 18-Oct-2018
 ===============================================================================
 SeaChest_Erase for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Erase Version: 1.7.3
- Build Date: May 07 2018
+ SeaChest_Erase Version: 1.7.4
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_Erase diagnostic software.
 
@@ -1432,7 +1450,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -1784,7 +1802,8 @@ command set.
 
                 Note: There is no electronic method to test if a SAS drive
                       supports Fast Format. Refer to the drive product manual
-                      to determine if it supports the sub-command.
+                      to determine if it supports the sub-command.  (See the
+                      help topic below: About FastFormat)
 
         --pattern [repeat:asciinospaces | random | increment:startValue |
              file:filename]
@@ -1948,6 +1967,11 @@ libata.allow_tpm=1 on the append line with the other kernel boot parameters.
 3. Using a (Windows) text editor go to USB:/EFI/boot/refind.conf and add
 libata.allow_tpm=1 on the options line with the other kernel boot parameters
 
+Alternate method:
+If Linux is already booted and you only want to temporarily enable TCG
+commands, you can change the contents of
+/sys/module/libata/parameters/allow_tpm from "0" to a "1".
+
 ===============
 Version History
 ===============
@@ -2065,13 +2089,26 @@ v1.7.3  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux. Removed immediate bit from SAS Fast Format.
+v1.7.4  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command.
+v1.7.4  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_Firmware.Lin.txt                                 Revision: 08-May-2018
+SeaChest_Firmware.Lin.txt                                 Revision: 18-Oct-2018
 ===============================================================================
  SeaChest_Firmware for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Firmware Version: 2.5.2
- Build Date: May 07 2018
+ SeaChest_Firmware Version: 2.5.4
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_Firmware diagnostic software.
 
@@ -2159,7 +2196,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -2263,6 +2300,18 @@ Utility arguments
                     SHA2_384
                     SHA2_512
 
+        --allowFlexibleFWDLAPIUse
+                This option is used to control when to use the Windows 10+
+                Firmware Download API calls. Default behavior is to only use
+                this call when the interface and drive and command all match.
+                The default behavior means that only ATA drives on an ATA
+                interface with a ATA download command will use this call. SCSI
+                SAS drives with a supported write buffer command will also use
+                this call. Using this option allows a detected ATA drive on any
+                interface to use this call if the OS/driver supports it
+                regardless of the command being sent by the opensea-transport
+                library.
+
 Utility Options
 ===============
         -h, --help
@@ -2310,7 +2359,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -2562,13 +2611,26 @@ v2.5.2  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux.
+v2.5.4  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command. Add --allowFlexibleFWDLAPIUse.
+v2.5.4  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_Format.Lin.txt                                   Revision: 08-May-2018
+SeaChest_Format.Lin.txt                                   Revision: 18-Oct-2018
 ===============================================================================
 SeaChest_Format for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 1.2.0
- Build Date: May 07 2018
+ SeaChest_Format Version: 1.2.1
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_Format diagnostic software.
 
@@ -2677,7 +2739,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -2781,7 +2843,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -2839,6 +2901,29 @@ entire drive.
 
         --confirm I-understand-this-test-command-erase ... etc
 
+        --setSectorSize [new sector size]        (Seagate Only)
+                This option is only available for drives that support sector
+                size changes. On SATA Drives, the Set Sector Configuration
+                command must be supported. On SAS Drives, Fast Format must be
+                supported. A format unit can be used on SAS instead of this
+                option to perform a long format and adjust sector size. Use the
+                --showSupportedSectorSizes option to see the sector sizes the
+                drive reports supporting. If this option doesn't list anything,
+                please consult your product manual. This option should be used
+                to quickly change between 5xxE and 4xxx sector sizes. Using
+                this option to change from 512 to 520 or similar is not
+                recommended at this time due to limited drive support.
+
+                This option can be used to quickly change the the logical
+                sector size between 5xx emulation and 4xxx native logical block
+                sizes. Resulting LBA (sector) count is either /8 or *8 the
+                current Read Capacity or Identify, depending on the direction
+                of the conversion.  In the case of SAS, this is a fast format
+                unit command keeping existing data in the physical sector. The
+                media may be readable, but data may be unspecified or may
+                return errors on read access according to it's error processing
+                algorithms.  (See the help topic below: About FastFormat)
+
         --formatUnit [current | new sector size]    (SAS Only) (Seagate Only)
                 This option will start a format unit operation on a SAS drive
                 Use "current" to perform a format unit operation with the
@@ -2886,7 +2971,8 @@ entire drive.
 
                 Note: There is no electronic method to test if a SAS drive
                       supports Fast Format. Refer to the drive product manual
-                      to determine if it supports the sub-command.
+                      to determine if it supports the sub-command.  (See the
+                      help topic below: About FastFormat)
 
         --disableCertification       (SAS Only)
                 Use this option to disable the certification operation when
@@ -3032,6 +3118,24 @@ command (i.e., INQUIRY data shall not change until after successful completion
 of a format operation). The processing of commands in the task set when a
 FORMAT UNIT command is received is vendor specific.
 
+================
+About FastFormat
+================
+A FastFormat (quickly changing the logical sector size) may take a few minutes
+for the process to complete. The disk activity LED may show activity during the
+conversion.  The larger the drive, the longer it takes.
+
+NOTE: Operating systems do a device discovery during start up and set various
+parameters, like total sectors and sector size, into the storage device
+descriptions. The logical sector size times the number or logical sectors
+defines the drive capacity.  You should expect to see OS I/O errors if you
+change the logical sector size on a drive and then perform read or write
+operations before the OS has updated its storage device descriptions.  Some
+operating systems will throw an error after accessing a drive that has just run
+a FastFormat but during its error recovery routines it may re-discover the
+device parameters and update the system logs.  A system restart, however, is
+the most reliable way to refresh the storage device descriptions.
+
 ===============
 Version History
 ===============
@@ -3092,13 +3196,26 @@ v1.2.0  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux. Removed immediate bit from SAS Fast Format.
+v1.2.1  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command.
+v1.2.1  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_GenericTests.Lin.txt                             Revision: 08-May-2018
+SeaChest_GenericTests.Lin.txt                             Revision: 18-Oct-2018
 ===============================================================================
  SeaChest GenericTests for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_GenericTests Version: 1.7.2
- Build Date: May 07 2018
+ SeaChest_GenericTests Version: 1.7.3
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_GenericTests diagnostic software.
 
@@ -3144,6 +3261,26 @@ erasure or setting the maximum capacity, etc) are limited to Seagate disk
 drives (this includes Seagate, Maxtor, Samsung and LaCie). Be careful using
 SeaChest because some of the features, like the data erasure options, will
 cause data loss. Seagate is not responsible for lost user data.
+
+Inner and outer diameter tests refer to the physical beginning and ending
+sections of a hard disk drive with rotating magnetic media.  In the case of SSD
+devices, these tests refer to the logical beginning and ending sections of the
+solid state drive.
+
+Important note: Many tests in this tool directly reference storage device data
+sectors, also known as Logical Block Addresses (LBA). Test arguments may
+require a starting LBA or an LBA range.  The predefined variable 'maxLBA'
+refers to the last sector on the drive.  Many older SATA and SAS storage
+controllers (also known as Host Bus Adapters [HBA]) have a maximum addressable
+limit of 4294967295 [FFFFh] LBAs hard wired into their design.  This equates to
+2.1TB using 512 byte sectors.  This also means accessing an LBA beyond the
+2.1TB limitation either will result in an error or simply the last readable LBA
+(usually LBA 4294967295 [FFFFh]) depending on the actual hardware.  This
+limitation can have important consequences.  For example, if you intended to
+erase a 4TB drive, then only the first 2TB will actually get erased (or maybe
+even twice!) and the last 2TB will remain untouched.  You should carefully
+evaluate your system hardware to understand if your storage controllers provide
+support for greater than 2.1TB.
 
 Usage
 =====
@@ -3198,7 +3335,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -3392,7 +3529,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -3634,13 +3771,26 @@ v1.7.2  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux.  Added --bufferTest.
+v1.7.3  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command.
+v1.7.3  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_Info.Lin.txt                                     Revision: 08-May-2018
+SeaChest_Info.Lin.txt                                     Revision: 18-Oct-2018
 ===============================================================================
  SeaChest_Info for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 1.3.1
- Build Date: May 07 2018
+ SeaChest_Info Version: 1.4.1
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_Info diagnostic software.
 
@@ -3753,7 +3903,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -3787,6 +3937,37 @@ Utility arguments
                 the notifications log (if DSN feature is supported) to display
                 these statistics. On SAS, various log pages are read to collect
                 a bunch of equivalent reported parameter information.
+
+        --showSCSIDefects [ p | g | pg ]        (SAS Only)
+                This option will display the SCSI defects on the screen. The
+                arguments to this will tell whether to get the grown, primary,
+                or primary and grown defects from the drive. Use the
+                --defectFormat option to specify the mode to display the
+                defects. If no mode is specified, physical cylinder-head-sector
+                mode is assumed.
+
+                Arguments:
+                p - use this option to pull and display the primary (factory)
+                    defects
+                g - use this option to pull and display the grown (reallocated)
+                    defects
+                pg - the options can be combined to pull and display both
+                    defect lists.
+
+        --defectFormat [ # | shortBlock | longBlock | xbfi | xchs | bfi | chs ] (SAS Only)
+                This option set the format of the defects to output. Not all
+                drives will support all defect modes. SSDs will only support
+                block modes.
+
+                Arguments: show the defects in either name or # mode
+                shortBlock | 0    short block address mode (drives < 32bit LBA)
+                xbfi       | 1    extended bytes from index mode
+                xchs       | 2    extended physical cylinder-head-sector mode
+                longBlock  | 3    long block address mode (drives > 32bit LBA)
+                bfi        | 4    bytes from index mode
+                chs        | 5    physical cylinder-head-sector mode
+
+                Examples: --defectFormat 3, or --defectFormat longBlock
 
 Utility Options
 ===============
@@ -3835,7 +4016,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -3971,13 +4152,26 @@ v1.3.1  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux.
+v1.4.1  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command.
+v1.4.1  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_PowerControl.Lin.txt                             Revision: 08-May-2018
+SeaChest_PowerControl.Lin.txt                             Revision: 18-Oct-2018
 ===============================================================================
  SeaChest_PowerControl for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 1.9.0
- Build Date: May 07 2018
+ SeaChest_PowerControl Version: 1.9.1
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_PowerControl diagnostic software.
 
@@ -4081,7 +4275,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -4343,7 +4537,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -4551,13 +4745,26 @@ v1.9.0  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux.  Added --idle (Immediate), --idleUnload, --standby
                      (Immediate), --active.
+v1.9.1  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command.
+v1.9.1  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_Security.Lin.txt                                 Revision: 08-May-2018
+SeaChest_Security.Lin.txt                                 Revision: 18-Oct-2018
 ===============================================================================
  SeaChest_Security for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Security Version: 1.6.1
- Build Date: May 07 2018
+ SeaChest_Security Version: 1.6.2
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_Security diagnostic software.
 
@@ -4640,7 +4847,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -4774,7 +4981,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -4952,6 +5159,11 @@ libata.allow_tpm=1 on the append line with the other kernel boot parameters.
 3. Using a (Windows) text editor go to USB:/EFI/boot/refind.conf and add
 libata.allow_tpm=1 on the options line with the other kernel boot parameters
 
+Alternate method:
+If Linux is already booted and you only want to temporarily enable TCG
+commands, you can change the contents of
+/sys/module/libata/parameters/allow_tpm from "0" to a "1".
+
 ===============
 Version History
 ===============
@@ -5043,13 +5255,26 @@ v1.6.1  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux.
+v1.6.2  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command.
+v1.6.2  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
-SeaChest_SMART.Lin.txt                                    Revision: 08-May-2018
+SeaChest_SMART.Lin.txt                                    Revision: 18-Oct-2018
 ===============================================================================
  SeaChest_SMART for Linux - Seagate drive utilities
  Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_SMART Version: 1.9.1
- Build Date: May 07 2018
+ SeaChest_SMART Version: 1.11.0
+ Build Date: Oct 18 2018
 ===============================================================================
 Welcome to Seagate's SeaChest_SMART diagnostic software.
 
@@ -5172,7 +5397,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -5314,6 +5539,21 @@ Utility arguments
                 will go check itself for issues and update attributes. Uncommon
                 and not supported on most drives.
 
+        --showSMARTErrorLog [ summary | comprehensive ] (SATA Only)
+                This option will display the ATA SMART Error log on the screen.
+                Use "summary" to view the summary SMART error log (last 5
+                entries). Use "comprehensive" to view all the entires the drive
+                has available. Specifying "comprehensive" will automatically
+                pull the ext error log on drives that support 48bit LBAs.
+
+                Note: The summary error log will truncate 48bit commands, so
+                some information will be missing to describe the operation of
+                certain commands.
+
+        --smartErrorLogFormat [ raw | detailed ]        (SATA Only)
+                Use this option to change the format of the output from the
+                --showSMARTErrorLog option. The default mode is "detailed".
+
         --idd [short | long]    (Seagate Only)
                 Start an In Drive Diagnostic (IDD) test on a Seagate SATA
                 drive. Not all tests are supported by all products. If a
@@ -5348,6 +5588,37 @@ Utility arguments
                     4 - Unconditionally generate recovered error
                     5 - Generate no sense
                     6 - Report on request
+
+        --showSCSIDefects [ p | g | pg ]        (SAS Only)
+                This option will display the SCSI defects on the screen. The
+                arguments to this will tell whether to get the grown, primary,
+                or primary and grown defects from the drive. Use the
+                --defectFormat option to specify the mode to display the
+                defects. If no mode is specified, physical cylinder-head-sector
+                mode is assumed.
+
+                Arguments:
+                p - use this option to pull and display the primary (factory)
+                    defects
+                g - use this option to pull and display the grown (reallocated)
+                    defects
+                pg - the options can be combined to pull and display both
+                    defect lists.
+
+        --defectFormat [ # | shortBlock | longBlock | xbfi | xchs | bfi | chs ] (SAS Only)
+                This option set the format of the defects to output. Not all
+                drives will support all defect modes. SSDs will only support
+                block modes.
+
+                Arguments: show the defects in either name or # mode
+                shortBlock | 0    short block address mode (drives < 32bit LBA)
+                xbfi       | 1    extended bytes from index mode
+                xchs       | 2    extended physical cylinder-head-sector mode
+                longBlock  | 3    long block address mode (drives > 32bit LBA)
+                bfi        | 4    bytes from index mode
+                chs        | 5    physical cylinder-head-sector mode
+
+                Examples: --defectFormat 3, or --defectFormat longBlock
 
         --errorLimit [limit in number of LBAs]
                 Use this option to specify a different error limit for DST and
@@ -5403,7 +5674,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
@@ -5642,6 +5913,20 @@ v1.9.1  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
                      Linux.
+v1.10.0 25-Jul-2018  Adds --defectFormat, --showSCSIDefects
+v1.11.0 21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command. Adds --showSMARTErrorLog, --smartErrorLogFormat.
+v1.11.0 18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 
 Sections below are common to all tools:
 
@@ -5694,7 +5979,7 @@ Utility arguments
                 operation. See the section below 'Tool Usage Hints' for
                 information about defining multiple device handles.
 
-                Example: -d /dev/sg5
+                Linux example: -d /dev/sg5    Windows example: -d PD3
 
         -i, --deviceInfo
                 Show information and features for the storage device. USB
@@ -5759,7 +6044,7 @@ Utility Options
 
         --onlySeagate
                 Use this option to match only Seagate drives for the options
-                provided.
+                provided. May also be used with the --scan command.
 
         --modelMatch [model Number]
                 Use this option to run on all drives matching the provided
