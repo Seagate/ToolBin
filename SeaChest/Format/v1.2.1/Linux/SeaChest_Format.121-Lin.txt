@@ -315,10 +315,7 @@ entire drive.
                 Example: --formatUnit 512 --fastFormat 1 --confirm I-... etc
                 Example: --formatUnit 4096 --fastFormat 1 --confirm I-... etc
 
-                Note: There is no electronic method to test if a SAS drive
-                      supports Fast Format. Refer to the drive product manual
-                      to determine if it supports the sub-command.  (See the
-                      help topic below: About FastFormat)
+                Note: See the help topic below: About FastFormat
 
         --setSectorSize [new sector size]        (Seagate Only)
                 This option is only available for drives that support sector
@@ -546,7 +543,29 @@ About FastFormat
 ================
 A FastFormat (quickly changing the logical sector size) may take a few minutes
 for the process to complete. The disk activity LED may show activity during the
-conversion.  The larger the drive, the longer it takes.
+conversion.  The larger the drive, the longer it takes.  This feature is found
+on SAS and SATA interface Seagate drive families designed and manufactured
+later than 2016.  SAS interface drives will report support for FastFormat if it
+is available in the drive. Just run the -i or --deviceInfo command and check
+under the Features Supported section.  Unfortunately, SATA interface drives do
+not report this capability.  Please refer to the SATA product manual for
+verification of this feature.
+
+SAS and SATA interface drives accomplish a FastFormat this with the
+--setSectorSize [new sector size] command found in SeaChest_Format or
+SeaChest_Lite.  In addition, for SAS interface drives, only, the same result is
+possible using the --formatUnit command with the --fastFormat [fast format
+mode] modifier equal to 1.  This command is found in SeaChest_Format and
+SeaChest_Erase.  For example:
+--formatUnit 4096 --fastFormat 1 --confirm I-... etc
+
+SAS interface drives, only, can all do a long format unit.  This procedure
+takes a very long time, more than a day in some cases, but it does have the
+advantage of full defect management with all sectors being readable at the
+conclusion.  The fast format does not do this full drive read and
+verification.  If your drive is new, there is no real need to run a long format
+unit to change sector between 5xxE (512 bytes per logical sector emulation) and
+4kN (4096 native bytes per sector, logical and physical).
 
 NOTE: Operating systems do a device discovery during start up and set various
 parameters, like total sectors and sector size, into the storage device
@@ -1003,7 +1022,7 @@ diagnostics are installed through a typical setup wizard and can be removed via
 the Control Panel.
 
 In addition, Seagate offers a tool to build a bootable USB SeaChest flash drive
-which boots to a 32-bit Linux command prompt.  This is a Windows executable
+which boots to a 64-bit Linux command prompt.  This is a Windows executable
 file which formats a USB Flash drive you provide.  It copies over all the files
 needed to use it as a bootable device for the SeaChest diagnostic software.
 All data on the USB Flash drive will be erased so be sure to protect any
