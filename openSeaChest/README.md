@@ -1,7 +1,7 @@
 # openSeaChest
 ## Cross platform utilities useful for performing various operations on SATA, SAS, NVMe, and USB storage devices.
 
-#### Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+#### Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 
 Welcome to the openSeaChest open source project!
 
@@ -10,6 +10,10 @@ been made available to you under the Mozilla Public License 2.0 (MPL).  The
 openSeaChest project repository is maintained at
 https://github.com/Seagate/openSeaChest.
 
+Compiled binary versions of the openSeaChest utilities for various operating
+systems may be found at
+https://github.com/Seagate/ToolBin/tree/master/openSeaChest
+
 This collection of storage device utility software is branched (forked) off of
 an original utility collection called the Seagate SeaChest Utilities by Seagate
 Technology LLC.  The original SeaChest Utilities are still available at
@@ -17,31 +21,10 @@ www.seagate.com or https://github.com/Seagate/ToolBin/tree/master/SeaChest.
 Binary versions are available for Linux or Windows, with the Windows versions
 signed by Seagate Technology LLC.
 
-This User Guide file contains important information about openSeaChest Basics.
-Please read this entire file before using this software.
-
 openSeaChest is a collection of programming libraries for storage devices and
-comprehensive, easy-to-use command line diagnostic tool that helps you quickly
+comprehensive, easy-to-use command line diagnostic tools that helps you quickly
 determine the health and status of your storage product. It includes several
 tests that will examine the physical media on your storage device.
-
-### The libraries:
-
-**opensea-common**      - Operating System common operations, not specific to
-                      storage standards. Contains functions and defines that
-                      are useful to all other libraries.
-                      
-**opensea-transport**   - Contains standard ATA/SCSI/NVMe functions based on open
-                      standards for these command sets.  This layer also
-                      supports different transporting these commands through
-                      operating systems to the storage devices. Code depends on
-                      opensea-common.
-                      
-**opensea-operations**  - Contains common use cases for operations to be performed
-                      on a storage device. This layer encapsulates the nuances
-                      of each command set (ATA/SCSI) and operating systems
-                      (Linux/Windows etc.) Depends on opensea-common and
-                      opensea-transport.
 
 ### The applications are described below:
 
@@ -51,20 +34,10 @@ tests that will examine the physical media on your storage device.
 * *openSeaChest_Firmware*
 * *openSeaChest_Format*
 * *OpenSeaChest_GenericTests*
+* *OpenSeaChest_Logs*
+* *OpenSeaChest_NVMe*
 * *openSeaChest_PowerControl*
 * *openSeaChest_SMART*
-
-### Source
-
-
-### Building
-
-
-### Documentation
-
-
-### Platforms
-
 
 ### Important Notes:
 
@@ -78,13 +51,6 @@ data erasure options, will cause data loss.   Some commands, like setting the
 maximum LBA, may cause existing data on the drive to become inaccessible.  Some
 commands, like disabling the read look ahead buffer, may affect the performance
 of the drive.  Seagate is not responsible for lost user data.
-
-openSeaChest diagnostics are command line utilities which are available for
-expert users.  These command line tools assume the user is knowledgeable about
-running software from the operating system command prompt. CLI tools are in the
-English language only and use "command line arguments" to define the various
-tasks and specific devices.  openSeaChest diagnostics are available for both
-Linux and Windows environments.
 
 **Important note:** Many tests in this tool directly reference storage device data
 sectors, also known as Logical Block Addresses (LBA). Test arguments may
@@ -126,15 +92,7 @@ both Linux and Windows environments.
 
 Linux versions of openSeaChest tools are available as stand alone 32 or 64-bit
 executables you can copy to your own system.  Windows OS versions of
-openSeaChest diagnostics are installed through a typical setup wizard and can
-be removed via the Control Panel.
-
-In addition, Seagate offers a tool to build a bootable USB openSeaChest flash
-drive which boots to a 32-bit Linux command prompt.  This is a Windows
-executable file which formats a USB Flash drive you provide.  It copies over
-all the files needed to use it as a bootable device for the openSeaChest
-diagnostic software. All data on the USB Flash drive will be erased so be sure
-to protect any valuable files.
+openSeaChest diagnostics are also available.
 
 Technical Support for openSeaChest drive utilities is not available.  If you
 have the time to send us some feedback about this software, especially if you
@@ -143,7 +101,7 @@ from you.  To report your comments and suggestions, please use this email
 seaboard@seagate.com.  Please let us know the name and version of the tool you
 are using.
 
-openSeaChest drive utilities support SATA, SAS and USB interface devices.
+openSeaChest drive utilities support SATA, SAS, NVMe and USB interface devices.
 
 **openSeaChest_Basics** - Contains the most important tests and tools.
 
@@ -183,6 +141,10 @@ and power on hours) and performance logs (like temperature) are available for
 analytical review.  Identification and inquiry data stored on the drive is also
 provided.  A view of SMART and device statistics is available when supported by
 the drive.
+
+**openSeaChest_Logs** -
+
+**openSeaChest_NVMe** -
 
 **openSeaChest_PowerControl** - Seagate disk drives offer a multitude of options to
 manage power.  This tool manipulates the various power modes.
@@ -230,7 +192,7 @@ The newest online version of the openSeaChest Utilities documentation, open
 source usage and acknowledgement licenses, and our Linux USB Boot Maker FAQ can
 be found at: https://github.com/Seagate/openSeaChest.
 
-Copyright (c) 2014-2017 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 
 -----------------------------------------
 
@@ -246,24 +208,24 @@ Mozilla Public License Version 2.0
 
 ### 1. Definitions
 
-**1.1. “Contributor”**  
+**1.1. “Contributor”**
     means each individual or legal entity that creates, contributes to
     the creation of, or owns Covered Software.
 
-**1.2. “Contributor Version”**  
+**1.2. “Contributor Version”**
     means the combination of the Contributions of others (if any) used
     by a Contributor and that particular Contributor's Contribution.
 
-**1.3. “Contribution”**  
+**1.3. “Contribution”**
     means Covered Software of a particular Contributor.
 
-**1.4. “Covered Software”**  
+**1.4. “Covered Software”**
     means Source Code Form to which the initial Contributor has attached
     the notice in Exhibit A, the Executable Form of such Source Code
     Form, and Modifications of such Source Code Form, in each case
     including portions thereof.
 
-**1.5. “Incompatible With Secondary Licenses”**  
+**1.5. “Incompatible With Secondary Licenses”**
     means
 
 * **(a)** that the initial Contributor has attached the notice described
@@ -272,22 +234,22 @@ Mozilla Public License Version 2.0
     version 1.1 or earlier of the License, but not also under the
     terms of a Secondary License.
 
-**1.6. “Executable Form”**  
+**1.6. “Executable Form”**
     means any form of the work other than Source Code Form.
 
-**1.7. “Larger Work”**  
-    means a work that combines Covered Software with other material, in 
+**1.7. “Larger Work”**
+    means a work that combines Covered Software with other material, in
     a separate file or files, that is not Covered Software.
 
-**1.8. “License”**  
+**1.8. “License”**
     means this document.
 
-**1.9. “Licensable”**  
+**1.9. “Licensable”**
     means having the right to grant, to the maximum extent possible,
     whether at the time of the initial grant or subsequently, any and
     all of the rights conveyed by this License.
 
-**1.10. “Modifications”**  
+**1.10. “Modifications”**
     means any of the following:
 
 * **(a)** any file in Source Code Form that results from an addition to,
@@ -296,7 +258,7 @@ Mozilla Public License Version 2.0
 * **(b)** any new file in Source Code Form that contains any Covered
     Software.
 
-**1.11. “Patent Claims” of a Contributor**  
+**1.11. “Patent Claims” of a Contributor**
     means any patent claim(s), including without limitation, method,
     process, and apparatus claims, in any patent Licensable by such
     Contributor that would be infringed, but for the grant of the
@@ -304,16 +266,16 @@ Mozilla Public License Version 2.0
     made, import, or transfer of either its Contributions or its
     Contributor Version.
 
-**1.12. “Secondary License”**  
+**1.12. “Secondary License”**
     means either the GNU General Public License, Version 2.0, the GNU
     Lesser General Public License, Version 2.1, the GNU Affero General
     Public License, Version 3.0, or any later versions of those
     licenses.
 
-**1.13. “Source Code Form”**  
+**1.13. “Source Code Form”**
     means the form of the work preferred for making modifications.
 
-**1.14. “You” (or “Your”)**  
+**1.14. “You” (or “Your”)**
     means an individual or a legal entity exercising rights under this
     License. For legal entities, “You” includes any entity that
     controls, is controlled by, or is under common control with You. For
