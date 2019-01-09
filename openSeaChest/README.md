@@ -33,9 +33,10 @@ tests that will examine the physical media on your storage device.
 * *openSeaChest_Erase*
 * *openSeaChest_Firmware*
 * *openSeaChest_Format*
-* *OpenSeaChest_GenericTests*
-* *OpenSeaChest_Logs*
-* *OpenSeaChest_NVMe*
+* *openSeaChest_GenericTests*
+* *openSeaChest_Info*
+* *openSeaChest_Logs*
+* *openSeaChest_NVMe*
 * *openSeaChest_PowerControl*
 * *openSeaChest_SMART*
 
@@ -51,6 +52,8 @@ data erasure options, will cause data loss.   Some commands, like setting the
 maximum LBA, may cause existing data on the drive to become inaccessible.  Some
 commands, like disabling the read look ahead buffer, may affect the performance
 of the drive.  Seagate is not responsible for lost user data.
+
+**Windows note:** Your system will require the latest [Microsoft Visual C++ 2017 Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) to run the compiled openSeaChest tools under Windows.
 
 **Important note:** Many tests in this tool directly reference storage device data
 sectors, also known as Logical Block Addresses (LBA). Test arguments may
