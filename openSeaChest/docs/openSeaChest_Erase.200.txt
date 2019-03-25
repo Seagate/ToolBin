@@ -1,9 +1,9 @@
-openSeaChest_Erase.txt                                    Revision: 08-Jan-2019
+openSeaChest_Erase.txt                                    Revision: 25-Mar-2019
 ===============================================================================
 openSeaChest_Erase for Linux and Windows - Seagate drive utilities
  Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- openSeaChest_Erase Version: 1.9.0
- Build Date: Jan  7 2018
+ openSeaChest_Erase Version: 2.0.0
+ Build Date: Feb 28 2019
 ===============================================================================
 Welcome to the openSeaChest open source project!
 
@@ -196,6 +196,17 @@ Utility arguments
                 specify a test to check progress. The progress counts up from
                 0% to 100%.
 
+        --showPhysicalElementStatus
+                Use this option to see the status/health of the storage
+                elements inside a drive. Use the element # shown with the
+                --removePhysicalElement option to remove that storage element
+                from use. This option can also be used to see if a depopulation
+                is still in progress or if it has completed.  See the section
+                below 'Interpreting Head Health and Status' for more
+                information.
+
+SATA Only
+---------
         --disableATASecurityPW [SeaChest | ASCIIPW] [user | master]
                 Use this option to disable an ATA security password. If a drive
                 lost power during an ATA Security Erase in SeaChest, then using
@@ -215,14 +226,54 @@ Utility arguments
                 Note: See the section below "When drives are reported Security
                 "Frozen" by openSeaChest".
 
-        --showPhysicalElementStatus
-                Use this option to see the status/health of the storage
-                elements inside a drive. Use the element # shown with the
-                --removePhysicalElement option to remove that storage element
-                from use. This option can also be used to see if a depopulation
-                is still in progress or if it has completed.  See the section
-                below 'Interpreting Head Health and Status' for more
-                information.
+        --ataSATsecurityProtocol [enable | disable]         (SATA only)
+                This option can be used to force enable or disable using the
+                ATA security protocol as specified in the SAT specification. By
+                default, the tool will use this method when it is supported to
+                allow the SATL to understand and manage the security commands
+                being performed and prevent other issues.
+
+        --ataSecPassword ["ASCII password" | SeaChest | empty]      (SATA only)
+                Use this option to specify a password to use with an ATA
+                security operation. If specifying a password with spaces,
+                quotes must be used. If SeaChest is given, the default SeaChest
+                password will be used. If empty is given, an empty password
+                will be used.
+
+                Examples:
+                  "This is a valid password"
+                  ThisIsAlsoValid
+                  "This password uses \"quotes\"
+                  "This password is \/\/eird"
+                In Windows PE, MS will allow issuing secure erase using the
+                following as a USER password: AutoATAWindowsString12345678901
+
+        --ataSecPassType [user | master]                (SATA only)
+                Use this option to specify if the password being given with the
+                --ataSecPassword option is a user or a master password. If this
+                option is not provided, user is assumed.
+
+        --ataSecPWMod [byteswapped | zeropad | spacepad | fpad | leftAlign |
+          rightAlign | uppercase | lowercase | invertcase] (SATA Only)
+                Use this option to have the utility make modifications to the
+                ATA security password to attempt other various ways it may be
+                sent by a system bios. These are not guaranteed to work, but
+                may help unlock a drive that was locked by a BIOS that encoded
+                the password in a unique way. This option can be presented
+                multiple times to select multiple modificaitons.
+
+                EX: --ataSecPWMod byteswapped --ataSecPWMod invertcase
+                  byteswapped - byteswaps the password. EX: blah -> lbha
+                  zeropad - zero pads the password if less than 32 characters
+                  spacepad - space pads the password if less than 32 characters
+                  fpad - pads the passwords with Fh (all 1's) if less than
+                     32characters
+                  leftAlign - left aligns the password in the buffer
+                  rightAlign - right aligns the password in the buffer
+                  uppercase - sends the password as all uppercase
+                  lowercase - sends the password as all lowercase
+                  invertcase - switches uppercase for lower, and lowercase for
+                  upper
 
 Utility Options
 ===============
@@ -402,7 +453,7 @@ Note: Windows 8 (and newer) native drivers block Sanitize commands.
                 openSeaChest_Erase will use zeros (0) and one pass.
 
                 Overwrite on hard disk drives (HDD) takes a very long time to
-                complete at approximately three (3) hours per TeraByte. Once
+                complete at approximately three (3) hours per terabyte. Once
                 this command starts it must finish the overwrite erase before
                 normal use of the drive is returned. Even if a power reset is
                 performed during overwrite erase the drive will continue from
@@ -428,39 +479,6 @@ Note: Windows 8 (and newer) native drivers block Sanitize commands.
                 freezelock command from locking out the sanitize feature set.
                 It is only available on ATA drives that support the ACS3, or
                 higher specification.
-
-        --secureErase [normal | enhanced]          (SATA only)
-                Use the normal or enhanced argument to start an ATA security
-                erase on a device.
-
-                ATA Security Erase on standard drives (non-SED) takes a very
-                long time to complete at approximately three (3) hours per
-                TeraByte. Self Encrypting Drives (SED) may run an quick
-                cryptographic erase by changing the drive's encryption keys.
-                The industry standard command ATA Security Erase begins by
-                locking the drive with a temporary password which is cleared at
-                the end of the erasure. Do not run this command unless you have
-                ample time to allow it to run through to the end. If the
-                procedure is interrupted prior to completion, then the drive
-                will remain in a locked state and you must manually restart it
-                from the beginning. The temporary password to unlock the drive
-                is "SeaChest", plain ASCII letters without the quotes.  If the
-                drive reports that it is freezelocked, then this is usually put
-                on by a BIOS command at startup.  After the operating system is
-                finished booting you can try removing the power to just the
-                hard drive.  This should allow it to restart without the
-                freezelock command.
-
-                * normal writes binary zeros (0) to all user data areas.
-
-                * enhanced writes binary zeros (0) to all user data areas,
-                including sectors that are no longer in use due to
-                reallocation. Not all drives support the enhanced mode. For
-                some models (ISE enabled), enhanced mode erase can take seconds
-                because it uses crypto erase internally.
-
-                Note: See the section below "When drives are reported Security
-                "Frozen" by openSeaChest".
 
         --overwrite [starting LBA | maxLBA]
                 Use this option to start an overwrite erase at the specified
@@ -545,6 +563,83 @@ Note: Windows 8 (and newer) native drivers block Sanitize commands.
                 omitted then the end of the drive is assumed and the test will
                 end at the MaxLBA.
 
+        --pattern [repeat:asciinospaces | random | increment:startValue |
+             file:filename]
+                Use this option with overwrite, sanitize, and format unit
+                operations to write a specific pattern to a range of LBAs or
+                the whole drive.
+
+                * repeat - without spaces, enter an ASCII text string or a
+                hexadecimal string terminated by a lower case "h". This pattern
+                will be repeated until it fills the logical size of the LBA.
+                i.e. helloword or FFFFFFFFh
+                Note: A hexadecimal pattern will be interpreted as a 32bit
+                      unsigned integer. 4 hex bytes (8 characters) must be
+                      given for a hex value to be used. Ex: 1F037AC8h or
+                      0000FFFFh
+
+                * random - the entire logical sector size will be filled with
+                random bytes. This pattern will be written to all LBAs in the
+                desired range.
+
+                * increment - enter the starting numerical value. Starting with
+                this value, each byte will be written with 1 + previous value.
+
+                * file - user supplied file name to use for a pattern. The file
+                will be truncated or padded with zeros to the logical sector
+                size.
+                Note 1: Each file will be interpreted as a binary file.
+                Note 2: A path must also be provided if the file is not in the
+                        local directory.
+                Note 3: Sanitize Overwrite on SATA only supports a 32bit
+                        pattern. The file option will get truncated to a 32bit
+                        pattern for SATA products.
+
+        --removePhysicalElement [element #]
+                Use this option to remove a storage element from use on a
+                drive. When this is done, the drive will erase all user data
+                and lower the capacity to a new point where the drive is still
+                usable without the provided element #. Use the
+                --showPhysicalElementStatus option to see the status of the
+                depopulation operation.
+
+SATA Only
+---------
+        --ataSecureErase [normal | enhanced]          (SATA only)
+                Use the normal or enhanced argument to start an ATA security
+                erase on a device.
+
+                ATA Security Erase on standard drives (non-SED) takes a very
+                long time to complete at approximately three (3) hours per
+                terabyte. Self Encrypting Drives (SED) may run an quick
+                cryptographic erase by changing the drive's encryption keys.
+                The industry standard command ATA Security Erase begins by
+                locking the drive with a temporary password which is cleared at
+                the end of the erasure. Do not run this command unless you have
+                ample time to allow it to run through to the end. If the
+                procedure is interrupted prior to completion, then the drive
+                will remain in a locked state and you must manually restart it
+                from the beginning. The temporary password to unlock the drive
+                is "SeaChest", plain ASCII letters without the quotes.  If the
+                drive reports that it is freezelocked, then this is usually put
+                on by a BIOS command at startup.  After the operating system is
+                finished booting you can try removing the power to just the
+                hard drive.  This should allow it to restart without the
+                freezelock command.
+
+                * normal writes binary zeros (0) to all user data areas.
+
+                * enhanced writes binary zeros (0) to all user data areas,
+                including sectors that are no longer in use due to
+                reallocation. Not all drives support the enhanced mode. For
+                some models (ISE enabled), enhanced mode erase can take seconds
+                because it uses crypto erase internally.
+
+                Note: See the section below "When drives are reported Security
+                "Frozen" by openSeaChest".
+
+SAS Only
+--------
         --formatUnit [current | new sector size]    (SAS Only)
                 This option will start a format unit operation on a SAS drive
                 Use "current" to perform a format unit operation with the
@@ -595,45 +690,6 @@ Note: Windows 8 (and newer) native drivers block Sanitize commands.
                       to determine if it supports the sub-command.  (See the
                       help topic below: About FastFormat)
 
-        --pattern [repeat:asciinospaces | random | increment:startValue |
-             file:filename]
-                Use this option with overwrite, sanitize, and format unit
-                operations to write a specific pattern to a range of LBAs or
-                the whole drive.
-
-                * repeat - without spaces, enter an ASCII text string or a
-                hexadecimal string terminated by a lower case "h". This pattern
-                will be repeated until it fills the logical size of the LBA.
-                i.e. helloword or FFFFFFFFh
-                Note: A hexadecimal pattern will be interpreted as a 32bit
-                      unsigned integer. 4 hex bytes (8 characters) must be
-                      given for a hex value to be used. Ex: 1F037AC8h or
-                      0000FFFFh
-
-                * random - the entire logical sector size will be filled with
-                random bytes. This pattern will be written to all LBAs in the
-                desired range.
-
-                * increment - enter the starting numerical value. Starting with
-                this value, each byte will be written with 1 + previous value.
-
-                * file - user supplied file name to use for a pattern. The file
-                will be truncated or padded with zeros to the logical sector
-                size.
-                Note 1: Each file will be interpreted as a binary file.
-                Note 2: A path must also be provided if the file is not in the
-                        local directory.
-                Note 3: Sanitize Overwrite on SATA only supports a 32bit
-                        pattern. The file option will get truncated to a 32bit
-                        pattern for SATA products.
-
-        --removePhysicalElement [element #]
-                Use this option to remove a storage element from use on a
-                drive. When this is done, the drive will erase all user data
-                and lower the capacity to a new point where the drive is still
-                usable without the provided element #. Use the
-                --showPhysicalElementStatus option to see the status of the
-                depopulation operation.
 
 Return codes
 ============
@@ -1328,6 +1384,11 @@ v1.7.4  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 v1.9.0  07-Jan-2019  1_19_0 libraries added per device verbosity, --deviceInfo
                      adds SAS (not SATA) FastFormat for Features Supported
                      section.
+v2.0.0  28-Feb-2019  1_19_2 libraries.  ATA Security password options sometimes
+                     needed for ATA Security Erase controls.  Added
+                     --ataSATsecurityProtocol, --ataSecPassword,
+                     --ataSecPassType, --ataSecPWMod.  Rename --secureErase to
+                     --ataSecureErase.
 
 ===========================================
 About openSeaChest Command Line Diagnostics
