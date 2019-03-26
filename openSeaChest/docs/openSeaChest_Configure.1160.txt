@@ -1,8 +1,8 @@
-openSeaChest_Configure.txt                                Revision: 08-Jan-2019
+openSeaChest_Configure.txt                                Revision: 26-Mar-2019
 ===============================================================================
  openSeaChest_Configure for Linux and Windows - Seagate drive utilities
  Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- openSeaChest_Configure Version: 1.13.0
+ openSeaChest_Configure Version: 1.16.0
  Build Date: Jan  7 2018
 ===============================================================================
 Welcome to the openSeaChest open source project!
@@ -197,30 +197,60 @@ Utility arguments
                 4 - allow negotiation up to 12.0Gb/s (SAS Only)
                 5 - allow negotiation up to 22.5Gb/s (SAS Only)
 
-        --sasPhy [identifier value]
-                Use this option to specify a specific phy to use with another
-                option that uses a phy identifier value. Some tool options will
-                assume all SAS Phys when this option is not present. Others
-                will produce an error when a specific phy is needed for an
-                operation. Use the -i option to learn more about the supported
-                phys.
-
-        --readyLED [info | on | off | default] (SAS Only)
-                Use this option to change the behavior of pin 11, the ready
-                LED. See the SPL spec for full details on how this changes LED
-                behavior.
-                    info - gets the current state of the ready LED.
-                    on - sets the ready LED to usually off unless
-                         processing a command.
-                    off - sets the ready LED to usually on unless
-                          processing a command
-                    default - sets the ready LED to the drive's default value
-
        --readLookAhead [info | enable | disable]
                 Use this option to enable or disable read look-ahead support on
                 a drive.  Use the "info" argument to get the current status of
                 the read look ahead feature.  This change is not preserved over
                 power cycles.
+
+        --writeCache [info | enable | disable]
+                Use this option to enable or disable write cache support on a
+                drive.  Use the "info" argument to get the current status of
+                the write cache feature.  Changes may not be preserved over
+                power cycles.
+
+SATA Only
+---------
+        --freeFall [info | enable | disable | sensitivity value]  (SATA only)
+                Use this option to configure the Free Fall control feature
+                found on some SATA drives. This feature allows the drive to
+                take action if it detects it is in free fall to protect the
+                data from harm due to a drop.
+
+                info - use this to see the current sensitivity value
+                enable - this option will set the sensitivity to the vendor's
+                        recommended value.
+                disable - this will disable the free fall control feature.
+                sensitivity value - set a value between 1 and 255 to control
+                        how sensitive the detection is. A value of zero will
+                        set the vendor's recommended value.
+
+        --lowCurrentSpinup [ low | ultra | disable ]  (SATA Only) (Seagate Only)
+                Use this option to set the state of the low current spinup
+                feature on Seagate SATA drives.  When this setting is enabled
+                for low or ultra low mode, the drive will take longer to spinup
+                and become ready.
+                Note: This feature is not available on every drive.
+                Note: Some products will support low, but not the ultra low
+                current spinup mode.
+
+        --puisFeature [enable | disable]  (SATA Only)
+                Use this option to enable or disable the Power Up In Standby
+                (PUIS) feature on SATA drives.
+                Note: If this is configured on the drive with a jumper, this
+                      command will fail.
+                Note2: Not all products support this feature.
+
+        --sscFeature [info | default | enable | disable] (SATA Only)
+                Use this option to change or view the SSC (Spread Spectrum
+                Clocking) mode on a Seagate SATA drive. Only change this
+                setting if you are experiencing compatibility problems with the
+                drive in a system.
+
+                info - show current SSC state
+                default - set to drive default mode
+                enable - enable SSC
+                disable - disable SSC
 
         --sctReadTimer [info | value] (SATA Only)
                 Use this option to set the SMART command transport read command
@@ -258,12 +288,6 @@ Utility arguments
                 the file level instead of replacing the device since the
                 timeout may be caused by a sector that is just difficult to
                 read, not an entire failure of the drive.
-
-        --writeCache [info | enable | disable]
-                Use this option to enable or disable write cache support on a
-                drive.  Use the "info" argument to get the current status of
-                the write cache feature.  Changes may not be preserved over
-                power cycles.
 
         --sctWriteCache [info | enable | disable | default]
                 (SATA Only)
@@ -317,42 +341,142 @@ Utility arguments
 
                 Note: see additional information above for --sctReadTimer.
 
-        --lowCurrentSpinup [ enable | disable ]  (SATA Only)
-                Use this option to enable or disable the low current spinup
-                feature on Seagate SATA drives. Note: This feature is not
-                available on every drive.
+SAS Only
+--------
+        --readyLED [info | on | off | default] (SAS Only)
+                Use this option to change the behavior of pin 11, the ready
+                LED. See the SPL spec for full details on how this changes LED
+                behavior.
+                    info - gets the current state of the ready LED.
+                    on - sets the ready LED to usually off unless
+                         processing a command.
+                    off - sets the ready LED to usually on unless
+                          processing a command
+                    default - sets the ready LED to the drive's default value
 
-        --puisFeature [enable | disable]  (SATA Only)
-                Use this option to enable or disable the Power Up In Standby
-                (PUIS) feature on SATA drives.
-                Note: If this is configured on the drive with a jumper, this
-                      command will fail.
-                Note2: Not all products support this feature.
+        --sasPhy [identifier value]
+                Use this option to specify a specific phy to use with another
+                option that uses a phy identifier value. Some tool options will
+                assume all SAS Phys when this option is not present. Others
+                will produce an error when a specific phy is needed for an
+                operation. Use the -i option to learn more about the supported
+                phys.
 
-        --sscFeature [info | default | enable | disable] (SATA Only)
-                Use this option to change or view the SSC (Spread Spectrum
-                Clocking) mode on a Seagate SATA drive. Only change this
-                setting if you are experiencing compatibility problems with the
-                drive in a system.
+        --scsiLPReset [cumulative | threshold | defCumulative | defThreshold | all]   (SAS only)
+                Use this option to reset all SCSI Log Pages. If the device is
+                compliant with SPC4 or later, the --scsiLPResetPage option may
+                be used to specify a specific page to reset. The --volatile
+                option may also be passed to prevent saving changes.
+                            cumulative - reset the cumulative values
+                            threshold  - reset the threshold values
+                            defCumulative - reset the cumulative values to
+                               default without saving.
+                            defThreshold  - reset the threshold values to
+                               default without saving.
+                            all - sends the log page reset command to all of
+                               the above control values
 
-                info - show current SSC state
-                default - set to drive default mode
-                enable - enable SSC
-                disable - disable SSC
+        --scsiLPResetPage [page# | page-subpage#]               (SAS only)
+                This option is used to specify a specific page, and/or subpage
+                to be used with the --scsiLPReset option.
+                NOTE: This option will only work on newer drives compliant with
+                the SPC4 specification.
 
-        --freeFall [info | enable | disable | sensitivity value]  (SATA only)
-                Use this option to configure the Free Fall control feature
-                found on some SATA drives. This feature allows the drive to
-                take action if it detects it is in free fall to protect the
-                data from harm due to a drop.
+        --scsiMPReset [page# | page-subpage#]           (SAS only)
+                This option will reset the specified mode page(s) to their
+                default settings. Valid page numbers range from 0 to 3Fh. Valid
+                subpage numbers range from 0 to FFh.
 
-                info - use this to see the current sensitivity value
-                enable - this option will set the sensitivity to the vendor's
-                        recommended value.
-                disable - this will disable the free fall control feature.
-                sensitivity value - set a value between 1 and 255 to control
-                        how sensitive the detection is. A value of zero will
-                        set the vendor's recommended value.
+                (MP) Mode page 3Fh specifies all mode pages and can be used to
+                reset all mode pages. (SP) Subpage FFh specifies all subpages
+                of a given page and will reset all those subpages. Using both
+                MP 3Fh and SP FFh will reset all pages and subpages on a device.
+
+        --scsiMPRestore [page# | page-subpage#]         (SAS only)
+                This option will restore the specified mode page(s) to their
+                saved settings. Valid page numbers range from 0 to 3Fh. Valid
+                subpage numbers range from 0 to FFh.
+
+                (MP) Mode page 3Fh specifies all mode pages and can be used to
+                restore all mode pages. (SP) Subpage FFh specifies all subpages
+                of a given page and will restore all those subpages. Using both
+                MP 3Fh and SP FFh will restore all pages and subpages on a
+                device.
+
+        --scsiMPSave [page# | page-subpage#]            (SAS only)
+                This option will save the current specified mode page(s) to the
+                saved settings. Valid page numbers range from 0 to 3Fh. Valid
+                subpage numbers range from 0 to FFh.
+
+                (MP) Mode page 3Fh specifies all mode pages and can be used to
+                save all mode pages. (SP) Subpage FFh specifies all subpages of
+                a given page and will save all those subpages. Using both MP
+                3Fh and SP FFh will save all pages and subpages on a device.
+
+         --setSCSIMP [ mp[-sp]:byte:highestBit:fieldWidthInBits=value | file=filename.txt ]  (SAS only) (Seagate Only)
+                Use this option to set a specific field in a mode page to a
+                value. There are two argument formats to this option:
+                1. The first format expects a mode page (in hex), optionally a
+                   subpage code (in hex), the byte offset that the field starts
+                   at (in decimal), the highest bit the field starts at (0-7),
+                   the width of the field in as a number of bits (decimal), and
+                   the value to set (hex or decimal).  A maximum of 64bits can
+                   be set at a time with this option.
+                2. The second format is a text file that contains all bytes of
+                   the mode page in hex. Each byte must be separated by a
+                   space, new line, or underscore. It is recommended that this
+                   file is created by copy-pasting the output of the
+                   --showSCSIMP option's default classic view, then modifying
+                   after that.
+
+                Example use of the arguments:
+                1. Setting WCE to zero on Caching MP 8 from command line:
+                   command line: 08:2:2:1=0
+                2. Setting DLC to one on Control Extension MP from command line:
+                   command line: 0A-01:4:3:1=1
+                3. Setting WCE to zero on Caching MP 8 from a text file:
+                   command line: file=cachingModePage.txt
+                   File contents: 88 12 10 00 FF FF 00 00 FF FF FF FF 90 20 00 00 00 00 00 00
+
+        --showSCSIMP [page# | page-subpage#]            (SAS only)
+                This option will display the specified mode page on the screen
+                as raw hexadecimal data bytes. Use --showSCSIMPControl to
+                control the output.  If --showSCSIMPControl is not provided,
+                the current values will be shown.
+
+                (MP) Mode page 3Fh specifies all mode pages and can be used to
+                show all mode pages. (SP) Subpage FFh specifies all subpages of
+                a given page and will show all those subpages. Using both MP
+                3Fh and SP FFh will show all pages and subpages on a device.
+
+                Note: page# is a decimal value unless it has the characters A
+                through F, then it is hexadecimal. Page 18, for example,  would
+                be 12h so be sure to say 18h if that is the page you want.
+
+                Example: --showSCSIMP 3F-FF
+                         --showSCSIMP 18h
+                         --showSCSIMP 24    (shows page 18h)
+
+        --showSCSIMPControl [current | default | saved | changeable | all]  (SAS only)
+                Use this option to control the output of the --showSCSIMP
+                option.
+                        current - show the current values of the mode page.
+                        default - show the default values of the mode page.
+                        saved   - show the saved values of the mode page.
+                        changeable - show the changeable fields in a mode page.
+                        all - show all of the above formats for a given mode
+                              page.
+                Example: --showSCSIMP 8 --showSCSIMPControl all
+
+        --showMPOutputMode [classic | buffer]   (SAS Only)
+                Use this option to control the format of the output when
+                displaying a SCSI mode page. Modes:
+                   classic - This output is a classic output from old SCSI
+                      manuals where the bytes of the page are output in a
+                      series of rows across the screen in hexadecimal format.
+                   buffer  - This output is a formatted buffer showing offsets
+                      on the top and side in hex. This will output each row
+                      with up to 16 bytes of data before moving to the next row.
 
 Utility Options
 ===============
@@ -1090,6 +1214,12 @@ v1.12.2 18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
 v1.13.0 07-Jan-2019  1_19_0 libraries added per device verbosity, --deviceInfo
                      adds SAS (not SATA) FastFormat for Features Supported
                      section.
+v1.14.0 24-Jan-2019  Add Log and Mode Page commands --scsiLPReset,
+                     --scsiLPResetPage, --scsiMPReset, --scsiMPRestore,
+                     --scsiMPSave, --setSCSIMP, --showMPOutputMode,
+                     --showSCSIMP, --showSCSIMPControl
+v1.15.0 10-Feb-2019  Device information now shows "Low Current Spinup" status
+v1.16.0 28-Feb-2019  Add ultra to --lowCurrentSpinup
 
 ===========================================
 About openSeaChest Command Line Diagnostics
