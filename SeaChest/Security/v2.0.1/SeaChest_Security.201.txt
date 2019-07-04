@@ -1,4 +1,4 @@
-SeaChest_Security.txt                                     Revision: 12-Jun-2019
+SeaChest_Security.txt                                     Revision: 03-Jul-2019
 ===============================================================================
  SeaChest_Security - Seagate drive utilities
  Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -178,10 +178,7 @@ Utility Arguments
                 The PSID (Physical Security IDentification number) is a
                 32-digit number & capital letter sequence printed on the label.
                 There is no electronic query for this number, therefore the
-                drive must be removed in order to read the PSID number.  Many
-                drives have a PSID code on the label but are NOT marked as
-                "Seagate Secure"; these drives do not support revertSP
-                cryptographic erase.
+                drive must be removed in order to read the PSID number.
 
                 Enter the PSID without spaces. FIVE attempts are allowed before
                 a power cycle is required. It can also be read by 2D barcode
@@ -466,9 +463,9 @@ Seagate is not responsible for lost user data.
                 data causing all previous data to be useless. This operation
                 performs an Opal SSC specification Revert on a Self Encrypting
                 Drive (SED). This operation is only available on Seagate TCG
-                Opal drives. Seagate SED drives are marked on the label with
-                the words "Seagate Secure".  No all Seagate SED drives are TCG
-                Opal compliant.
+                Opal drives. Seagate SED drives may be marked on the label with
+                the word "SED".  No all Seagate SED drives are TCG Opal
+                compliant.
 
                 In order to complete this operation, the lockingSP must not be
                 activated, as this option will activate it in order to perform
@@ -487,8 +484,12 @@ Seagate is not responsible for lost user data.
                 data causing all previous data to be useless. This operation
                 performs an Opal SSC specification revertSP on a Self
                 Encrypting Drive (SED). This operation is available on all
-                Seagate SED drives which are marked on the label with the words
-                "Seagate Secure". Requires the --psid code from the label.
+                Seagate SED drives which may be marked on the label with the
+                word "SED". Requires the --psid code from the label.
+
+                Note: To determine if your drive supports cryptographic erase
+                you can run --tcgInfo --deviceInfo (look for 'Encryption
+                Support: Self Encrypting' and 'TCG'.
 
                 Example: --revertSP --psid 123ALL32DIGITS123ALL32DIGITS123A
                 Note: If a Secure product does not recognize the --revertSP
@@ -554,6 +555,22 @@ be catastrophic or exactly what you want. The shortcut to select all devices is
 designation for all devices, you can narrow the tasks to specific types of
 drives by using the --onlySeagate, --modelMatch and --onlyFW filters.
 
+If the task is an OFFLINE command like format unit or short DST, meaning that
+the drive works on the task in the background and the tool quickly returns to
+the command prompt (there is little or no I/O to the system), then you can
+expect the system to run normally. If the task has high I/O to the system like
+a sequential read of all sectors on the drive, then you can expect the system
+to slow down with each additional device.
+
+The discussion above is about starting SEQUENTIAL tests, or one after the
+other.  When the task does not return to the command prompt for a very long
+time, then you have a few options to run tests in PARALLEL, also called
+simultaneous, in other words all at the same time.  One way is to start
+different drives in different Terminal windows, if available.  There are other
+more sophisticated methods using parallel processing, for information about
+these methods please see the information at this link:
+https://github.com/Seagate/ToolBin/tree/master/SeaChest/parallel_testing
+
 Tests which take a very long time to complete or erase all user data on the
 drive will require a longer command line argument than indicated in the --help
 output to the screen.  This approach is taken to eliminate the possibility of
@@ -615,7 +632,7 @@ The SeaChest_Erase --revert and --revertSP commands require specific support be
 enabled in the Linux kernel.  This document describes the process to enable
 support for sending ATA Trusted Trusted Computing Group (TCG) commands in
 Linux. The focus is on how to do this through Ubuntu Linux 14.04LTS, however,
-the process should apply to other Linux’s as well although others may vary
+the process should apply to other Linux's as well although others may vary
 slightly.
 
 Modifying The GRUB Configuration File (Ubuntu example used)
@@ -626,7 +643,7 @@ modifying the GRUB 2 configuration file. This section references the Grub2
 configuration documentation from the Ubuntu Community:
 https://help.ubuntu.com/community/Grub2/Setup#Configuring_GRUB_2
 
-Follow these steps to perform this modification in Ubuntu (other Linux’s may be
+Follow these steps to perform this modification in Ubuntu (other Linux's may be
 similar).
 
 1. You must modify the file /etc/default/grub. You can do this by running "sudo
