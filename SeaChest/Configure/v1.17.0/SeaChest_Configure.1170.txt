@@ -1,4 +1,4 @@
-SeaChest_Configure.txt                                    Revision: 03-Jul-2019
+SeaChest_Configure.txt                                    Revision: 10-Jul-2019
 ===============================================================================
  SeaChest_Configure - Seagate drive utilities
  Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -92,9 +92,11 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
+                     interfaceNVME  - show devices on a NVMe interface
                     Linux:
                      sd             - show /dev/sd? device handles
                      sgtosd         - show the sd and sg device handle mapping
@@ -571,7 +573,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-        --confirm I-understand-this-command-will-erase ... etc
+        --confirm this-will-erase-data ... etc
 
         --provision [newMaxLBA | maxLBA]        (Seagate Only)
                 Provision your drive to a new max LBA to any value less than

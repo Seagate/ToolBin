@@ -1,4 +1,4 @@
-SeaChest_Lite.txt                                         Revision: 03-Jul-2019
+SeaChest_Lite.txt                                         Revision: 10-Jul-2019
 ===============================================================================
  SeaChest_Lite - Seagate drive utilities
  Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -175,7 +175,7 @@ Seagate is not responsible for lost user data.
                 interrupt this operation.  (See the help topic below: About
                 FastFormat)
 
-        --confirm I-understand-this-command-will-erase ... etc
+        --confirm this-will-erase-data
 
 Return codes
 ============
@@ -323,7 +323,7 @@ SeaChest_Lite.  In addition, for SAS interface drives, only, the same result is
 possible using the --formatUnit command with the --fastFormat [fast format
 mode] modifier equal to 1.  This command is found in SeaChest_Format and
 SeaChest_Erase.  For example:
---formatUnit 4096 --fastFormat 1 --confirm I-... etc
+--formatUnit 4096 --fastFormat 1 --confirm this-will ... etc
 
 SAS interface drives, only, can all do a long format unit.  This procedure
 takes a very long time, more than a day in some cases, but it does have the
