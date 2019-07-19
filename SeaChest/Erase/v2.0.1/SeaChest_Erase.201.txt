@@ -166,7 +166,7 @@ Utility Arguments
                 until it has completed.  This argument does not return to the
                 command prompt and prints ongoing completion percentages (%)
                 and the final test result.  Full drive procedures will take a
-                very long time.  Used with --sanitize, --secureErase (SATA),
+                very long time.  Used with --sanitize, --ataSecureErase (SATA),
                 --writeSame (SATA), or --formatUnit (SAS).
 
         --progress [sanitize, format]

@@ -205,10 +205,14 @@ Utility Arguments
                         how sensitive the detection is. A value of zero will
                         set the vendor's recommended value.
 
-        --lowCurrentSpinup [ enable | disable ]  (SATA Only) (Seagate Only)
-                Use this option to enable or disable the low current spinup
-                feature on Seagate SATA drives. Note: This feature is not
-                available on every drive.
+        --lowCurrentSpinup [ low | ultra | disable ]  (SATA Only) (Seagate Only)
+                Use this option to set the state of the low current spinup
+                feature on Seagate SATA drives.  When this setting is enabled
+                for low or ultra low mode, the drive will take longer to spinup
+                and become ready.
+                Note: This feature is not available on every drive.
+                Note: Some products will support low, but not the ultra low
+                current spinup mode.
 
         --puisFeature [enable | disable]  (SATA Only) (Seagate Only)
                 Use this option to enable or disable the Power Up In Standby
