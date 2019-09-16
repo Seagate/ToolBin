@@ -1,11 +1,11 @@
-ReadMeFirst.SeaChest.txt                                  Revision: 18-Oct-2018
+ReadMeFirst.SeaChest.txt                                  Revision: 16-Sep-2019
 ===============================================================================
  Seagate Utilities
- Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
 Please READ ME FIRST
 
-Thank you for downloading SeaChest Utilities, build 10.18
+Thank you for downloading SeaChest Utilities, build 06.19
 
 SeaChest Utilities are command line utilities which are available for expert
 users.  These command line tools assume the user is knowledgeable about running
@@ -144,7 +144,7 @@ The newest online version of the SeaChest Utilities documentation, open source
 usage and acknowledgement licenses can be found at:
 http://support.seagate.com/seachest/SeaChest_Combo_UserGuides.html
 
-Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ======================================================================
 
                         END USER LICENSE AGREEMENT
