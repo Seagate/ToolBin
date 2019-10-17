@@ -7,12 +7,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"Basics/v2.8.0/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Basics_280_11923_64.exe"
             },
             "lin":{
                "app_path":"Basics/v2.8.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Basics_280_11923_64"
             }
          },
@@ -22,12 +22,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"Configure/v1.17.0/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Configure_1170_11923_64.exe"
             },
             "lin":{
                "app_path":"Configure/v1.17.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Configure_1170_11923_64"
             }
          },
@@ -37,12 +37,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"Erase/v2.0.1/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Erase_201_11923_64.exe"
             },
             "lin":{
                "app_path":"Erase/v2.0.1/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Erase_201_11923_64"
             }
          },
@@ -52,12 +52,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"Firmware/v2.7.0/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Firmware_270_11923_64.exe"
             },
             "lin":{
                "app_path":"Firmware/v2.7.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Firmware_270_11923_64"
             }
          },
@@ -67,12 +67,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"Format/v1.4.0/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Format_140_11923_64.exe"
             },
             "lin":{
                "app_path":"Format/v1.4.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Format_140_11923_64"
             }
          },
@@ -82,12 +82,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"GenericTests/v1.8.0/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_GenericTests_180_11923_64.exe"
             },
             "lin":{
                "app_path":"GenericTests/v1.8.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_GenericTests_180_11923_64"
             }
          },
@@ -97,12 +97,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"Info/v1.5.0/Windows/",
-               "32bit":"not available at this time.exe",
+               "32bit":"not_available_at_this_time.exe",
                "64bit":"SeaChest_Info_150_11923_64.exe"
             },
             "lin":{
                "app_path":"Info/v1.5.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Info_150_11923_64"
             }
          },
@@ -112,12 +112,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"Lite/v1.2.0/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Lite_120_11923_64.exe"
             },
             "lin":{
                "app_path":"Lite/v1.2.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Lite_120_11923_64"
             }
          },
@@ -127,12 +127,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"PowerControl/v1.10.0/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_PowerControl_1100_11923_64.exe"
             },
             "lin":{
                "app_path":"PowerControl/v1.10.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_PowerControl_1100_11923_64"
             }
          },
@@ -142,12 +142,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"Security/v2.0.1/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Security_201_11923_64.exe"
             },
             "lin":{
                "app_path":"Security/v2.0.1/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Security_201_11923_64"
             }
          },
@@ -157,12 +157,12 @@
             "date":"Jun-10-2019",
             "win":{
                "app_path":"SMART/v1.12.0/Windows/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_SMART_1120_11923_64.exe"
             },
             "lin":{
                "app_path":"SMART/v1.12.0/Linux/",
-               "32bit":"not available at this time",
+               "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_SMART_1120_11923_64"
             }
          },
