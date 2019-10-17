@@ -1,14 +1,14 @@
 #!/bin/bash
 # ================================================================================
 # update_seachest.sh - Seagate drive utilities
-# Copyright (c) 2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+# Copyright (c) 2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 # v0.1 initial release
 # v0.2 now pointing to github, added MD5 check
 # v0.3 now basing update on build date instead of versions
 # v0.4 need to support old and new --version layouts with multiple libraries
 # ================================================================================
 
-# Demonstrates how to chech for updates
+# Demonstrates how to check for updates
 # Exit levels:
 # 0 You have the latest version or Download successful. 
 # 1 Command help
@@ -20,7 +20,7 @@
 
 #=============== Global Variables ============================================
 # Date last edit
-EDIT_STAMP="17-May-2018"
+EDIT_STAMP="18-Sep-2019"
 TITLE="SeaChest Utilities Update Script"
 SC_UPDATE_PATH="https://raw.githubusercontent.com/Seagate/ToolBin/master/SeaChest/";
 SC_UPDATE_FILE="seachestupdate.json";
@@ -126,6 +126,8 @@ function download_update_data() {
 function populate_update_data() {
   JSON_DATA_ARRAY=( $(sed -n '/{/,/}/{s/[^:]*:[^"]*"\([^"]*\).*/\1/p;}' $SC_UPDATE_FILE) );
 
+  # above shows how to read a json file into a bash array
+  # see https://stackoverflow.com/questions/38364261/parse-json-to-array-in-a-shell-script for examples
   # various ways to study the array data
   # echo ${JSON_DATA_ARRAY[@]};
   # print the contents of the array
@@ -228,7 +230,7 @@ echo "";
 if [[ $# -ne 1  || ( $1 == "--help" || $1 == "-help" || $1 == "-h") ]]; then
   echo -ne "Usage:   "$WHITEonBLUE"./update_seachest.sh"$RESETCOLOR" "$BLACKonGREEN"<SeaChest app name>"; echo -e $RESETCOLOR
   echo "";
-  echo -ne "Example: "$WHITEonBLUE"./update_seachest.sh"$RESETCOLOR" "$WHITEonRED"SeaChest_Basics_271_1177_32"; echo -e $RESETCOLOR
+  echo -ne "Example: "$WHITEonBLUE"./update_seachest.sh"$RESETCOLOR" "$WHITEonRED"SeaChest_Basics_280_11923_64"; echo -e $RESETCOLOR
   echo "";
   exit 1;
 fi
