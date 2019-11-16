@@ -155,7 +155,7 @@ Utility Arguments
                 SCSI Inquiry/VPD/Log reported data (translated according to
                 SAT) and the ATA Identify/Log reported data.
 
-        --csmiInfo
+        --csmiInfo                       (Windows only)
                 Use this option to show some information reported by the CSMI
                 compliant driver. This includes driver information, controller
                 information, PHY information, SAS address, and SATA signature
@@ -1141,7 +1141,7 @@ PORTION OF THIS PRODUCT (INCLUDING, BUT NOT LIMITED TO, THE SOFTWARE AND
 ASSOCIATED FILES (THE "SOFTWARE"), HARDWARE ("HARDWARE"), DISK (S), OR OTHER
 MEDIA) (COLLECTIVELY, THE "PRODUCT") YOU AND YOUR COMPANY ACCEPT ALL THE
 TERMS AND CONDITIONS OF THIS EULA.  IF YOU ACQUIRE THIS PRODUCT FOR YOUR
-COMPANY’S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
+COMPANY'S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
 HAS THE AUTHORITY TO LEGALLY BIND YOUR COMPANY TO THIS EULA.  IF YOU DO NOT
 AGREE, DO NOT CLICK "I AGREE" AND DO NOT DOWNLOAD, SET-UP, INSTALL OR USE THE
 SOFTWARE.
@@ -1269,14 +1269,14 @@ TO, AND IN NO EVENT WILL SEAGATE'S TOTAL CUMULATIVE DAMAGES EXCEED, THE FEES
 PAID BY THE LICENSEE TO SEAGATE FOR THE PRODUCT.  ADDITIONALLY, IN NO EVENT
 SHALL SEAGATE'S LICENSORS OR SUPPLIERS BE LIABLE FOR ANY DAMAGES OF ANY KIND.
 
-8.  Privacy.  Seagate’s collection, use and disclosure of personally
+8.  Privacy.  Seagate's collection, use and disclosure of personally
 identifiable information in connection with your use of the Product is
-governed by Seagate’s Privacy Policy which is located at
+governed by Seagate's Privacy Policy which is located at
 http://www.seagate.com/legal-privacy/privacy-policy/As further described in
-Seagate’s Privacy Policy, certain Products may include a Product dashboard
+Seagate's Privacy Policy, certain Products may include a Product dashboard
 which allows users to manage Product settings, including but not limited to
 use of anonymous statistical usage data in connection with personally
-identifiable information. You agree to Seagate’s collection, use, and
+identifiable information. You agree to Seagate's collection, use, and
 disclosure of your data in accordance with the Product dashboard settings
 selected by you for the Product, or in the case of transfer as described in
 Section 11, you agree to the settings selected by the prior licensee unless
@@ -1327,7 +1327,7 @@ related technical data are provided with restricted rights.  Use,
 duplication, or disclosure by the U.S. government is subject to the
 restrictions as set forth in subparagraph (c)(1)(iii) of DFARS 252.227-7013
 (The Rights in Technical Data and Computer Product) or subparagraphs (c)(1)
-and (2) of 48 CFR 52.227-19 (Commercial Computer Product – Restricted
+and (2) of 48 CFR 52.227-19 (Commercial Computer Product â€“ Restricted
 Rights), as applicable.  The manufacturer is Seagate.  You may not transfer
 or assign this EULA or any rights under this EULA, except that you may make a
 one-time, permanent transfer of this EULA and the Software to another end
