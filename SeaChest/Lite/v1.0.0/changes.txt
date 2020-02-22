@@ -1,6 +1,0 @@
-===============
-Version History
-===============
-SeaChest_Lite is branched off from SeaChest Basics v2.7.1
-
-v1.0.0  19-Apr-2018  Initial release.
