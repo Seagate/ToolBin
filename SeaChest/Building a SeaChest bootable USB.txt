@@ -1,7 +1,7 @@
-Building a SeaChest Bootable USB.txt                      Revision: 29-May-2018
+Building a SeaChest Bootable USB.txt                                 Revision: 24-Feb-2020
 ==========================================================================================
  Seagate Utilities
- Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ==========================================================================================
 
 Building a SeaChest bootable USB
@@ -144,7 +144,7 @@ The newest online version of the SeaChest Utilities documentation, open source
 usage and acknowledgement licenses can be found at:
 http://support.seagate.com/seachest/SeaChest_Combo_UserGuides.html
 
-Copyright (c) 2014-2018 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ======================================================================
 
                         END USER LICENSE AGREEMENT
@@ -157,7 +157,7 @@ PORTION OF THIS PRODUCT (INCLUDING, BUT NOT LIMITED TO, THE SOFTWARE AND
 ASSOCIATED FILES (THE "SOFTWARE"), HARDWARE ("HARDWARE"), DISK (S), OR OTHER
 MEDIA) (COLLECTIVELY, THE "PRODUCT") YOU AND YOUR COMPANY ACCEPT ALL THE
 TERMS AND CONDITIONS OF THIS EULA.  IF YOU ACQUIRE THIS PRODUCT FOR YOUR
-COMPANY’S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
+COMPANY'S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
 HAS THE AUTHORITY TO LEGALLY BIND YOUR COMPANY TO THIS EULA.  IF YOU DO NOT
 AGREE, DO NOT CLICK "I AGREE" AND DO NOT DOWNLOAD, SET-UP, INSTALL OR USE THE
 SOFTWARE.
@@ -285,14 +285,14 @@ TO, AND IN NO EVENT WILL SEAGATE'S TOTAL CUMULATIVE DAMAGES EXCEED, THE FEES
 PAID BY THE LICENSEE TO SEAGATE FOR THE PRODUCT.  ADDITIONALLY, IN NO EVENT
 SHALL SEAGATE'S LICENSORS OR SUPPLIERS BE LIABLE FOR ANY DAMAGES OF ANY KIND.
 
-8.  Privacy.  Seagate’s collection, use and disclosure of personally
+8.  Privacy.  Seagate's collection, use and disclosure of personally
 identifiable information in connection with your use of the Product is
-governed by Seagate’s Privacy Policy which is located at
+governed by Seagate's Privacy Policy which is located at
 http://www.seagate.com/legal-privacy/privacy-policy/As further described in
-Seagate’s Privacy Policy, certain Products may include a Product dashboard
+Seagate's Privacy Policy, certain Products may include a Product dashboard
 which allows users to manage Product settings, including but not limited to
 use of anonymous statistical usage data in connection with personally
-identifiable information. You agree to Seagate’s collection, use, and
+identifiable information. You agree to Seagate's collection, use, and
 disclosure of your data in accordance with the Product dashboard settings
 selected by you for the Product, or in the case of transfer as described in
 Section 11, you agree to the settings selected by the prior licensee unless

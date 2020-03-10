@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 03-Jul-2019
+Date last edit: 20-Feb-2020
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -11,6 +11,8 @@ _Fimrware
 _Format
 _GenericTests
 _Info
+_Lite
+_NVMe
 _PowerControl
 _Security
 _SMART
@@ -22,14 +24,14 @@ General Usage Hints - Linux or Windows
 Sample Output
 
 END USER LICENSE AGREEMENT
+Various Open Source Licenses
 
-
-SeaChest_Basics.txt                                       Revision: 03-Jul-2019
+SeaChest_Basics.txt                                       Revision: 19-Feb-2020
 ===============================================================================
  SeaChest_Basics - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Basics Version: 2.8.0
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Basics Version: 2.9.1
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest Basics diagnostic software.
 
@@ -70,19 +72,19 @@ NOTE: Windows severely restricts downloading firmware to SATA drives.  Please
 see the section below "Windows Restrictions Over SATA Firmware Downloads".
 SeaChest_Basics may not be fully functional on non-Seagate drives.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_Basics [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_Basics --scan
-        SeaChest_Basics -d /dev/sg2 -i
-        SeaChest_Basics -d /dev/sg1 --shortDST --poll
+        sudo SeaChest_Basics --scan
+        sudo SeaChest_Basics -d /dev/sg2 -i
+        sudo SeaChest_Basics -d /dev/sg1 --shortDST --poll
 
-Usage - Windows
-===============
-        SeaChest_Basics [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_Basics [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -116,6 +118,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -561,6 +564,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 ===============
@@ -744,13 +748,24 @@ v2.8.0 10-Jun-2019   1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v2.9.1 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_Configure.txt                                    Revision: 03-Jul-2019
+SeaChest_Configure.txt                                    Revision: 19-Feb-2020
 ===============================================================================
  SeaChest_Configure - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Configure Version: 1.17.0
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Configure Version: 1.18.1
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_Configure diagnostic software.
 
@@ -771,18 +786,18 @@ important data.
 Be very careful using SeaChest_Configure. Power failure during a configuration
 change may cause data loss. Seagate is not responsible for lost user data.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_Configure [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_Configure --scan
-        SeaChest_Configure -d /dev/sg2 --deviceInfo
+        sudo SeaChest_Configure --scan
+        sudo SeaChest_Configure -d /dev/sg2 --deviceInfo
 
-Usage - Windows
-===============
-        SeaChest_Configure [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_Configure [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -815,6 +830,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -890,6 +906,13 @@ Utility Arguments
                 3 - allow negotiation up to 6.0Gb/s
                 4 - allow negotiation up to 12.0Gb/s (SAS Only)
                 5 - allow negotiation up to 22.5Gb/s (SAS Only)
+
+        --nvCache [info | enable | disable]     (SAS Only)
+                Use this option to enable or disable the SCSI Non-Volatile
+                cache on a drive. Use the "info" argument to get the current
+                status of the Non-Volatile Cache setting.
+                WARNING: Changing NV Cache may affect all LUNs/namespaces for
+                devices with multiple logical units or namespaces.
 
         --readLookAhead [info | enable | disable]
                 Use this option to enable or disable read look-ahead support on
@@ -1431,13 +1454,24 @@ v1.17.0 10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v1.18.1 19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_Erase.txt                                        Revision: 03-Jul-2019
+SeaChest_Erase.txt                                        Revision: 19-Feb-2020
 ===============================================================================
 SeaChest_Erase - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Erase Version: 2.0.1
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Erase Version: 2.1.1
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_Erase diagnostic software.
 
@@ -1470,19 +1504,19 @@ erasure on this drive.
 Be very careful because using SeaChest_Erase will cause data loss. Seagate is
 not responsible for lost user data.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_Erase [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_Erase --scan
-        SeaChest_Erase -d /dev/sg2 -i
-        SeaChest_Erase --device /dev/sg1 --sanitize info
+        sudo SeaChest_Erase --scan
+        sudo SeaChest_Erase -d /dev/sg2 -i
+        sudo SeaChest_Erase --device /dev/sg1 --sanitize info
 
-Usage - Windows
-===============
-        SeaChest_Erase [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_Erase [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -1516,6 +1550,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -2186,6 +2221,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 Interpreting Head Health and Status
@@ -2240,7 +2276,7 @@ The SeaChest_Erase --revert and --revertSP commands require specific support be
 enabled in the Linux kernel.  This document describes the process to enable
 support for sending ATA Trusted Trusted Computing Group (TCG) commands in
 Linux. The focus is on how to do this through Ubuntu Linux 14.04LTS, however,
-the process should apply to other Linux’s as well although others may vary
+the process should apply to other Linux's as well although others may vary
 slightly.
 
 Modifying The GRUB Configuration File (Ubuntu example used)
@@ -2251,7 +2287,7 @@ modifying the GRUB 2 configuration file. This section references the Grub2
 configuration documentation from the Ubuntu Community:
 https://help.ubuntu.com/community/Grub2/Setup#Configuring_GRUB_2
 
-Follow these steps to perform this modification in Ubuntu (other Linux’s may be
+Follow these steps to perform this modification in Ubuntu (other Linux's may be
 similar).
 
 1. You must modify the file /etc/default/grub. You can do this by running "sudo
@@ -2448,13 +2484,24 @@ v2.0.1 10-Jun-2019   1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v2.1.1 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_Firmware.txt                                     Revision: 03-Jul-2019
+SeaChest_Firmware.txt                                     Revision: 19-Feb-2020
 ===============================================================================
  SeaChest_Firmware - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Firmware Version: 2.7.0
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Firmware Version: 2.8.1
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_Firmware diagnostic software.
 
@@ -2465,9 +2512,9 @@ Seagate, Maxtor, Samsung and LaCie).
 Seagate products are run by firmware.  Having the latest firmware can improve
 performance and or reliability of your product.  Seagate recommends applying
 new firmware to enhance the performance and or reliability of your drive.  Like
-any software, firmware is improved over time and problems are also fixed. 
+any software, firmware is improved over time and problems are also fixed.'
 Every drive family has a couple of firmware releases during the life of the
-product.  Please check in regularly to determine if new firmware is available
+product.' Please check in regularly to determine if new firmware is available
 for your drive.
 
 SeaChest_Firmware allows for both single drive and sequential batch mode
@@ -2490,21 +2537,21 @@ download will cause data loss. Never apply firmware to a drive unless you are
 certain that the firmware data file is specifically prepared for your drive.
 Seagate is not responsible for lost user data.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_Firmware [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_Firmware --scan
-        SeaChest_Firmware -d /dev/sg2 -i
-        SeaChest_Firmware -d /dev/sg2 --fwdlInfo
-        SeaChest_Firmware -d /dev/sg2 --downloadFW fwfilename
-        SeaChest_Firmware -d /dev/sg2 --fwdlConfig configfile.cfs
+        sudo SeaChest_Firmware --scan
+        sudo SeaChest_Firmware -d /dev/sg2 -i
+        sudo SeaChest_Firmware -d /dev/sg2 --fwdlInfo
+        sudo SeaChest_Firmware -d /dev/sg2 --downloadFW fwfilename
+        sudo SeaChest_Firmware -d /dev/sg2 --fwdlConfig configfile.cfs
 
-Usage - Windows
-===============
-        SeaChest_Firmware [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_Firmware [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -2539,6 +2586,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -2830,6 +2878,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         ---SeaChest_Firmware specific exit codes---
         32 = Firmware Download Complete
         33 = Deferred Firmware Download Complete
@@ -3043,13 +3092,24 @@ v2.7.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v2.8.1 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_Format.txt                                       Revision: 03-Jul-2019
+SeaChest_Format.txt                                       Revision: 19-Feb-2020
 ===============================================================================
 SeaChest_Format - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 1.4.0
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Format Version: 1.5.1
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_Format diagnostic software.
 
@@ -3105,19 +3165,19 @@ erasure on this drive.
 Be very careful because using SeaChest_Format will cause data loss. Seagate
 is not responsible for lost user data.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_Format [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_Format --scan
-        SeaChest_Format -d /dev/sg2 -i
-        SeaChest_Format --device /dev/sg1 --showSupportedSectorSizes
+        sudo SeaChest_Format --scan
+        sudo SeaChest_Format -d /dev/sg2 -i
+        sudo SeaChest_Format --device /dev/sg1 --showSupportedSectorSizes
 
-Usage - Windows
-===============
-        SeaChest_Format [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_Format [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -3151,6 +3211,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -3487,6 +3548,16 @@ entire drive.
                 complete and cannot be polled.  Not commonly used.
                 Note: This mode may take a long time to complete.
 
+         --formatMaxLBA [ new Max LBA ]       (SAS Only)
+                Use this option to specify a new Max LBA for a drive during a
+                format unit operation. This can speed up a format unit if
+                formatting to test something, or also desiring to reduce a
+                drive's capacity while formatting.
+                NOTE: Not all devices support reducing capacity during a
+                format. Some may ignore this parameter and format the full
+                medium anyways. This is not guaranteed to stick or reduce
+                formatting time.
+
         --protectionIntervalExponent [exponent value]       (SAS Only)
                 Use this option to specify the protection interval exponent for
                 protection types 2 & 3. This option is ignored for all other
@@ -3599,6 +3670,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 ==================================
@@ -3773,13 +3845,24 @@ v1.4.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v1.5.1  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_GenericTests.txt                                 Revision: 03-Jul-2019
+SeaChest_GenericTests.txt                                 Revision: 19-Feb-2020
 ===============================================================================
  SeaChest GenericTests - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_GenericTests Version: 1.8.0
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_GenericTests Version: 1.9.0
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_GenericTests diagnostic software.
 
@@ -3846,19 +3929,19 @@ even twice!) and the last 2TB will remain untouched.  You should carefully
 evaluate your system hardware to understand if your storage controllers provide
 support for greater than 2.1TB.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_GenericTests [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_GenericTests --scan
-        SeaChest_GenericTests -d /dev/sg2 -i
-        SeaChest_GenericTests -d /dev/sg1 --twoMinuteGeneric
+        sudo SeaChest_GenericTests --scan
+        sudo SeaChest_GenericTests -d /dev/sg2 -i
+        sudo SeaChest_GenericTests -d /dev/sg1 --twoMinuteGeneric
 
-Usage - Windows
-===============
-        SeaChest_GenericTests [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_GenericTests [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -3892,6 +3975,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -4035,12 +4119,15 @@ Utility Arguments
                 error found. Please see the section below "Sector Repair
                 Commands".
 
-        --errorLimit [limit in number of LBAs]
+        --errorLimit [limit in number of physical LBAs | none]
                 Use this option to specify a different error limit for a user
                 generic or long generic read test. This must be a number of
                 logical LBAs to have errors. If a drive has multiple logical
                 sectors per physical sector, this number will be adjusted for
-                you to reflect the drive architecture.
+                you to reflect the drive architecture. (The default error limit
+                is 50 x number of logical sectors per physical sector.) The
+                predefined text string "none" (without quotes) may be entered
+                to indicate that there is no error limit.
 
         --randomTest
                 Use this option to start a random read test. This is a timed
@@ -4218,6 +4305,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 ======================
@@ -4397,13 +4485,24 @@ v1.8.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v1.9.0 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_Info.txt                                         Revision: 03-Jul-2019
+SeaChest_Info.txt                                         Revision: 19-Feb-2020
 ===============================================================================
  SeaChest_Info - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 1.5.0
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Info Version: 1.6.0
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_Info diagnostic software.
 
@@ -4463,18 +4562,18 @@ drives (this includes Seagate, Maxtor, Samsung and LaCie). Be careful using
 SeaChest because some of the features, like the data erasure options, will
 cause data loss. Seagate is not responsible for lost user data.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_Info [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_Info --scan
-        SeaChest_Info -d /dev/sg2 -i
+        sudo SeaChest_Info --scan
+        sudo SeaChest_Info -d /dev/sg2 -i
 
-Usage - Windows
-===============
-        SeaChest_Info [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_Info [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -4507,6 +4606,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -4733,6 +4833,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 ===============
@@ -4837,13 +4938,774 @@ v1.5.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v1.6.0 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_PowerControl.txt                                 Revision: 03-Jul-2019
+SeaChest_Lite.txt                                         Revision: 19-Feb-2020
+===============================================================================
+ SeaChest_Lite - Seagate drive utilities
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Lite Version: 1.3.0
+ Build Date: Feb 19 2020
+===============================================================================
+Welcome to Seagate's SeaChest Lite diagnostic software.
+
+This User Guide file contains important information about SeaChest Lite.
+Please read this entire file before using this software.
+
+SeaChest is a comprehensive, easy-to-use command line diagnostic tool that
+helps you quickly determine the health and status of your Seagate storage
+product. It also includes a command to change the default sector size on
+supported drive models.
+
+Tests and commands which are completely data safe will run on any disk drive.
+Tests and commands which change the drive (like changing the default sector
+size) are limited to Seagate disk drives. Be careful using SeaChest because
+some of the features, like the data erasure options, will cause data loss.
+Seagate is not responsible for lost user data.
+
+If you need additional diagnostics for your Seagate family drive, please see
+the section below 'About SeaChest Command Line Diagnostics'.
+
+If this is your drive, you should always keep a current backup of your
+important data.
+
+Important note: Many tests in this tool directly reference storage device data
+sectors, also known as Logical Block Addresses (LBA). Test arguments may
+require a starting LBA or an LBA range.  The predefined variable 'maxLBA'
+refers to the last sector on the drive.  Many older SATA and SAS storage
+controllers (also known as Host Bus Adapters [HBA]) have a maximum addressable
+limit of 4294967295 [FFFFh] LBAs hard wired into their design.  This equates to
+2.1TB using 512 byte sectors.  This also means accessing an LBA beyond the
+2.1TB limitation either will result in an error or simply the last readable LBA
+(usually LBA 4294967295 [FFFFh]) depending on the actual hardware.  This
+limitation can have important consequences.  For example, if you intended to
+erase a 4TB drive, then only the first 2TB will actually get erased (or maybe
+even twice!) and the last 2TB will remain untouched.  You should carefully
+evaluate your system hardware to understand if your storage controllers provide
+support for greater than 2.1TB.
+
+NOTE: Windows severely restricts downloading firmware to SATA drives.  Please
+see the section below "Windows Restrictions Over SATA Firmware Downloads".
+SeaChest_Lite may not be fully functional on non-Seagate drives.
+
+Usage - Linux (run with sudo)
+=============================
+        SeaChest_Basics [-d <sg_device>] {arguments} {options}
+
+Examples - Linux
+================
+        sudo SeaChest_Lite --scan
+        sudo SeaChest_Lite -d /dev/sg2 -i
+        sudo SeaChest_Lite -d /dev/sg1 --shortDST --poll
+
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_Lite [-d <PD_device>] {arguments} {options}
+
+Examples - Windows
+==================
+        SeaChest_Lite --scan
+        SeaChest_Lite -d PD0 -i
+        SeaChest_Lite -d PD1 --shortDST --poll
+
+Utility Arguments
+=================
+        -d, --device <device handle>
+                Use this option with all commands, except --scan, to specify
+                the sg device handle (target drive) on which to perform an
+                operation. See the section below 'Tool Usage Hints' for
+                information about defining multiple device handles.
+
+                Example Lin: -d /dev/sg5
+                Example Win: -d PD0, or -d PD3
+
+        -i, --deviceInfo
+                Show information and features for the storage device. USB
+                devices will show the product name, serial and firmware numbers
+                as communicated by the USB-SATA bridge.  Add --usbChildInfo
+                to display details about the drive within the USB enclosure.
+
+        -s, --scan
+                Scan the system and list all storage devices with Physical
+                Device assignments. Shows model, serial and firmware numbers.
+                If your device is not listed on a scan immediately after
+                booting, then wait 10 seconds and run it again.
+
+        --downloadFW [firmware filename]    (Seagate Only)
+                Download firmware to a Seagate storage product. Use only
+                Seagate authorized firmware data files which are designated for
+                the specific model drive. Improper use of this option may harm
+                a device and or its data. You may specify the path (without
+                spaces) if the firmware data file is in a different location.
+                This option will use segmented download by default.
+
+        --shortDST
+                Execute a short diagnostic drive self test. This test can take
+                up to 2 minutes to complete.  Use with the --poll argument to
+                let SeaChest check for progress and print it to the screen
+                until complete.  If the --poll argument is not used then the
+                test begins and immediately returns to the command prompt.  Use
+                the --progress DST command to check on the completion
+                percentage (%) and test result. The poll argument does not
+                return to the command prompt and prints ongoing completion
+                percentages (%) until the final test result.
+
+                Note: Use --progress DST to see details about the last DST
+                      run on the drive.
+
+        --poll
+                Use this option to cause another operation to poll for progress
+                until it has completed.  This argument does not return to the
+                command prompt and prints ongoing completion percentages (%)
+                and the final test result. Used with --shortDST.
+
+        --progress [DST]
+                Get the periodic ongoing progress for certain types of tests
+                which were started quietly (default) and running in the
+                background until completion and the tool has already returned
+                to the command prompt.  This type of progress checking is used
+                when not using the --poll argument which does not return to the
+                command prompt.  The progress counts up from 0% to 100%.
+                Specify the type of test to check progress.
+
+
+        --showSupportedFormats
+                This option will show the supported formats of a device. These
+                can be used to change the sector size or used with a format
+                operation. On SAS, this is the supported block lengths and
+                protection types VPD page (SBC4 and later). On SATA, this is
+                the sector configuration log (ACS4 and later). If the device
+                does not report supported sector sizes, please consult your
+                product manual.
+
+Utility Options
+===============
+        -h, --help
+                Show utility options and example usage (this output you see now)
+
+        --license
+                Display the Seagate End User License Agreement (EULA).
+
+        --modelMatch [model Number]
+                Use this option to run on all drives matching the provided
+                model number. This option will provide a closest match although
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
+
+        --onlySeagate
+                Use this option to match only Seagate drives for the options
+                provided. May also be used with the --scan command.
+
+        -V, --version
+                Show SeaChest version and copyright information & exit
+
+         --noTimeLimit
+                Use with utility command arguments which have build in timeout
+                values. For example, --shortDST has a 10 minutes default
+                timeout.  In some cases a good drive may need more time to
+                complete the test due to other legitimate system activity.
+
+Data Destructive Commands (Seagate Only)
+========================================
+Data destructive commands will require additional command line arguments as
+confirmation of your understanding that data will be lost on the drive.
+Seagate is not responsible for lost user data.
+
+        --setSectorSize [new sector size]       (Seagate Only)
+                This option is only available for drives that support sector
+                size changes. On SATA Drives, the Set Sector Configuration
+                command must be supported. On SAS Drives, Fast Format must be
+                supported. Use the --showSupportedSectorSizes option to see the
+                sector sizes the drive reports supporting. If this option
+                doesn't list anything, please consult your product manual.
+
+                This option can be used to quickly change the logical
+                sector size between 5xx emulation and 4xxx native logical block
+                sizes, usually 512 and 4096. Resulting LBA (sector) count is
+                either /8 or *8 the current Read Capacity or Identify,
+                depending on the direction of the conversion.  The conversion
+                between logical sector sizes can take a few minutes.  Do not
+                interrupt this operation.  (See the help topic below: About
+                FastFormat)
+
+        --confirm this-will-erase-data
+
+Return codes
+============
+        0       No Error Found
+        1       Error in command line options
+        2       Invalid Device Handle or Missing Device Handle
+        3       Operation Failure
+        4       Operation not supported
+        5       Operation Aborted
+        6       File Path Not Found
+        7       Cannot Open File
+        8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
+        Anything else = unknown error
+
+================
+About FastFormat
+================
+A FastFormat (quickly changing the logical sector size) may take a few minutes
+for the process to complete. The disk activity LED may show activity during the
+conversion.  The larger the drive, the longer it takes.  This feature is found
+on SAS and SATA interface Seagate drive families designed and manufactured
+later than 2016.  SAS interface drives will report support for FastFormat if it
+is available in the drive. Just run the -i or --deviceInfo command and check
+under the Features Supported section.  Unfortunately, SATA interface drives do
+not report this capability.  Please refer to the SATA product manual for
+verification of this feature.
+
+SAS and SATA interface drives accomplish a FastFormat this with the
+--setSectorSize [new sector size] command found in SeaChest_Format or
+SeaChest_Lite.  In addition, for SAS interface drives, only, the same result is
+possible using the --formatUnit command with the --fastFormat [fast format
+mode] modifier equal to 1.  This command is found in SeaChest_Format and
+SeaChest_Erase.  For example:
+--formatUnit 4096 --fastFormat 1 --confirm this-will ... etc
+
+SAS interface drives, only, can all do a long format unit.  This procedure
+takes a very long time, more than a day in some cases, but it does have the
+advantage of full defect management with all sectors being readable at the
+conclusion.  The fast format does not do this full drive read and
+verification.  If your drive is new, there is no real need to run a long format
+unit to change sector between 5xxE (512 bytes per logical sector emulation) and
+4kN (4096 native bytes per sector, logical and physical).
+
+NOTE: Operating systems do a device discovery during start up and set various
+parameters, like total sectors and sector size, into the storage device
+descriptions. The logical sector size times the number or logical sectors
+defines the drive capacity.  You should expect to see OS I/O errors if you
+change the logical sector size on a drive and then perform read or write
+operations before the OS has updated its storage device descriptions.  Some
+operating systems will throw an error after accessing a drive that has just run
+a FastFormat but during its error recovery routines it may re-discover the
+device parameters and update the system logs.  A system restart, however, is
+the most reliable way to refresh the storage device descriptions.
+
+===============
+Version History - SeaChest_Lite
+===============
+SeaChest_Lite is branched off from SeaChest Basics v2.7.1
+
+v1.0.0  19-Apr-2018  Initial release.
+v1.0.1  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     field to get the OS name under linux; NVMe enabled;  fixed
+                     a bug in the ATA activate FW command; added in reading ID
+                     Data log and Device statistics logs page 0 to check the
+                     list of supported pages; fixed a bug in the loop used to
+                     read mode pages for -i information on SAS; IDD SAS
+                     improvements; fixed a bug in DST & Clean with ATA drives
+                     behind SCSI controllers. Fix for --modelMatch that have
+                     spaces in the name. Added additional information to the
+                     banner and -V data to show support levels. Add general
+                     support for NVMe and NVMe specific identify data to "-i"
+                     command.
+v1.0.1  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
+v1.2.0  03-May-2019  1_19_18 libraries added per device verbosity, --deviceInfo
+                     adds SAS (not SATA) FastFormat for Features Supported
+                     section,  --deviceInfo now gives Low Current Spinup
+                     status. Adds --showSupportedFormats, removes
+                     --showSupportedSectorSizes.
+v1.2.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
+                     updated software SAT translator to use dataset management
+                     XL command, fixes for issuing vendor unique commands under
+                     Windows, improved fast format support detection, and
+                     refactored verbose output for NVMe commands.
+v1.3.0  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
+
+SeaChest_NVMe.txt                                        Revision: 19-Feb-2020
+===============================================================================
+ SeaChest_NVMe - Seagate drive utilities
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_NVMe Version: 1.1.0
+ Build Date: Feb 19 2020
+===============================================================================
+Welcome to Seagate's SeaChest NVMe diagnostic software.
+
+This User Guide file contains important information about SeaChest NVMe.
+Please read this entire file before using this software.
+
+SeaChest is a comprehensive, easy-to-use command line diagnostic tool that
+helps you quickly determine the health and status of your Seagate storage
+product. It includes several tests that will examine the physical media on your
+Seagate, Samsung or Maxtor disk drive.
+
+Tests and commands which are completely data safe will run on any disk drive.
+Tests and commands which change the drive (like firmware download or data
+erasure or setting the maximum capacity, etc) are limited to Seagate disk
+drives (this includes Seagate, Maxtor, Samsung and LaCie). Be careful using
+SeaChest because some of the features, like the data erasure options, will
+cause data loss. Seagate is not responsible for lost user data.
+
+If this is your drive, you should always keep a current backup of your
+important data.
+
+Important note: Many tests in this tool directly reference storage device data
+sectors, also known as Logical Block Addresses (LBA). Test arguments may
+require a starting LBA or an LBA range.  The predefined variable 'maxLBA'
+refers to the last sector on the drive.  Many older SATA and SAS storage
+controllers (also known as Host Bus Adapters [HBA]) have a maximum addressable
+limit of 4294967295 [FFFFh] LBAs hard wired into their design.  This equates to
+2.1TB using 512 byte sectors.  This also means accessing an LBA beyond the
+2.1TB limitation either will result in an error or simply the last readable LBA
+(usually LBA 4294967295 [FFFFh]) depending on the actual hardware.  This
+limitation can have important consequences.  For example, if you intended to
+erase a 4TB drive, then only the first 2TB will actually get erased (or maybe
+even twice!) and the last 2TB will remain untouched.  You should carefully
+evaluate your system hardware to understand if your storage controllers provide
+support for greater than 2.1TB.
+
+Note: One gigabyte, or GB, equals one billion bytes when referring to hard
+drive capacity. This software may use information provided by the operating
+system to display capacity and volume size. The Windows file system uses a
+binary calculation for gibibyte or GiB (2^30) which causes the abbreviated size
+to appear smaller. The total number of bytes on a disk drive divided by the
+decimal calculation for gigabyte or GB (10^9) shows the expected abbreviated
+size. See this FAQ for more information
+<http://knowledge.seagate.com/articles/en_US/FAQ/172191en?language=en_US>.
+
+Usage - Linux (run with sudo)
+=============================
+        SeaChest_NVMe [-d <sg_device>] {arguments} {options}
+
+Examples - Linux
+================
+        sudo SeaChest_NVMe --scan
+        sudo SeaChest_NVMe -d /dev/nvme0n1 -i
+        sudo SeaChest_NVMe -d /dev/nvme0n1 --deviceInfo
+
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_NVMe [-d <PD_device>] {arguments} {options}
+
+Examples - Windows
+==================
+        SeaChest_NVMe --scan
+        SeaChest_NVMe -d PD0 --deviceInfo
+
+Utility Arguments
+=================
+        -s, --scan
+                Scan the system and list all storage devices with Physical
+                Device assignments. Shows model, serial and firmware numbers.
+                If your device is not listed on a scan immediately after
+                booting, then wait 10 seconds and run it again.
+
+        -F, --scanFlags [option list]
+                Use this option with -s to control the output from scan with the
+                options listed below. Multiple options can be combined.
+                     ata            - show only ATA (SATA) devices
+                     usb            - show only USB devices
+                     scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
+                     interfaceATA   - show devices on an ATA interface
+                     interfaceUSB   - show devices on a USB interface
+                     interfaceSCSI  - show devices on a SCSI or SAS interface
+                     interfaceNVME  - show devices on a NVMe interface
+                    Linux:
+                     sd             - show /dev/sd? device handles
+                     sgtosd         - show the sd and sg device handle mapping
+                    Windows:
+                     ignoreCSMI     - do not scan for any CSMI devices
+                     allowDuplicates - allow drives with both CSMI and PD
+                                       handles to show up multiple times in the
+                                       list.
+
+                Examples of combining two options:
+                     -s --scanFlags usb scsi  - show only USB and SAS devices
+                     --scan -F ata interfaceSCSI  - show only SATA nearline
+                        drives on a SAS adapter
+
+        -d, --device <device handle>
+                Use this option with all commands, except --scan, to specify
+                the sg device handle (target drive) on which to perform an
+                operation. See the section below 'Tool Usage Hints' for
+                information about defining multiple device handles.
+
+                Example Lin: -d /dev/sg5
+                Example Win: -d PD0, or -d PD3
+
+        -i, --deviceInfo
+                Show information and features for the storage device. USB
+                devices will show the product name, serial and firmware numbers
+                as communicated by the USB-SATA bridge.  Add --usbChildInfo
+                to display details about the drive within the USB enclosure.
+
+        --testUnitReady
+                A simple check to see if the device responds to commands from
+                interface.  Ready or Not Ready are the outputs.  Not Ready
+                results will also include the full SCSI Sense Code.
+
+        --downloadFW [firmware filename]    (Seagate Only)
+                Download firmware to a Seagate storage product. Use only
+                Seagate authorized firmware data files which are designated for
+                the specific model drive. Improper use of this option may harm
+                a device and or its data. You may specify the path (without
+                spaces) if the firmware data file is in a different location.
+                This option will use segmented download by default. Use the
+                --downloadMode option to specify a different download mode.
+
+                Please see the section below "Windows Restrictions Over SATA
+                Firmware Downloads".
+
+        --downloadMode [immediate | deferred | activate]
+                Use this option along with the --downloadFW option to set the
+                firmware download mode. The "activate" option can be run
+                without the --downloadFW option.
+
+                Supported Modes:
+                     immediate - Performs the download command and sends the
+                                 activate/commit command.
+                     deferred  - Performs a segmented download to the device,
+                                 but does not activate the new firmware until a
+                                 reset / activate command is sent.
+                     activate  - Only sends the activate/commit command to
+                                 activate previously downloaded firmware.
+
+                Note: See the --modelMatch and --onlyFW utility options which
+                may assist in creating commands to update multiple similar
+                drives.
+
+        --firmwareSlot/--fwBufferID slot#               (Seagate Only)
+                Use this option to specify a firmware slot (NVMe) or a buffer
+                ID (SCSI) along with the --downloadMode (SCSI) or --activateFW
+                (NVMe & SCSI) options. If this option is not used, a value of
+                zero will be used instead, which means the drive will
+                automatically select the slot number.
+
+        --fwdlSegSize [segment size in 512B blocks]
+                Use this option to specify a segment size in 512B blocks to use
+                for a segmented or deferred download. This option will not
+                affect an immediate download (full buffer at once). The default
+                segment size used is 64. Larger segment sizes may be faster,
+                however they may also be incompatible with controllers or
+                drivers in the system. Smaller values are more likely to be
+                compatible, but also slower. Use this option if the default
+                used by the tool is not working correctly for firmware updates.
+
+        --checkPowerMode
+                Get the current power mode of a drive. On SCSI devices, this
+                will only work if the drive has transitioned from active state
+                to another state.
+
+        --transitionPowerState [new power state]
+                Use this option to transition to a specific power state.
+                HINT:
+                  Use --deviceInfo to show number of supported states
+
+        --getFeatures  [help | list | #]
+                Use this option to list the NVMe features
+                Supported Modes:
+                        help  - prints the descriptions of all
+                                the features
+                        list  - lists raw values of all mandatory
+                                features supported by device
+                        #     - feature number will print the
+                                humanized details
+
+        --getNvmeLogPage   [error | smart | fwSlots | suppCmds | selfTest | #]
+                Use this option to get the NVMe log pages
+                Supported Modes:
+                        error    - lists the valid entries found in the
+                                   Error Information Log. Binary logs to the
+                                   current directory as
+                                   <serialnumber>_LOG_PAGE_1_<date and time>.bin
+                        smart    - lists information found in the SMART/Health
+                                   Information Log. Binary logs to the current
+                                   directory as <serialnumber>_LOG_PAGE_2_<date
+                                   and time>.bin
+                        fwSlots  - lists currently active Firmware slot and
+                                   Firmware Revision in each slot.  Binary logs
+                                   to the current directory as
+                                   <serialnumber>_LOG_PAGE_3_<date and time>.bin
+                        suppCmds - lists the commands that the controller
+                                   supports and the effects of those commands.
+                                   Binary logs to the current directory as
+                                   <serialnumber>_LOG_PAGE_5_<date and time>.bin
+                        selfTest - lists the status of any device self-test
+                                   operation in progress and the results of the
+                                   last 20 device self-test operations.Binary
+                                   logs to the current directory as
+                                   <serialnumber>_LOG_PAGE_6_<date and time>.bin
+                        #        -  option to get the log page using
+                                   a number
+
+        --getTelemetry [host | ctrl]
+                Use this option to get the NVMe Telemetry data for a device.
+                Use the --telemetryDataArea option to control the amount of
+                data collected.
+                Supported Modes:
+                     host - get Host Telemetry
+                     ctrl - get Controller Telemetry
+
+        --telemetryDataArea [1 | 2 | 3]
+                This is a sub-command which defines the amount of data
+                collected by the --getTelemetry option. Data Area 3 is assumed
+                if this option is not used.
+                Supported Data Area.
+                     1 - get minimal telemetry data
+                     2 - get telemetry data additional to data area 1
+                     3 - get telemetry data additional to data area 2 (default
+                         data area)
+
+        --clearPciErr
+                Use this option to clear correctable errors.
+
+        --extSmartLog
+                Use this option to pull the Extended Smart Log Attributes.
+
+        --logMode   [raw | binary]
+                Use this option with others options such as --getNvmeLogPage and
+                --deviceInfo to show a buffer output or to create a binary file.
+
+                Supported Modes:
+                        raw    - prints the raw buffer on stdout
+                        binary - writes data to a file with device
+                                 Serial Number & time stamp
+                Note: If --logMode is omitted then the --getNvmeLogPage
+                      output is in a human readable format.
+
+        --tempStats
+                Use this option to get the NVMe Temperature Statistics
+
+        --pciStats
+                Use this option to get the NVMe PCIe Statistics
+
+        --poll
+                Use this option to cause another operation to poll for progress
+                until it has completed.  This argument does not return to the
+                command prompt and prints ongoing completion percentages (%)
+                and the final test result.  Full drive procedures will take a
+                very long time.  Used with --sanitize, --secureErase (SATA),
+                --writeSame (SATA), --formatUnit (SAS), --nvmFormat (NVMe).
+
+        --progress format
+                Get the periodic ongoing progress for certain types of tests
+                which were started quietly (default) and running in the
+                background until completion and the tool has already returned
+                to the command prompt.  This type of progress checking is used
+                when not using the --poll argument which does not return to the
+                command prompt.  The progress counts up from 0% to 100%.
+                Specify the type of test to check progress.
+
+        --showSupportedFormats
+                This option will show the supported formats of a device. These
+                can be used to change the sector size or used with a format
+                operation. On SAS, this is the supported block lengths and
+                protection types VPD page (SBC4 and later). On SATA, this is
+                the sector configuration log (ACS4 and later). If the device
+                does not report supported sector sizes, please consult your
+                product manual.
+
+Utility Options
+===============
+        -h, --help
+                Show utility options and example usage (this output you see now)
+
+        -v [0-4], --verbose [0 | 1 | 2 | 3 | 4]
+                Show verbose information. Verbosity levels are
+                0 - quiet
+                1 - default
+                2 - command descriptions
+                3 - command descriptions and values
+                4 - command descriptions, values, and data buffers.
+
+                Example: -v 3 or --verbose 3
+
+        -q, --quiet
+                Run SeaChest in quiet mode. This is the same as -v0
+                or --verbose 0
+
+        -V, --version
+                Show SeaChest version and copyright information & exit
+
+        --license
+                Display the Seagate End User License Agreement (EULA).
+
+        --echoCommandLine
+                Shows the command line above the banner in the standard output.
+                Useful when saving output to logs.
+
+        --modelMatch [model Number]
+                Use this option to run on all drives matching the provided
+                model number. This option will provide a closest match although
+                an exact match is preferred. Ex: ST500 will match ST500LM0001.
+                The option --childModelMatch may be used to match drives in USB
+                enclosures.
+
+                Note: See the section below 'Tool Usage Hints' for information
+                about defining multiple device handles.
+
+        --onlyFW [firmware revision]
+                Use this option to run on all drives matching the provided
+                firmware revision. This option will only do an exact match.
+                The option --childOnlyFW may be used to match drives in USB
+                enclosures.
+
+        Windows only:
+        --csmiIgnorePort
+                Use this option to force setting the "ignore Port" flag for the
+                port identifier in a CSMI passthrough command. This option can
+                be combined with --csmiUsePort which will force the passthrough
+                to rely on only the SAS address. This flag is intended to help
+                troubleshoot or improve CSMI compatibility on systems that are
+                otherwise not functional.
+
+        --csmiUsePort
+                Use this option to force setting the "Use Port" flag for the
+                PHY identifier in a CSMI passthrough command. This option can
+                be combined with --csmiIgnorePort which will force the
+                passthrough to rely on only the SAS address. This flag is
+                intended to help troubleshoot or improve CSMI compatibility on
+                systems that are otherwise not functional.
+
+        --csmiVerbose
+                Use this option to show some verbose output when running the
+                tool on a CSMI handle. The debugging information shown will be
+                specific to the CSMI passthrough mechanism and may be useful
+                when troubleshooting system/driver compatibility issues.
+
+Data Destructive Commands (Seagate Only)
+========================================
+Data destructive commands will require additional command line arguments as
+confirmation of your understanding that data will be lost on the drive.
+Seagate is not responsible for lost user data.
+
+        --confirm this-will-erase-data ... etc
+
+        --nvmFormat [current | format # | sector size]  (NVMe Only)
+                This option is used to start an NVM format operation. Use
+                "current" to perform a format operation with the Sector size
+                currently being used. If a value between 0 and 15 is given,
+                then that will issue the NVM format with the specified sector
+                size/metadata size for that supported format on the drive.
+                Values 512 and higher will be treated as a new sector size to
+                switch to and will be matched to an appropriate LBA format
+                supported by the drive. This command will erase all data on the
+                drive. Combine this option with --poll to poll for progress
+                until the format is complete.
+
+                HINT: Use --showSupportedFormats to print supported LBA Formats
+
+        --nvmFmtSecErase [none | user | crypto]         (NVMe Only)
+                This option is used to specify the type of erase to perform
+                during an NVM format operation. All user data will be
+                inaccessible upon completing format, no matter the erase
+                requested.
+
+                Options:
+                     none   - no secure erase requested (previous data will not
+                              be accessible)
+                     user   - requests all user data is erased by the device.
+                     crypto - requests a cryptographic erase of all user data.
+                              Note: this mode is not supported on all devices.
+
+        --nvmFmtMetadataSet [xlba | separate]   (NVMe Only)
+                Use this option to specify how metadata is transmitted to
+                the host system.
+                Options:
+                     xlba - metadata is transferred as part of the logical
+                            block data
+                     separate - metadata is transferred as a separate buffer
+
+                Note: Not all devices support specifying this. If this option
+                      is not provided, the NVM format will reuse the current
+                      setting.
+
+        --nvmFmtMS [# of bytes for metadata]    (NVMe Only)
+                This option is used to specify the length of metadata with a
+                requested logical block size. The device must support the
+                combination of logical block size and metadata size or the
+                format will be rejected by the device.
+
+        --nvmFmtNSID [all | current]    (NVMe Only)
+                This option changes the namespace ID (NSID) used when issuing
+                the NVM format command. This can be used to control formatting
+                device or a specific namespace if the device supports
+                specifying specific namespaces for a format command. Not all
+                devices support this behaviors no effect on devices that do not
+                support targeting and will format the entire device.  If this
+                option is not given, the format will be issued to all
+                namespaces by default.
+
+        --nvmFmtPI [0 | 1 | 2 | 3]      (NVMe Only)
+                Use this option to specify the protection type to format the
+                medium with.
+
+                Note: Not all devices support protection types. If this option
+                      is not provided, the NVM format will reuse the current
+                      setting.
+
+        --nvmFmtPIL [beginning | end]   (NVMe Only)
+                Use this option to specify the location protection information
+                in an NVM device's metadata.
+
+                Note: Not all devices support specifying this. If this option
+                      is not provided, the NVM format will reuse the current
+                      setting.
+
+===============
+Version History - SeaChest_NVMe
+===============
+v0.0.2  14-Jul-2016  1_10_1 libraries.  SeaChest_NVMe initial beta test
+                     release.  Branched from SeaChest_Basics v2.1.0.
+v0.0.3  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
+v1.0.0  03-May-2019  1_19_18 libraries added per device verbosity, --deviceInfo
+                     adds SAS (not SATA) FastFormat for Features Supported
+                     section,  --deviceInfo now gives Low Current Spinup
+                     status. Adds  --firmwareSlot/--fwBufferID, adds
+                     --fwdlSegSize, adds --getTelemetry,  adds
+                     --telemetryDataArea, adds showSupportedFormats, removes
+                     --formatUnit. Adds several new commands in support of NVMe
+                     format: --nvmFormat, --nvmFmtSecErase, --nvmFmtMS,
+                     --nvmFmtNSID, --nvmFmtPI, --nvmFmtPIL, --nvmFmtMetadataSet.
+v1.0.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
+                     updated software SAT translator to use dataset management
+                     XL command, fixes for issuing vendor unique commands under
+                     Windows, improved fast format support detection, and
+                     refactored verbose output for NVMe commands.
+v1.1.0  21-Nov-2019  1_20_5 libraries. Added new exit code 9 = Need Elevated
+                     Privileges; sudo or run as administrator now required for
+                     all SeaChest and related tools. Rename --getLogPage to
+                     --getNvmeLogPage.
+v1.1.0  19-Feb-2020  1_21_30 libraries add printing the USB VID/PID in the
+                     device info; fix to sg helper to support large systems;
+                     many changes in support of dual actuators (example:
+                     warning that EPC settings affect multiple LUNs); overhaul
+                     to USB device detection and support, incorporating a new
+                     USB hacks and workarounds approach which uses a lookup
+                     table listing various USB bridge VIDs/PIDs and their
+                     specific issues; separate Seagate SAS SN and PCBA SN.
+
+SeaChest_PowerControl.txt                                 Revision: 19-Feb-2020
 ===============================================================================
  SeaChest_PowerControl - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 1.10.0
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_PowerControl Version: 2.0.0
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_PowerControl diagnostic software.
 
@@ -4858,7 +5720,7 @@ provided controls over many devices in a system, including disk drives.  APM
 has since been replaced by a new framework called Extended Power Controls
 (EPC).  Seagate's implementation of EPC began to phase in starting in 2010 and
 is named by the marketing term "PowerChoice".  Seagate PowerChoice
-technology—specifically developed for enterprise environments—offers more
+technology'specifically developed for enterprise environments'offers more
 energy efficiency and control over the amount of power hard drives consume.
 
 You may need to learn what capabilities for power management your drive offers,
@@ -4894,25 +5756,35 @@ drives (this includes Seagate, Maxtor, Samsung and LaCie). Be careful using
 SeaChest because some of the features, like the data erasure options, will
 cause data loss. Seagate is not responsible for lost user data.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_PowerControl [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_PowerControl --scan
-        SeaChest_PowerControl -d /dev/sg2 -i
-        SeaChest_PowerControl -d /dev/sg1 --deviceInfo
+        sudo SeaChest_PowerControl --scan
+        sudo SeaChest_PowerControl -d /dev/sg2 -i
+        sudo SeaChest_PowerControl -d /dev/sg1 --deviceInfo
+        sudo SeaChest_PowerControl -d /dev/sg3 --showEPCSettings
+        sudo SeaChest_PowerControl -d /dev/sg2 --idle_a 5000
+        sudo SeaChest_PowerControl -d /dev/sg1 --idle_b disable
+        sudo SeaChest_PowerControl -d /dev/sg3 --transitionPower standby_z
+        sudo SeaChest_PowerControl -d /dev/sg45 --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
 
-Usage - Windows
-===============
-        SeaChest_PowerControl [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_PowerControl [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
         SeaChest_PowerControl --scan
         SeaChest_PowerControl -d PD0 -i
         SeaChest_PowerControl -d PD1 --deviceInfo
+        SeaChest_PowerControl -d PD3 --showEPCSettings
+        SeaChest_PowerControl -d PD2 --idle_a 5000
+        SeaChest_PowerControl -d PD1 --idle_b disable
+        SeaChest_PowerControl -d PD3 --transitionPower standby_z
+        SeaChest_PowerControl -d PD45 --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
 
 Utility Arguments
 =================
@@ -4940,6 +5812,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -4992,6 +5865,92 @@ Utility Arguments
                 on secondary controllers or non-Microsoft device drivers may
                 accept the --checkPowerMode command without waking up the drive.
 
+        --EPCfeature [enable | disable]
+                Enables or disables Extended Power Conditions (EPC) support for
+                devices.  To disable EPC use --EPCfeature disable. Note that the
+                EPC Feature Set is not supported on all devices. Use
+                --deviceInfo option to see if EPC is supported.
+
+        --showEPCSettings
+                Use this option to show the current Extended Power Conditions
+                (EPC) settings on the screen. Only drives supporting the EPC
+                feature will show this data and only supported power conditions
+                will be shown.
+
+        --idle_a [ enable | disable | default | timerValueMilliseconds ]
+                Use this setting to change the EPC Idle_A power mode settings.
+                    enable  - enable the power state
+                    disable - disable the power state
+                    default - restore default settings for this power state
+                    timerValue - number of milliseconds to set for the timer
+                                used in this power state. If a timer is
+                                provided the state will also be enabled, if not
+                                already. EPC spec timers are set in 100
+                                millisecond increments. Timers will be
+                                truncated to fit 100 millisecond increments.
+
+                WARNING: EPC Settings may affect all LUNs/namespaces for devices
+                         with multiple logical units or namespaces.
+
+        --idle_b [ enable | disable | default | timerValueMilliseconds ]
+                Use this setting to change the EPC Idle_B power mode settings.
+                    enable  - enable the power state
+                    disable - disable the power state
+                    default - restore default settings for this power state
+                    timerValue - number of milliseconds to set for the timer
+                                used in this power state. If a timer is
+                                provided the state will also be enabled, if not
+                                already. EPC spec timers are set in 100
+                                millisecond increments. Timers will be
+                                truncated to fit 100 millisecond increments.
+
+                WARNING: EPC Settings may affect all LUNs/namespaces for devices
+                         with multiple logical units or namespaces.
+
+        --idle_c [ enable | disable | default | timerValueMilliseconds ]
+                Use this setting to change the EPC Idle_C power mode settings.
+                    enable  - enable the power state
+                    disable - disable the power state
+                    default - restore default settings for this power state
+                    timerValue - number of milliseconds to set for the timer
+                                used in this power state. If a timer is
+                                provided the state will also be enabled, if not
+                                already. EPC spec timers are set in 100
+                                millisecond increments. Timers will be
+                                truncated to fit 100 millisecond increments.
+
+                WARNING: EPC Settings may affect all LUNs/namespaces for devices
+                         with multiple logical units or namespaces.
+
+        --powerMeasurementMode [all | 5 | 12]   (Seagate Only)
+                Use this option along with --requestPowerMeasurement to specify
+                which sources to measure power on for the requested time.
+                 all - measure all power sources
+                 5   - measure only the 5v power
+                 12  - measure only the 12v power
+
+        --requestPowerMeasurement [seconds to perform measurement]      (Seagate Only)
+                This option is used to specify a time to perform a power
+                measurement for. The minimum measurement time is 22 seconds and
+                the maximum is 65535 seconds. If a time less than 22 seconds is
+                provided, 22 seconds will be used by the drive. A value greater
+                than 65535 will result in error. Use the --powerMeasurementMode
+                option to specify which mode to measure.
+
+        --showPowerTelemetry    (Seagate Only)
+                Use this option to show the power telemetry data from a Seagate
+                drive that supports the power telemetry feature If a
+                measurement was not previously requested, this will show
+                free-running mode data from the last 10 minutes. If this option
+                is provided while a measurement is still in progress, this will
+                show all data that is currently available Use the
+                --requestPowerMeasurement option to request a power measurement
+                with a set time window.
+
+                NOTE: Power measurements are for the full device, not individual
+                      logical units. All logical units will be measured for
+                      this data.
+
         --spinDown
                 Removes power to the disk drive motor with the Standby
                 Immediate for SATA, or standby_z for SAS. Use this before
@@ -5002,113 +5961,81 @@ Utility Arguments
                 In the case of SSD devices, the drive will flush the temporary
                 caches and prepare for shutdown.
 
-        --idle
-                This command will transition a drive to the idle power state.
-                This command may flush the cache before the transition to this
-                state.  This command is for non-EPC enabled drives. If the
-                drive has the EPC feature enabled, it is recommended that the
-                --transitionPower option be used instead. This option is
-                compatible with EPC enabled drives as well, but offers less
-                control over the transition. If the operating system selects
-                this drive, it will transition it back to an active state.
+        --standby [ enable | disable | default | timerValueMilliseconds ] (Some settings are SAS only)
+                Use this setting to change the standby power mode settings.
+                NOTE: This is the legacy standby timer before EPC drives.
+                      If this is used on an EPC drive, this will modify
+                      the standby_z power state and timer values.
+                    enable  - enable the power state    (SAS Only)
+                    disable - disable the power state   (SAS Only)
+                    default - restore default settings for this power state     (SAS Only)
+                    timerValue - number of milliseconds to set for the timer
+                                used in this power state. If a timer is
+                                provided the state will also be enabled, if not
+                                already. Spec timers are set in 100 millisecond
+                                increments. Timers will be truncated to fit 100
+                                millisecond increments.
 
-        --idleUnload
-                This command will transition a drive to the idle, heads
-                unloaded, power state. This command may flush the cache before
-                the transition to this state.  This command is for non-EPC
-                enabled drives.  If the drive has the EPC feature enabled, it
-                is recommended that the --transitionPower option be used
-                instead. This option is compatible with EPC enabled drives as
-                well, but offers less control over the transition. If the
-                operating system selects this drive, it will transition it back
-                to an active state.
+                ATA drives can only change the standby timer, not disable it.
+                On ATA drives, the standby timer set by this command is volatile
+                and drive defaults are restored on next power cycle.
 
-        --standby
-                This command will transition a drive to the standby power
-                state.  This command will flush the cache before the transition
-                to this state.  This command is for non-EPC enabled drives. If
-                the drive has the EPC feature enabled, it is recommended that
-                the --transitionPower option be used instead. This option is
-                compatible with EPC enabled drives as well, but offers less
-                control over the transition.  On an HDD, this will cause the
-                spindle motor to stop.  If the operating system selects this
-                drive, it will transition it back to an active state.
+                WARNING: EPC Settings may affect all LUNs/namespaces for devices
+                         with multiple logical units or namespaces.
 
-        --active
-                This command will transition a drive to the active power state.
-                This uses a ATA read-verify command to a random LBA, or a SCSI
-                start-stop unit command.
+        --standby_y [ enable | disable | default | timerValueMilliseconds ]
+                Use this setting to change the EPC Standby_Y power mode settings.
+                    enable  - enable the power state
+                    disable - disable the power state
+                    default - restore default settings for this power state
+                    timerValue - number of milliseconds to set for the timer
+                                used in this power state. If a timer is
+                                provided the state will also be enabled, if not
+                                already. EPC spec timers are set in 100
+                                millisecond increments. Timers will be
+                                truncated to fit 100 millisecond increments.
 
-        --showEPCSettings
-                Use this option to show the current Extended Power Conditions
-                (EPC) settings on the screen. Only drives supporting the EPC
-                feature will show this data and only supported power conditions
-                will be shown.
+                WARNING: EPC Settings may affect all LUNs/namespaces for devices
+                         with multiple logical units or namespaces.
 
-        --EPCfeature [enable | disable]
-                Enables or disables Extended Power Conditions (EPC) support for
-                devices.  To disable EPC use --EPCfeature disable. Note that the
-                EPC Feature Set is not supported on all devices. Use
-                --deviceInfo option to see if EPC is supported.
+        --standby_z [ enable | disable | default | timerValueMilliseconds ]
+                Use this setting to change the EPC Standby_Z power mode settings.
+                    enable  - enable the power state
+                    disable - disable the power state
+                    default - restore default settings for this power state
+                    timerValue - number of milliseconds to set for the timer
+                                used in this power state. If a timer is
+                                provided the state will also be enabled, if not
+                                already. EPC spec timers are set in 100
+                                millisecond increments. Timers will be
+                                truncated to fit 100 millisecond increments.
 
-        --changePower
-                Use this option to enable or disable certain --powerMode and
-                their timers. You can also use this option to restore default
-                values to the drive. The available power modes are idle_a,
-                idle_b, idle_c, standby_y (SAS only), standby_z, or all. "all"
-                can only be used to enable/disable/default everything. It
-                cannot be used to set a timer. Timer values are specified in
-                milliseconds.
+                WARNING: EPC Settings may affect all LUNs/namespaces for devices
+                         with multiple logical units or namespaces.
 
-                Example restore: --changePower --defaultMode --powerMode idle_a
-                Example enable: --changePower --enableMode --powerMode idle_a
-                Example set timer: --changePower --enableMode --powerMode idle_a
-                                   --modeTimer 5000
+        --transitionPower [active | idle | idleUnload | standby | idle_a | idle_b | idle_c | standby_y | standby_z | sleep]
+                Use this option to transition the drive to a specific power
+                state. EPC and legacy power states are supported. EPC states
+                are only available  on devices supporting the EPC feature.
+                Supported power states:
+                  active
+                  idle - idle mode (legacy mode equivalent to idle_a on EPC)
+                  idleUnload - same as above, but heads are unloaded. This may
+                        not be supported on all devices.
+                  standby - standby mode (legacy mode equivalent to standby_z on EPC)
+                  idle_a - EPC idle mode
+                  idle_b - EPC lower power idle mode
+                  idle_c - EPC lowest power idle mode
+                  standby_y - EPC low power standby mode
+                  standby_z - EPC lowest power standby mode
+                  sleep - Sleep state. WARNING: This requires a reset to wake
+                        from. Once in this state, this tool cannot wake the
+                        drive on its own. The OS or adapter will need to issue
+                        a reset, which may or may not happen.
 
-        --enableMode
-                Use this option with the --changePower mode option to enable
-                a specific --powerMode.
-
-        --modeTimer [timer value in milliseconds]
-                Use this option to specify a timer value to use with the
-                --changePower mode option.
-
-        --disableMode
-                Use this option with the --changePower mode option to disable
-                a specific --powerMode.
-
-        --defaultMode
-                Use this option with the --changePower mode option to restore
-                the default settings for a specific --powerMode.  The "all"
-                option is only valid for SAS interface drives.
-
-        --transitionPower
-                Use this option to actively change --powerMode. The available
-                power modes are idle_a, idle_b, idle_c, standby_y (SAS only),
-                standby_z, or active (SAS only).
-
-                Note: Hard disk drives require a few seconds time to spin up or
-                down. The drive will report the old power mode until it is
-                fully established in the new mode.  The SeaChest --spinDown
-                command is similar.  On SAS --spinDown is equivalent to Motor
-                Stop and --transitionPower --powerMode active is equivalent to
-                Motor Start.
-
-                Example: --transitionPower --powerMode idle_a
-                Example: --transitionPower --powerMode standby_y
-
-        --powerMode [powermode]
-                Use this option to specify a power mode. This should be used
-                with the --changePower or --transitionPower options.
-                Valid power modes (SAS and SATA):
-                        idle_a
-                        idle_b
-                        idle_c
-                        standby_y (SAS only)
-                        standby_z
-                        active (SAS only, used with --trasitionPower)
-                        all (used with --changePower enable, disable or default)
-                Valid power modes (NVMe): 0 - 30
+                WARNING: Transitioning power modes may affect all
+                LUNs/namespaces for devices with multiple logical units or
+                namespaces.
 
         SATA Only
         =========
@@ -5127,7 +6054,8 @@ Utility Arguments
                     254 = Maximum Performance
 
         --disableAPM   (SATA Only)
-                Use this option to disable the current Advanced Power Management (APM) level of a device
+                Use this option to disable the current Advanced Power
+                Management (APM) level of a device
 
         --powerBalanceFeature [info | enable | disable]   (SATA Only)(Seagate Only)
                 Use this option to see the state of the Seagate PowerBalance
@@ -5163,6 +6091,61 @@ Utility Arguments
 
         SAS Only
         ========
+        --idle [ enable | disable | default | timerValueMilliseconds ]  (SAS Only)
+                Use this setting to change the idle power mode settings.
+                NOTE: This is the legacy idle timer before EPC drives. If this
+                is used on an EPC drive, this will modify the idle_a power
+                state and timer values.
+                    enable  - enable the power state
+                    disable - disable the power state
+                    default - restore default settings for this power state
+                    timerValue - number of milliseconds to set for the timer
+                                used in this power state. If a timer is
+                                provided the state will also be enabled, if
+                                not already. Spec timers are set in 100
+                                millisecond increments. Timers will be
+                                truncated to fit 100 millisecond increments.
+
+                This is only available on SAS/SCSI drives as ATA drives did not
+                have a separate configurable idle timer.
+
+                WARNING: EPC Settings may affect all LUNs/namespaces for devices
+                         with multiple logical units or namespaces.
+
+        --sasPhy [phy number] (SAS Only)
+                Use this option to specify a specific phy to use with another
+                option that uses a phy identifier value. Some tool options will
+                assume all SAS Phys when this option is not present. Others
+                will produce an error when a specific phy is needed for an
+                operation. Use the -i option to learn more about the supported
+                phys.
+
+        --sasPhyPartial [info | enable | disable] (SAS Only)
+                Use this option to enable or disable the partial phy power
+                condition. This is from the enhanced phy control mode page.
+                Use the --sasPhy option to specify an individual phy,
+                otherwise this will be changed on all phys.
+                WARNING: Configuring this setting may cause the drive to be
+                undetectable by other hardware if this power condition is not
+                supported by a controller or expander.
+
+                WARNING: Changing SAS Phy partial may affect all
+                LUNs/namespaces for devices with multiple logical units or
+                namespaces.
+
+        --sasPhySlumber [info | enable | disable] (SAS Only)
+                Use this option to enable or disable the slumber phy power
+                condition. This is from the enhanced phy control mode page.
+                Use the --sasPhy option to specify an individual phy,
+                otherwise this will be changed on all phys.
+                WARNING: Configuring this setting may cause the drive to be
+                undetectable by other hardware if this power condition is not
+                supported by a controller or expander.
+
+                WARNING: Changing SAS Phy slumber may affect all
+                LUNs/namespaces for devices with multiple logical units, or
+                namespaces.
+
         --showPowerConsumption  (SAS Only)
                 This option will show the power consumption rates supported by
                 the device and the current power consumption rate of the
@@ -5185,6 +6168,12 @@ Utility Arguments
                 Power consumption watt values are listed with the
                 --showPowerConsumption command line option.
 
+        NVMe Only
+        =========
+        --transitionPowerState [new power state]        (NVMe Only)
+                Use this option to transition to a specific power state.
+                HINT:
+                  Use --deviceInfo to show number of supported states
 
 Utility Options
 ===============
@@ -5310,12 +6299,13 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 ================================
 How PowerChoice Technology Works
 ================================
-See the Seagate technology paper "Seagate® PowerChoice Technology Provides
+See the Seagate technology paper "Seagate' PowerChoice Technology Provides
 Unprecedented Hard Drive Power Savings and Flexibility"
 http://www.seagate.com/files/docs/pdf/en-GB/whitepaper/tp608-powerchoice-tech-provides-gb.pdf
 
@@ -5486,13 +6476,51 @@ v1.10.0  10-Jun-2019 1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v2.0.0  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_Security.txt                                     Revision: 03-Jul-2019
+                     v2 is a significant overhaul of the tool:
+                     These old v1 commands are retired:
+                     --active,--changePower, --defaultMode, --disableMode,
+                     --enableMode, --idle, --idleUnload, --powerMode
+                     [powermode], --sleep, --standby, --modeTimer [timer value
+                     in milliseconds], --transitionPower.
+
+                     And transitioned to these new v2 commands: --idle [ enable
+                     | disable | default | timerValueMilliseconds ], --idle_a [
+                     enable | disable | default | timerValueMilliseconds ],
+                     --idle_b [ enable | disable | default |
+                     timerValueMilliseconds ], --idle_c [ enable | disable |
+                     default | timerValueMilliseconds ], --standby_y [ enable |
+                     disable | default | timerValueMilliseconds ], --standby_z
+                     [ enable | disable | default | timerValueMilliseconds ],
+                     --standby [ enable | disable | default |
+                     timerValueMilliseconds ] (Some settings are SAS only),
+                     --transitionPower [active | idle | idleUnload | standby |
+                     idle_a | idle_b | idle_c | standby_y | standby_z | sleep]
+
+                     These v2 commands are new: --powerMeasurementMode [all | 5
+                     | 12], --requestPowerMeasurement [seconds to perform
+                     measurement], --showPowerTelemetry, --sasPhy [phy number]
+                     (SAS Only), --sasPhyPartial [info | enable | disable] (SAS
+                     Only), --sasPhySlumber [info | enable | disable] (SAS
+                     Only), --transitionPowerState [new power state]
+
+SeaChest_Security.txt                                     Revision: 19-Feb-2020
 ===============================================================================
  SeaChest_Security - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Security Version: 2.0.1
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Security Version: 2.1.0
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_Security diagnostic software.
 
@@ -5523,19 +6551,19 @@ important data.
 Be very careful using SeaChest_Security. Power failure during a configuration
 change may cause data loss. Seagate is not responsible for lost user data.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_Security [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_Security --scan
-        SeaChest_Security -d /dev/sg2 -i
-        SeaChest_Security --device /dev/sg1 --tcgInfo
+        sudo SeaChest_Security --scan
+        sudo SeaChest_Security -d /dev/sg2 -i
+        sudo SeaChest_Security --device /dev/sg1 --tcgInfo
 
-Usage - Windows
-===============
-        SeaChest_Security [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_Security [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -5569,6 +6597,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -5978,6 +7007,44 @@ Seagate is not responsible for lost user data.
                 --psid combination, try --revert --psid as the two commands are
                 closely related.
 
+        SATA Only
+        =========
+        --ataSecureErase [normal | enhanced]          (SATA only)
+                Use the normal or enhanced argument to start an ATA security
+                erase on a device.
+
+                * normal writes binary zeros (0) to all user data areas.
+
+                * enhanced writes binary zeros (0) to all user data areas,
+                including sectors that are no longer in use due to
+                reallocation. Not all drives support the enhanced mode. For
+                some Self-Encrypting Drive (SED) models, enhanced mode erase
+                can take seconds because it uses crypto erase internally.
+
+                ATA Security Erase on standard drives (non-SED) takes a very
+                long time to complete at approximately three (3) hours per
+                terabyte. Self Encrypting Drives (SED) may run an quick
+                cryptographic erase by changing the drive's encryption keys.
+                The industry standard command ATA Security Erase begins by
+                locking the drive with a temporary password which is cleared at
+                the end of the erasure. Do not run this command unless you have
+                ample time to allow it to run through to the end. If the
+                procedure is interrupted prior to completion, then the drive
+                will remain in a locked state and you must manually restart it
+                from the beginning. The temporary password to unlock the drive
+                is "SeaChest", plain ASCII letters without the quotes.  See the
+                various ATA password options in the Utility Arguments section
+                above.
+
+                If the drive reports that it is freezelocked, then this is
+                usually put on by a BIOS command at startup.  After the
+                operating system is finished booting you can try removing the
+                power to just the hard drive.  This should allow it to restart
+                without the freezelock command.
+
+                Note: See the section below "When drives are reported Security
+                "Frozen" by SeaChest".
+
 Return codes
 ============
         0       No Error Found
@@ -5989,6 +7056,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 ==============================
@@ -6000,7 +7068,7 @@ The SeaChest_Erase --revert and --revertSP commands require specific support be
 enabled in the Linux kernel.  This document describes the process to enable
 support for sending ATA Trusted Trusted Computing Group (TCG) commands in
 Linux. The focus is on how to do this through Ubuntu Linux 14.04LTS, however,
-the process should apply to other Linux’s as well although others may vary
+the process should apply to other Linux's as well although others may vary
 slightly.
 
 Modifying The GRUB Configuration File (Ubuntu example used)
@@ -6011,7 +7079,7 @@ modifying the GRUB 2 configuration file. This section references the Grub2
 configuration documentation from the Ubuntu Community:
 https://help.ubuntu.com/community/Grub2/Setup#Configuring_GRUB_2
 
-Follow these steps to perform this modification in Ubuntu (other Linux’s may be
+Follow these steps to perform this modification in Ubuntu (other Linux's may be
 similar).
 
 1. You must modify the file /etc/default/grub. You can do this by running "sudo
@@ -6180,13 +7248,24 @@ v2.0.1  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      --ataSecFreeze, --ataSecPassword, --ataSecPassType,
                      --ataSecPWMod, --ataSecurityInfo, --disableATASecPW,
                      --unlockATASec, --ataSecureErase.
+v2.1.0  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
-SeaChest_SMART.txt                                        Revision: 03-Jul-2019
+SeaChest_SMART.txt                                        Revision: 19-Feb-2020
 ===============================================================================
  SeaChest_SMART - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_SMART Version: 1.12.0
- Build Date: June 10 2019
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_SMART Version: 1.13.1
+ Build Date: Feb 19 2020
 ===============================================================================
 Welcome to Seagate's SeaChest_SMART diagnostic software.
 
@@ -6256,19 +7335,19 @@ drives (this includes Seagate, Maxtor, Samsung and LaCie). Be careful using
 SeaChest because some of the features, like the data erasure options, will
 cause data loss. Seagate is not responsible for lost user data.
 
-Usage - Linux
-=============
+Usage - Linux (run with sudo)
+=============================
         SeaChest_SMART [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        SeaChest_SMART --scan
-        SeaChest_SMART -d /dev/sg2 -i
-        SeaChest_SMART -d /dev/sg1 --shortDST --poll
+        sudo SeaChest_SMART --scan
+        sudo SeaChest_SMART -d /dev/sg2 -i
+        sudo SeaChest_SMART -d /dev/sg1 --shortDST --poll
 
-Usage - Windows
-===============
-        SeaChest_SMART [-d <device>] {arguments} {options}
+Usage - Windows (run as administrator)
+======================================
+        SeaChest_SMART [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
@@ -6302,6 +7381,7 @@ Utility Arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -6430,12 +7510,15 @@ Utility Arguments
         --abortIDD (Seagate Only)
                 Abort a Seagate In Drive Diagnostic (IDD) that is in progress.
 
-        --errorLimit [limit in number of LBAs]
-                Use this option to specify a different error limit for DST and
-                Clean. This must be a number of logical LBAs to have errors. If
-                a drive has multiple logical sectors per physical sector, this
-                number will be adjusted for you to reflect the drive
-                architecture.
+        --errorLimit [limit in number of physical LBAs | none]
+                Use this option to specify a different error limit for a user
+                generic or long generic read test. This must be a number of
+                logical LBAs to have errors. If a drive has multiple logical
+                sectors per physical sector, this number will be adjusted for
+                you to reflect the drive architecture. (The default error limit
+                is 50 x number of logical sectors per physical sector.) The
+                predefined text string "none" (without quotes) may be entered
+                to indicate that there is no error limit.
 
         SATA Only:
         =========
@@ -6709,6 +7792,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 ======================
@@ -6892,6 +7976,17 @@ v1.12.0  10-Jun-2019 1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
+v1.13.1 19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
+                     (sudo, run as administrator) before trying to talk to
+                     devices, new exit code 9 if privileges are missing;
+                     printing the USB VID/PID in the device info; fix to sg
+                     helper to support large systems; many changes in support
+                     of dual actuators (example: warning that EPC settings
+                     affect multiple LUNs); overhaul to USB device detection
+                     and support, incorporating a new USB hacks and workarounds
+                     approach which uses a lookup table listing various USB
+                     bridge VIDs/PIDs and their specific issues; separate
+                     Seagate SAS SN and PCBA SN.
 
 Sections below are common to all tools:
 
@@ -6921,6 +8016,7 @@ Utility arguments
                      ata            - show only ATA (SATA) devices
                      usb            - show only USB devices
                      scsi           - show only SCSI (SAS)) devices
+                     nvme           - show only NVMe devices
                      interfaceATA   - show devices on an ATA interface
                      interfaceUSB   - show devices on a USB interface
                      interfaceSCSI  - show devices on a SCSI or SAS interface
@@ -7103,6 +8199,7 @@ Return codes
         6       File Path Not Found
         7       Cannot Open File
         8       File Already Exists
+        9       Need Elevated Privileges (sudo, run as administrator)
         Anything else = unknown error
 
 ================
@@ -7370,7 +8467,7 @@ SATA HDD Device Information:
 [sysop@localhost ~]$ sudo ./SeaChest_Basics -i -d /dev/sg1
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST4000DX001-1CE168
         Serial Number: ZQ3034X7R
@@ -7445,7 +8542,7 @@ SATA SSD Device Information:
 [sysop@localhost ~]$ sudo ./SeaChest_Basics -d /dev/sg1 -i
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST120FP0021
         Serial Number: PQ57011BD
@@ -7511,7 +8608,7 @@ SAS HDD Device Information:
 [sysop@localhost ~]$ sudo ./SeaChest_Basics -i -d /dev/sg2
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST4000NM0043
         Serial Number: Z1QZ04KVG
@@ -7574,7 +8671,7 @@ SAS SSD: Device Information
 [sysop@localhost ~]$ sudo ./SeaChest_Basics -d /dev/sg3 -i
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST400FM0053
         Serial Number: P3QF13026
@@ -7646,7 +8743,7 @@ Reminder: Seagate Support does not help to analyze SMART attributes.
 [sysop@localhost ~]$ sudo ./SeaChest_x64 -d /dev/sg0 --smartAttributes
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
 Attribute Name:                   Status: Nominal: Worst:     Raw (hex):
   1 Read Error Rate               0x000F    0x75    0x63      0x0000000969AFB4
@@ -7804,7 +8901,7 @@ named wingetopt, license shown below.
 SeaChest_Firmware uses two open source projects named mbedtls and zlib.h,
 licenses shown below.
 
-Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ======================================================================
 
                         END USER LICENSE AGREEMENT
@@ -7817,7 +8914,7 @@ PORTION OF THIS PRODUCT (INCLUDING, BUT NOT LIMITED TO, THE SOFTWARE AND
 ASSOCIATED FILES (THE "SOFTWARE"), HARDWARE ("HARDWARE"), DISK (S), OR OTHER
 MEDIA) (COLLECTIVELY, THE "PRODUCT") YOU AND YOUR COMPANY ACCEPT ALL THE
 TERMS AND CONDITIONS OF THIS EULA.  IF YOU ACQUIRE THIS PRODUCT FOR YOUR
-COMPANY’S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
+COMPANY'S USE, YOU REPRESENT THAT YOU ARE AN AUTHORIZED REPRESENTATIVE WHO
 HAS THE AUTHORITY TO LEGALLY BIND YOUR COMPANY TO THIS EULA.  IF YOU DO NOT
 AGREE, DO NOT CLICK "I AGREE" AND DO NOT DOWNLOAD, SET-UP, INSTALL OR USE THE
 SOFTWARE.
@@ -7945,14 +9042,14 @@ TO, AND IN NO EVENT WILL SEAGATE'S TOTAL CUMULATIVE DAMAGES EXCEED, THE FEES
 PAID BY THE LICENSEE TO SEAGATE FOR THE PRODUCT.  ADDITIONALLY, IN NO EVENT
 SHALL SEAGATE'S LICENSORS OR SUPPLIERS BE LIABLE FOR ANY DAMAGES OF ANY KIND.
 
-8.  Privacy.  Seagate’s collection, use and disclosure of personally
+8.  Privacy.  Seagate's collection, use and disclosure of personally
 identifiable information in connection with your use of the Product is
-governed by Seagate’s Privacy Policy which is located at
+governed by Seagate's Privacy Policy which is located at
 http://www.seagate.com/legal-privacy/privacy-policy/As further described in
-Seagate’s Privacy Policy, certain Products may include a Product dashboard
+Seagate's Privacy Policy, certain Products may include a Product dashboard
 which allows users to manage Product settings, including but not limited to
 use of anonymous statistical usage data in connection with personally
-identifiable information. You agree to Seagate’s collection, use, and
+identifiable information. You agree to Seagate's collection, use, and
 disclosure of your data in accordance with the Product dashboard settings
 selected by you for the Product, or in the case of transfer as described in
 Section 11, you agree to the settings selected by the prior licensee unless
