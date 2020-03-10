@@ -1,4 +1,4 @@
-#### Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+#### Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates
 
 # FieldTools
 All the great tools we have for the field.
