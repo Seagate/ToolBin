@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 20-Feb-2020
+Date last edit: 19-Apr-2020
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -26,12 +26,11 @@ Sample Output
 END USER LICENSE AGREEMENT
 Various Open Source Licenses
 
-SeaChest_Basics.txt                                       Revision: 19-Feb-2020
+SeaChest_Basics.txt                                       Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_Basics - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Basics Version: 2.9.1
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest Basics diagnostic software.
 
@@ -759,13 +758,14 @@ v2.9.1 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v2.9.2  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_Configure.txt                                    Revision: 19-Feb-2020
+SeaChest_Configure.txt                                    Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_Configure - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Configure Version: 1.18.1
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Configure diagnostic software.
 
@@ -1465,13 +1465,14 @@ v1.18.1 19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v1.18.2 13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_Erase.txt                                        Revision: 19-Feb-2020
+SeaChest_Erase.txt                                        Revision: 19-Apr-2020
 ===============================================================================
 SeaChest_Erase - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Erase Version: 2.1.1
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Erase diagnostic software.
 
@@ -2495,13 +2496,14 @@ v2.1.1 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v2.1.2  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_Firmware.txt                                     Revision: 19-Feb-2020
+SeaChest_Firmware.txt                                     Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_Firmware - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Firmware Version: 2.8.1
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Firmware diagnostic software.
 
@@ -3103,13 +3105,14 @@ v2.8.1 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v2.8.2  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_Format.txt                                       Revision: 19-Feb-2020
+SeaChest_Format.txt                                       Revision: 19-Apr-2020
 ===============================================================================
 SeaChest_Format - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 1.5.1
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Format diagnostic software.
 
@@ -3856,13 +3859,14 @@ v1.5.1  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v1.5.2  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_GenericTests.txt                                 Revision: 19-Feb-2020
+SeaChest_GenericTests.txt                                 Revision: 19-Apr-2020
 ===============================================================================
  SeaChest GenericTests - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_GenericTests Version: 1.9.0
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_GenericTests diagnostic software.
 
@@ -4496,13 +4500,14 @@ v1.9.0 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v1.9.1  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_Info.txt                                         Revision: 19-Feb-2020
+SeaChest_Info.txt                                         Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_Info - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 1.6.0
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Info diagnostic software.
 
@@ -4949,13 +4954,14 @@ v1.6.0 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v1.6.1  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_Lite.txt                                         Revision: 19-Feb-2020
+SeaChest_Lite.txt                                         Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_Lite - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Lite Version: 1.3.0
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest Lite diagnostic software.
 
@@ -5235,13 +5241,14 @@ v1.3.0  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v1.3.1  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_NVMe.txt                                        Revision: 19-Feb-2020
+SeaChest_NVMe.txt                                        Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_NVMe - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_NVMe Version: 1.1.0
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest NVMe diagnostic software.
 
@@ -5699,13 +5706,14 @@ v1.1.0  19-Feb-2020  1_21_30 libraries add printing the USB VID/PID in the
                      USB hacks and workarounds approach which uses a lookup
                      table listing various USB bridge VIDs/PIDs and their
                      specific issues; separate Seagate SAS SN and PCBA SN.
+v1.1.1  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_PowerControl.txt                                 Revision: 19-Feb-2020
+SeaChest_PowerControl.txt                                 Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_PowerControl - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 2.0.0
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_PowerControl diagnostic software.
 
@@ -6514,13 +6522,14 @@ v2.0.0  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
                      (SAS Only), --sasPhyPartial [info | enable | disable] (SAS
                      Only), --sasPhySlumber [info | enable | disable] (SAS
                      Only), --transitionPowerState [new power state]
+v2.0.1  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_Security.txt                                     Revision: 19-Feb-2020
+SeaChest_Security.txt                                     Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_Security - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Security Version: 2.1.0
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Security diagnostic software.
 
@@ -7259,13 +7268,14 @@ v2.1.0  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v2.1.1  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
-SeaChest_SMART.txt                                        Revision: 19-Feb-2020
+SeaChest_SMART.txt                                        Revision: 19-Apr-2020
 ===============================================================================
  SeaChest_SMART - Seagate drive utilities
  Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_SMART Version: 1.13.1
- Build Date: Feb 19 2020
+ See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_SMART diagnostic software.
 
@@ -7987,6 +7997,8 @@ v1.13.1 19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
+v1.13.2 13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+                     command.
 
 Sections below are common to all tools:
 
