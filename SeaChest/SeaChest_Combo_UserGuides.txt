@@ -3271,7 +3271,7 @@ Utility Arguments
                 command prompt and prints ongoing completion percentages (%)
                 and the final test result.  Full drive procedures will take a
                 very long time.  Used with --sanitize, --secureErase (SATA),
-                --writeSame (SATA), or --Format (SAS).
+                --writeSame (SATA), --formatUnit (SAS), --nvmFormat (NVMe).
 
         --progress [format]
                 Get the progress for a test that was started quietly (default)
