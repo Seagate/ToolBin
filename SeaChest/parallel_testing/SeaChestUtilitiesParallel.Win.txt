@@ -1,0 +1,400 @@
+SeaChestUtilitiesParallel.Win.txt                         Revision: 24-Oct-2017
+===============================================================================
+Information About Running SeaChest Utilities in Parallel on Multiple Devices
+
+Seagate SeaChest Utilities are not multi-threaded applications.  While it is
+possible to define multiple target devices on the command line, these devices
+are processed sequentially, not simultaneously.  Some tests, like the full
+drive scan, can take several hours to complete.  It is understandable for
+testing multiple drives, therefore, to seek to process them in parallel.
+
+Fortunately, this support is readily available for the Windows operating system
+using sophisticated PowerShell scripts.  Two such projects are "Invoke-Parallel" and "PoshRSJob".
+
+1. "Invoke-Parallel" project at
+https://github.com/RamblingCookieMonster/Invoke-Parallel.
+(Mr. Warren Frame)
+
+The MIT License (MIT)
+https://github.com/RamblingCookieMonster/Invoke-Parallel/blob/master/LICENSE.md
+
+2. "PoshRSJob" project at
+https://github.com/proxb/PoshRSJob
+(Mr. Boe Prox)
+
+The MIT License (MIT)
+https://github.com/proxb/PoshRSJob/blob/master/LICENSE
+
+===============================================================================
+
+First, an important message:
+
+Running SeaChest Utilities using various parallel methods can easily overwhelm
+a system.  As the system administrator you are responsible for evaluating how
+your systems might react to multiple storage devices running various
+diagnostics routines.  Will there be memory issues?  What is the safe number of
+parallel tests to run at one time?  Is the power supply ready to support
+numerous active drives?  Will there be network issues when the tasks are on
+different systems?  What should be the response when a drive fails a diagnostic
+test?  Do you have a way to identify and kill an unresponsive instance of the
+tests?  Will there be clean up routines and processes that need be halted when
+the tests are finished?  These are only a few of the many obvious questions
+that need to be considered before implementing a parallel testing plan.
+
+===============================================================================
+Invoke-Parallel
+
+The Invoke-Parallel PowerShell script has many available options.  Only a few of
+them are needed for running SeaChest utilities in parallel.
+
+Example 1:
+=========
+2,3 | Invoke-Parallel -ScriptBlock { \\Path\To\SeaChest_GenericTests.exe -d PD$_ --randomTest --seconds 5 --hideLBACounter --echoCommandLine }
+
+The above command will start two drives testing simultaneously for 5 seconds.
+(You can touch the multiple drives and feel the random seeks in your hands.)
+
+Let's review the parts of the above command line:
+
+1. 2,3: these are the comma separated physical device (PD) variables which
+replace the $_ placeholder characters resulting in two parallel tests, one for
+PD2 and another for PD3.
+SeaChest_GenericTests -d PD2 --randomTest --seconds 5 --hideLBACounter --echoCommandLine
+SeaChest_GenericTests -d PD3 --randomTest --seconds 5 --hideLBACounter --echoCommandLine
+
+2. |: the pipe symbol.  This symbol tells the operating system to pass the
+preceding variables 2,3 into the script.
+
+3. Invoke-Parallel:  The PowerShell script for executing jobs in parallel using
+one or more computers.  The location of this script is known because you
+previously did a dot-source link to the file
+(. "\\Path\To\Invoke-Parallel.ps1") in preparation to running the script.
+
+4. the -ScriptBlock option: An Invoke-Parallel command line option setting up
+the scriptblock (a collection of statements surrounded with { curly parenthesis
+}) to run against selected devices and computers.
+
+5. { : the starting 'curly parenthesis and space' of the scriptblock which
+frames the command you might use for a single device.  For example, the actual
+command would be: SeaChest_GenericTests -d PD2 --randomTest --seconds 5
+--hideLBACounter --echoCommandLine
+
+6. \\Path\To\: Just a simplified representation of the drive and directory
+location of the SeaChest utility about to be run.  For example, it might be on
+a flash drive at G:\commandline_tools\Windows\Win64\
+
+7. SeaChest_GenericTests: This is the application name in this example. You
+will change this to the name of the tool you want to use. The application file
+will end with letters .exe.  Typing these letters is optional.
+
+8. -d PD: These are SeaChest device designations.  See the SeaChest
+documentation for more details.
+
+9. $_: This a variable replacement string exclusively for the Invoke-Parallel
+script. It tells Invoke-Parallel to expect values (letters, words or numbers)
+defined previously on this command line to take the place of the $_ characters.
+The count of comma separated values will determine the number of parallel
+processes that will occur.
+
+10. --randomTest --seconds 5 --hideLBACounter --echoCommandLine: These are
+command line options specific to the SeaChest_GenericTests application.
+
+Note: The --hideLBACounter option is very important when running a test that
+displays the LBA (sector) numbers.  These numbers can easily climb up into the
+millions and they will each display on a new line after Invoke-Parallel is
+finished running.  This is of course an impossible situation and if it happens
+then press Ctrl-C to abort the display. This will also abort your results so
+remember to use the --hideLBACounter option to avoid wasted time rerunning your
+tests.
+
+11.  }: This is the closing 'space and curly parenthesis' of the scriptblock
+which frames the general command.
+
+Example 2:
+=========
+With four drives testing Short Drive Self Test (DST) it would be:
+0,1,4,6 | Invoke-Parallel -ScriptBlock { \\Path\To\SeaChest_Basics.exe -d PD$_ --shortDST --poll --echoCommandLine }
+
+equivalent to starting in parallel:
+SeaChest_Basics -d PD0 --shortDST --poll --echoCommandLine
+SeaChest_Basics -d PD1 --shortDST --poll --echoCommandLine
+SeaChest_Basics -d PD4 --shortDST --poll --echoCommandLine
+SeaChest_Basics -d PD6 --shortDST --poll --echoCommandLine
+
+The terminal will display results in the order of how they have finished the
+command.  The output of a job will be printed as soon as the job completes.
+
+In the case of a test failure, you will need to decide if all remaining tests
+should complete or all current tests should stop. See the Invoke-Parallel
+documentation about -RunspaceTimeout and -NoCloseOnTimeout to control this behavior.
+
+Log files can help to keep test results reports. See the Invoke-Parallel
+documentation about -AppendLog and -LogFile to control this behavior.
+
+===============================================================================
+PoshRSJob
+
+The PoshRSJob PowerShell module has many available options.  Only a few of them
+are needed for running SeaChest utilities in parallel.
+
+Example 1:
+=========
+0..5 | Start-RSJob -Name {"PD$($_)"} -Throttle 3 -ScriptBlock { & '\\Path\To\SeaChest_GenericTests' -d PD$_ --randomTest --seconds 5 --hideLBACounter --echoCommandLine }
+
+The above command will start six drives testing simultaneously for 5 seconds.
+(You can touch the multiple drives and feel the random seeks in your hands.)
+
+Let's review the parts of the above command line:
+
+1. 0..5: these are the physical device (PD) variables expressed as a range from
+0 to 5 which replace the $_ placeholder characters resulting in six parallel
+tests, one each for PD0, PD1, PD2, PD3, PD4, PD5, and PD6.
+SeaChest_GenericTests -d PD0 --randomTest --seconds 5 --hideLBACounter --echoCommandLine
+SeaChest_GenericTests -d PD1 --randomTest --seconds 5 --hideLBACounter --echoCommandLine
+SeaChest_GenericTests -d PD2 --randomTest --seconds 5 --hideLBACounter --echoCommandLine
+SeaChest_GenericTests -d PD3 --randomTest --seconds 5 --hideLBACounter --echoCommandLine
+SeaChest_GenericTests -d PD4 --randomTest --seconds 5 --hideLBACounter --echoCommandLine
+SeaChest_GenericTests -d PD5 --randomTest --seconds 5 --hideLBACounter --echoCommandLine
+
+2. |: the pipe symbol.  This symbol tells the operating system to pass the
+preceding variables 0..5 into the script.
+
+3. Start-RSJob:  The PowerShell command from the PoshRSJob module for executing
+jobs in parallel using one or more computers.  The location of this script is
+known because you previously installed the module in preparation to running the
+script.
+
+4. the -Name option: A PoshRSJob command line option to assign a unique name to
+each instance of the parallel tests (each background runspace job).
+
+5. {"PD$($_)"}: A small script which assembles the names we want PD0, PD1 etc
+based on the 0..5 device variables.  These will display on the screen under the
+"Name" column.
+
+6. -Throttle 3: A PoshRSJob Start-RSJob command line option to set the number
+of concurrent running runspace jobs which are allowed at a time.  The value of
+3 is selected for demonstration purposes only.  Your value will depend on your
+chosen SeaChest Utilities task and your knowledge of your own system's
+abilities, current state and limitations.  As there are six drive in this
+example, they we run three at a time until all six are completed.
+
+7. the -ScriptBlock option: A PoshRSJob Start-RSJob command line option setting
+up the scriptblock (a collection of statements surrounded with { curly
+parenthesis }) to run against selected devices and computers.
+
+8. { : the starting 'curly parenthesis and space' of the scriptblock which
+frames the command you might use for a single device.  For example, the actual
+command would be: SeaChest_GenericTests -d PD0 --randomTest --seconds 5
+--hideLBACounter --echoCommandLine
+
+9. & '<some external command>': PowerShell interprets the ampersand (the 'and'
+sign) as an instruction to execute the command surrounded by single quotes,
+instead of treating it as a cmdlet or a string.
+
+10. \\Path\To\: Just a simplified representation of the drive and directory
+location of the SeaChest utility about to be run.  For example, it might be
+actually be at C:\Program Files\Seagate\SeaChest or on a flash drive at
+G:\commandline_tools\Windows\Win64\.  It depends on your system.
+
+11. SeaChest_GenericTests: This is the application name in this example. You
+will change this to the name of the tool you want to use. The application file
+will end with letters .exe.  Typing these letters is optional.
+
+12. -d PD: These are SeaChest device designations.  See the SeaChest
+documentation for more details.
+
+13. $_: This a variable replacement string exclusively for the Start-RSJob
+script. It tells Start-RSJob to expect values (letters, words or numbers)
+defined previously on this command line to take the place of the $_ characters.
+
+14. --randomTest --seconds 5 --hideLBACounter --echoCommandLine: These are
+command line options specific to the SeaChest_GenericTests application.
+
+Note: The --hideLBACounter option is very important when running a test that
+displays the LBA (sector) numbers.  These numbers can easily climb up into the
+millions and they will each display on a new line after Start-RSJob is finished
+running.  This is of course an impossible situation and if it happens then
+press Ctrl-C to abort the display. This will also abort your results so
+remember to use the --hideLBACounter option to avoid wasted time rerunning your
+tests.
+
+15.  }: This is the closing 'space and curly parenthesis' of the scriptblock
+which frames the general command.
+
+16. Three of the PoshRSJob module commands are especially useful when running
+SeaChest utilities in a parallel manner.  These modules are Start-RSJob,
+Get-RSJob and Receive-RSJob.  As demonstrated avove, Start-RSJob gets things
+started. It displays a single "ID" row with initial status for each instance of
+the task.  For example, based on the above six drive test:
+
+PS \\Path\To\> 0..5 | Start-RSJob -Name {"PD$($_)"} -Throttle 3 -ScriptBlock { & 'C:\Program Files\Seagate\SeaChest\scgt.exe' -d PD$_ --userGenericStart 10000 --seconds 5 --hideLBACounter }
+
+Id       Name                 State           HasMoreData  HasErrors    Command
+--       ----                 -----           -----------  ---------    -------
+218      PD0                  Running         False        False         & 'C:\Program Files\Seagate\SeaChest...
+219      PD1                  Running         False        False         & 'C:\Program Files\Seagate\SeaChest...
+220      PD2                  Running         False        False         & 'C:\Program Files\Seagate\SeaChest...
+221      PD3                  NotStarted      False        False         & 'C:\Program Files\Seagate\SeaChest...
+222      PD4                  NotStarted      False        False         & 'C:\Program Files\Seagate\SeaChest...
+223      PD5                  NotStarted      False        False         & 'C:\Program Files\Seagate\SeaChest...
+
+While our test example is a short five second test, a full drive scan will take
+several hours and the PoshRSJob command to check status is Get-RSJob.  For
+example, based on the above six drive test:
+
+PS \\Path\To\> Get-RSJob -Id 218,219,220,221,222,223
+or perhaps
+218..223 | ForEach { Get-RSJob -Id $_ }
+
+Id       Name                 State           HasMoreData  HasErrors    Command
+--       ----                 -----           -----------  ---------    -------
+218      PD0                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+219      PD1                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+220      PD2                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+221      PD3                  Running         False        False         & 'C:\Program Files\Seagate\SeaChest...
+222      PD4                  Running         False        False         & 'C:\Program Files\Seagate\SeaChest...
+223      PD5                  Running         False        False         & 'C:\Program Files\Seagate\SeaChest...
+
+Notice that the "-Throttle 3" option means that no more than three tests will
+run concurrently.  As one finishes then next in line starts up, while
+maintaining a maximum of three simultaneous tests.  For example, checking six
+seconds later, based on the above six drive test:
+
+PS \\Path\To\> Get-RSJob -Id 218,219,220,221,222,223
+or perhaps
+218..223 | ForEach { Get-RSJob -Id $_ }
+
+Id       Name                 State           HasMoreData  HasErrors    Command
+--       ----                 -----           -----------  ---------    -------
+218      PD0                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+219      PD1                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+220      PD2                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+221      PD3                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+222      PD4                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+223      PD5                  Completed       True         False         & 'C:\Program Files\Seagate\SeaChest...
+
+After all tests are complete you can view the final display output by using the
+Receive-RSJob command.  For example, based on the above six drive test:
+
+PS \\Path\To\> Receive-RSJob -Id 218,219,220,221,222,223
+or perhaps
+218..223 | ForEach { Write-Host "Id" $_; Receive-RSJob -Id $_ }
+
+Id 218
+-d PD0 --userGenericStart 10000 --seconds 5 --hideLBACounter
+===============================================================================
+ SeaChest_GenericTests - Seagate drive utilities
+ Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest_GenericTests Version: 1.7.0-1_16_2 X86_64
+ Build Date: Jul 27 2017
+ Today: Tue Aug 15 09:34:19 2017
+===============================================================================
+
+\\.\PhysicalDrive0 - ST320LT014-9YK142 - L0201QLZ - ATA
+Starting user generic timed test at LBA 10000 for 5 seconds
+
+No bad LBAs detected during read scan of device.
+User generic test completed successfully!
+
+Id 219
+-d PD1 --userGenericStart 10000 --seconds 5 --hideLBACounter
+===============================================================================
+ SeaChest_GenericTests - Seagate drive utilities
+ Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest_GenericTests Version: 1.7.0-1_16_2 X86_64
+ Build Date: Jul 27 2017
+ Today: Tue Aug 15 09:34:19 2017
+===============================================================================
+
+\\.\PhysicalDrive1 - ST4000NM0023 - L1Z90M2B0000R550X0ZK - SCSI
+Starting user generic timed test at LBA 10000 for 5 seconds
+
+No bad LBAs detected during read scan of device.
+User generic test completed successfully!
+
+Id 220
+-d PD2 --userGenericStart 10000 --seconds 5 --hideLBACounter
+===============================================================================
+ SeaChest_GenericTests - Seagate drive utilities
+ Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest_GenericTests Version: 1.7.0-1_16_2 X86_64
+ Build Date: Jul 27 2017
+ Today: Tue Aug 15 09:34:19 2017
+===============================================================================
+
+\\.\PhysicalDrive2 - ST400FM0073 - L3F1142E0000P3F1142E - SCSI
+Starting user generic timed test at LBA 10000 for 5 seconds
+
+No bad LBAs detected during read scan of device.
+User generic test completed successfully!
+
+Id 22119
+-d PD3 --userGenericStart 10000 --seconds 5 --hideLBACounter
+===============================================================================
+ SeaChest_GenericTests - Seagate drive utilities
+ Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest_GenericTests Version: 1.7.0-1_16_2 X86_64
+ Build Date: Jul 27 2017
+ Today: Tue Aug 15 09:34:24 2017
+===============================================================================
+
+\\.\PhysicalDrive3 - ST980411AS - LTF09P7D - ATA
+Starting user generic timed test at LBA 10000 for 5 seconds
+
+No bad LBAs detected during read scan of device.
+User generic test completed successfully!
+
+Id 222
+-d PD4 --userGenericStart 10000 --seconds 5 --hideLBACounter
+===============================================================================
+ SeaChest_GenericTests - Seagate drive utilities
+ Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest_GenericTests Version: 1.7.0-1_16_2 X86_64
+ Build Date: Jul 27 2017
+ Today: Tue Aug 15 09:34:24 2017
+===============================================================================
+
+\\.\PhysicalDrive4 - ST120FP0021 - L57011BD - ATA
+Starting user generic timed test at LBA 10000 for 5 seconds
+
+No bad LBAs detected during read scan of device.
+User generic test completed successfully!
+
+Id 223
+-d PD5 --userGenericStart 10000 --seconds 5 --hideLBACounter
+===============================================================================
+ SeaChest_GenericTests - Seagate drive utilities
+ Copyright (c) 2017 Seagate Technology LLC, All Rights Reserved
+ SeaChest_GenericTests Version: 1.7.0-1_16_2 X86_64
+ Build Date: Jul 27 2017
+ Today: Tue Aug 15 09:34:24 2017
+===============================================================================
+
+\\.\PhysicalDrive5 - ST5000NM0024-1HT170 - L4E006SN - ATA
+Starting user generic timed test at LBA 10000 for 5 seconds
+
+No bad LBAs detected during read scan of device.
+User generic test completed successfully!
+
+PS C:\Program Files\Seagate\SeaChest>
+
+
+Example 2:
+=========
+With four drives testing Short Drive Self Test (DST) it would be:
+0,1,4,6 | Start-RSJob -Name {"PD$($_)"} -Throttle 3 -ScriptBlock { & '\\Path\To\SeaChest_Basics.exe' -d PD$_ --shortDST --poll --echoCommandLine } | Wait-RSJob -ShowProgress | Receive-RSJob
+or perhaps
+0,1,4,6 | Start-RSJob -Name {"PD$($_)"} -Throttle 3 -ScriptBlock { & '\\Path\To\SeaChest_Basics.exe' -d PD$_ --shortDST --poll --echoCommandLine } | Wait-RSJob -ShowProgress | Get-RSJob
+
+equivalent to starting in parallel:
+SeaChest_Basics -d PD0 --shortDST --poll --echoCommandLine
+SeaChest_Basics -d PD1 --shortDST --poll --echoCommandLine
+SeaChest_Basics -d PD4 --shortDST --poll --echoCommandLine
+SeaChest_Basics -d PD6 --shortDST --poll --echoCommandLine
+
+The Wait-RSJob command holds up returning to the PowerShell command line until
+the jobs are complete (or a timeout is reached).  In addition, an optional
+progress bar is selected.  Lastly, when all jobs are complete the Receive-RSJob
+command shows the display output for each instance of the SeaChest test.  When
+Start-RSJob, Wait-RSJob and Receive-RSJob are pipelined together, the block of
+job Id's are automatically passed along to the next PoshRSJob command.

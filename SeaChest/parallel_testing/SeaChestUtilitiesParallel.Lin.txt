@@ -1,0 +1,147 @@
+SeaChestUtilitiesParallel.Lin.txt                         Revision: 24-Oct-2017
+===============================================================================
+Information About Running SeaChest Utilities in Parallel on Multiple Devices
+
+Seagate SeaChest Utilities are not multi-threaded applications.  While it is
+possible to define multiple target devices on the command line, these devices
+are processed sequentially, not simultaneously.  Some tests, like the full
+drive scan, can take several hours to complete.  It is understandable for
+testing multiple drives, therefore, to seek to process them in parallel.
+
+Fortunately, this support is readily available for Linux operating systems
+through the GNU Parallel project at https://www.gnu.org/software/parallel/.
+(O. Tange (2011): GNU Parallel - The Command-Line Power Tool,
+;login: The USENIX Magazine, February 2011:42-47.)
+
+The GNU General Public License: https://www.gnu.org/licenses/gpl.html
+
+===============================================================================
+
+First, an important message:
+
+Running SeaChest Utilities using various parallel methods can easily overwhelm
+a system.  As the system administrator you are responsible for evaluating how
+your systems might react to multiple storage devices running various
+diagnostics routines.  Will there be memory issues?  What is the safe number of
+parallel tests to run at one time?  Is the power supply ready to support
+numerous active drives?  Will there be network issues when the tasks are on
+different systems?  What should be the response when a drive fails a diagnostic
+test?  Do you have a way to identify and kill an unresponsive instance of the
+tests?  Will there be clean up routines and processes that need be halted when
+the tests are finished?  These are only a few of the many obvious questions
+that need to be considered before implementing a parallel testing plan.
+
+===============================================================================
+GNU Parallel
+
+GNU Parallel has many available options.  Only a few of them are needed for
+running SeaChest utilities in parallel.
+
+Example 1:
+=========
+sudo parallel -k 'time ./SeaChest_GenericTests -d /dev/sg{} --randomTest
+--seconds 5 --echoCommandLine' ::: 2 3
+
+The above command will start two drives testing simultaneously for 5 seconds,
+measured by the Linux time command.  (You can touch the multiple drives and
+feel the random seeks in your hands.)
+
+Let's review the parts of the above command line:
+
+1. sudo: A standard Linux command to elevate the privileges of the current user
+to that of an administrative superuser. You will need to be a member of this
+group already and reconfirm your login password to proceed any further. All
+SeaChest commands require this level of administrative confirmation.
+
+2. parallel: The GNU shell tool for executing jobs in parallel using one or
+more computers.
+
+3. the -k option: A GNU Parallel command line option to force the output in the
+same order as the arguments use. --keep-order/-k
+
+4. ': This is a starting tick mark which frames the command you might use for a
+single device.  For example, the actual command would be: sudo time
+./SeaChest_GenericTests -d /dev/sg2 --randomTest --seconds 5
+--echoCommandLine
+
+5. time: This is an optional item, standard to the Linux OS, which prints a
+small report about the time it took to execute a command.  Time is often useful
+with SeaChest, especially on the longer tests.
+
+6. ./: Standard Linux command line syntax "dot slash" to indicate that the
+compiled application will be found in the current directory.
+
+7. SeaChest_GenericTests: This is the application name in this example. You
+will change this to the name of the tool you want to use. The application file
+must be defined as an "executable" in the file properties.
+
+8. -d /dev/sg: These are SeaChest device designations.  See the SeaChest
+documentation for more details.
+
+9. {}: This a variable replacement string exclusively for the GNU Parallel
+application. It tells Parallel to expect values (letters, words or numbers)
+defined later on this command line to take the place of the {} brace marks.
+The count of values will determine the number of parallel processes that will
+occur.
+
+10. --randomTest --seconds 5 --echoCommandLine: These are command line options
+specific to the SeaChest_GenericTests application.
+
+11. ': This is the closing tick mark which frames the general command.
+
+12. ::: This is a special character combination (3 colons) defined by GNU
+Parallel which separates the full Parallel command line from the individual
+argument variables.  In our example, those which define the multiple
+simultaneous /dev/sg target devices.
+
+13. 2 3: these are the argument variables which replace the placeholder brace
+marks {} resulting in two parallel tests, one for /dev/sg2 and another for
+/dev/sg3.
+sudo time ./SeaChest_GenericTests -d /dev/sg2 --randomTest --seconds 5
+--echoCommandLine
+sudo time ./SeaChest_GenericTests -d /dev/sg3 --randomTest --seconds 5
+--echoCommandLine
+
+Example 2:
+=========
+With four drives testing Short Drive Self Test (DST) it would be:
+sudo parallel -k './SeaChest_Basics -d /dev/sg{} --shortDST --poll' ::: 0 1 4 6
+
+equivalent to starting in parallel:
+./SeaChest_Basics -d /dev/sg0 --shortDST --poll
+./SeaChest_Basics -d /dev/sg1 --shortDST --poll
+./SeaChest_Basics -d /dev/sg4 --shortDST --poll
+./SeaChest_Basics -d /dev/sg6 --shortDST --poll
+
+The terminal will display results AFTER all four drives have finished the
+command (due to the -k option). Normally, without -k, the output of a job will
+be printed as soon as the job completes.
+
+Example 3:
+=========
+Another example with four drives testing Short Drive Self Test (DST) it would
+be:
+seq 0 3 | sudo parallel --jobs 2 -k './SeaChest_Basics -d /dev/sg{} --shortDST --poll'
+
+equivalent to starting in parallel:
+./SeaChest_Basics -d /dev/sg0 --shortDST --poll
+./SeaChest_Basics -d /dev/sg1 --shortDST --poll
+./SeaChest_Basics -d /dev/sg2 --shortDST --poll
+./SeaChest_Basics -d /dev/sg3 --shortDST --poll
+
+The Linux seq command (as in generate a sequence of numbers) sends the device
+variables 0 1 2 3 to the SeaChest_Basics utility. The --jobs 2 option tells the
+parallel tool to run no more than two jobs at a time.
+
+===============================================================================
+
+In the case of a test failure, you will need to decide if all remaining tests
+should complete or all current tests should stop. See the GNU Parallel
+documentation about --halt to control this behavior.
+
+Log files can help to keep test results reports. See the GNU Parallel
+documentation about --joblog and --files to control this behavior.
+
+In the words of the GNU Parallel author, Ole Tange, "If you walk through the
+tutorial you will be better at using GNU Parallel than most people. If you also
+read the examples you will be better than most GNU Parallel users."
