@@ -1,4 +1,0 @@
-SeaChest Lite - SeaChest is a comprehensive, easy-to-use command line
-diagnostic tool that helps you quickly determine the health and status of your
-Seagate storage product. It also includes a command to change the default
-sector size on supported drive models.
