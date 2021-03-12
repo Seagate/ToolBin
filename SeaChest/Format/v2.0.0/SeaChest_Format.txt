@@ -1,395 +1,517 @@
-SeaChest_Firmware.txt                                     Revision: 19-Apr-2020
+SeaChest_Format                                            Revision: 25-Feb-2021
 ===============================================================================
- SeaChest_Firmware - Seagate drive utilities
- Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Format - Seagate drive utilities
+ Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
-Welcome to Seagate's SeaChest_Firmware diagnostic software.
+Welcome to Seagate's SeaChest_Format diagnostic software.
 
-SeaChest_Firmware is a comprehensive command line tool that can be used to
-update firmware, also known as microcode, on Seagate disk drives (this includes
-Seagate, Maxtor, Samsung and LaCie).
+Storage products which utilize the SAS, SCSI or Fibre Channel interfaces are
+able to perform a full low-level media format in the field.  These three
+storage interfaces use, in generic terms, the SCSI command set.  Unlike SATA,
+which is low-level formatted only at the factory, SCSI command devices are able
+to rescan the surface of the media while managing defective sectors (if any)
+and even change the drive sector size.  The SCSI Format Unit command offers
+many specialty options to accommodate a variety of conditions and to fine tune
+the procedure.
 
-Seagate products are run by firmware.  Having the latest firmware can improve
-performance and or reliability of your product.  Seagate recommends applying
-new firmware to enhance the performance and or reliability of your drive.  Like
-any software, firmware is improved over time and problems are also fixed.Ã‚Â 
-Every drive family has a couple of firmware releases during the life of the
-product.Ã‚Â  Please check in regularly to determine if new firmware is available
-for your drive.
+Some RAID adapters, for example, use 520 byte sectors rather than the common
+512 size.  Because of this ability to change to a new sector size (also called
+block size), the resulting number of total sectors (Logical Block Addresses or
+LBAs) on a drive can vary and the actual final count is determined at the end
+of the format.  In simple terms, if the new sector size is twice a large as the
+previous format then the new count of sectors is half of what it was.
 
-SeaChest_Firmware allows for both single drive and sequential batch mode
-firmware download.
+The SCSI Format Unit command is a drive background command which means that
+once the command is accepted by the drive it then goes offline to manage the
+task with no overhead impact to the host system.  The drive will report
+formatting progress in 1% increments.
 
-NOTE: Windows severely restricts downloading firmware to SATA drives.  Please
-see the section below "Windows Restrictions Over SATA Firmware Downloads".
-SeaChest_Firmware may not be fully functional on non-Seagate drives.
+Important note: Once a Format Unit command has begun on a device then it must
+be allowed to complete to be usable again.  If the format is interrupted then
+it will subsequently report a  corrupted format with Sense Key "03-31".  The
+only way to clear a corrupted format error is to start again and allow it to
+finish.
 
-This User Guide file contains important information about SeaChest_Firmware.
+        03h - Medium error. The command was terminated with a non-recoverable
+        error condition, probably caused by a flaw in the media or an error in
+        the recorded data.
+        31h - The media format is corrupted.
+
+Please see the section below "About the SCSI Format Unit Command" for
+additional information.
+
+NOTE: SeaChest_Format may not be fully functional on non-Seagate drives.
+
+This User Guide file contains important information about SeaChest_FormatUnit.
 Please read this entire file before using this software.
 
 If this is your drive, you should always keep a current backup of your
 important data.
 
-Be very careful using SeaChest_Firmware. Power failure during a firmware
-download will cause data loss. Never apply firmware to a drive unless you are
-certain that the firmware data file is specifically prepared for your drive.
-Seagate is not responsible for lost user data.
+If this is not your drive and the original owner has no claim of ownership to
+it or the data stored on it, then you may still be responsible for the data in
+your possession.   To protect yourself from potential liability and to protect
+the previous owner's privacy, you should remove all data by performing a data
+erasure on this drive.
+
+Be very careful because using SeaChest_Format will cause data loss. Seagate
+is not responsible for lost user data.
 
 Usage - Linux (run with sudo)
 =============================
-        SeaChest_Firmware [-d <sg_device>] {arguments} {options}
+        SeaChest_Format [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        sudo SeaChest_Firmware --scan
-        sudo SeaChest_Firmware -d /dev/sg2 -i
-        sudo SeaChest_Firmware -d /dev/sg2 --fwdlInfo
-        sudo SeaChest_Firmware -d /dev/sg2 --downloadFW fwfilename
-        sudo SeaChest_Firmware -d /dev/sg2 --fwdlConfig configfile.cfs
+        sudo SeaChest_Format --scan
+        sudo SeaChest_Format -d /dev/sg2 -i
+        sudo SeaChest_Format --device /dev/sg1 --showSupportedFormats
 
 Usage - Windows (run as administrator)
 ======================================
-        SeaChest_Firmware [-d <PD_device>] {arguments} {options}
+        SeaChest_Format [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
-        SeaChest_Firmware --scan
-        SeaChest_Firmware -d PD2 -i
-        SeaChest_Firmware -d PD2 --fwdlInfo
-        SeaChest_Firmware -d PD2 --fwdlConfig configfile.cfs
+        SeaChest_Format --scan
+        SeaChest_Format -d PD2 -i
+        SeaChest_Format --device PD1 --showSupportedFormats
 
-Utility Arguments
-=================
-        -s, --scan
-                Scan the system and list all storage devices with Physical
-                Device assignments. Shows model, serial and firmware numbers.
-                If your device is not listed on a scan immediately after
-                booting, then wait 10 seconds and run it again.
+==========================================================================================
+ SeaChest_Format - Seagate drive utilities - NVMe Enabled
+ Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Format Version: 2.2.1-2_1_3 X86_64
+ Build Date: Feb 25 2021
+ Today: Thu Feb 25 18:59:44 2021	User: tyler
+==========================================================================================
+Usage
+=====
+	 SeaChest_Format [-d <sg_device>] {arguments} {options}
 
-        -S, --Scan   (note the capital letter S)
-                This option is the same as --scan or -s, however it will also
-                perform a low level rescan to pick up other devices. This
-                low-level rescan may wake devices from low power states and may
-                cause the OS to re-enumerate them. Use this diagnostic option
-                when a device is plugged in and not discovered in a normal scan.
-
-                NOTE: A low-level rescan may not be available on all interfaces
-                or all OSs.  The low-level rescan is not guaranteed to find
-                additional devices in the system when the device is unable to
-                come to a ready state.
-
-        -F, --scanFlags [option list]
-                Use this option with -s to control the output from scan with the
-                options listed below. Multiple options can be combined.
-                     ata            - show only ATA (SATA) devices
-                     usb            - show only USB devices
-                     scsi           - show only SCSI (SAS)) devices
-                     nvme           - show only NVMe devices
-                     interfaceATA   - show devices on an ATA interface
-                     interfaceUSB   - show devices on a USB interface
-                     interfaceSCSI  - show devices on a SCSI or SAS interface
-                     interfaceNVME  - show devices on a NVMe interface
-                    Linux:
-                     sd             - show /dev/sd? device handles
-                     sgtosd         - show the sd and sg device handle mapping
-                    Windows:
-                     ignoreCSMI     - do not scan for any CSMI devices
-                     allowDuplicates - allow drives with both CSMI and PD
-                                       handles to show up multiple times in the
-                                       list.
-
-                Examples of combining two options:
-                     -s --scanFlags usb scsi  - show only USB and SAS devices
-                     --scan -F ata interfaceSCSI  - show only SATA nearline
-                        drives on a SAS adapter
-
-        -d, --device <device handle>
-                Use this option with all commands, except --scan, to specify
-                the sg device handle (target drive) on which to perform an
-                operation. See the section below 'Tool Usage Hints' for
-                information about defining multiple device handles.
-
-                Example Lin: -d /dev/sg5
-                Example Win: -d PD0, or -d PD3
-
-        -i, --deviceInfo
-                Show information and features for the storage device. USB
-                devices will show the product name, serial and firmware numbers
-                as communicated by the USB-SATA bridge.  Add --usbChildInfo
-                to display details about the drive within the USB enclosure.
-
-        --SATInfo                       (SATA only)
-                Displays SATA device information on any interface using both
-                SCSI Inquiry/VPD/Log reported data (translated according to
-                SAT) and the ATA Identify/Log reported data.
-
-        --testUnitReady
-                A simple check to see if the device responds to commands from
-                interface.  Ready or Not Ready are the outputs.  Not Ready
-                results will also include the full SCSI Sense Code.
-
-        --fwdlInfo
-                Use this option to show the firmware download support
-                information for a drive.
-
-        --downloadFW [firmware filename]    (Seagate Only)
-                Download firmware to a Seagate storage product. Use only
-                Seagate authorized firmware data files which are designated for
-                the specific model drive. Improper use of this option may harm
-                a device and or its data. You may specify the path (without
-                spaces) if the firmware data file is in a different location.
-                This option will use segmented download by default. Use the
-                --downloadMode option to specify a different download mode.
-
-                Please see the section below "Windows Restrictions Over SATA
-                Firmware Downloads".
-
-        --downloadMode [full | segmented | deferred]    (Seagate Only)
-                Use this command along with the --downloadFW option to set the
-                firmware download mode.
-
-                Supported Modes:
-                     full      - Performs a download in one large transfer to
-                                 the device.
-                     segmented - Downloads the firmware in multiple segments to
-                                 the device. (Most compatible)
-                     deferred  - Performs a segmented download to the device,
-                                 but does not activate the new firmware until a
-                                 power cycle or activate command is sent. Drives
-                                 with this feature are not common. See
-                                 --activateFW.
-
-                Note: See the --modelMatch and --onlyFW utility options which
-                may assist in creating commands to update multiple similar
-                drives.
-
-        --activateFW     (Seagate Only)
-                Use this option to issue the command to activate code that was
-                sent to the drive using a deferred download command. This will
-                immediately activate the new code on the drive. You can use
-                this along with a --downloadFW and --downloadMode deferred to
-                automatically issue the activate command after the deferred
-                download has completed.
-
-        --fwdlConfig [config file]      (Seagate Only)
-                Use this option to specify a configuration file to perform an
-                update based on a firmware match on multiple drives or a single
-                drive in the system.  You may specify the path if the file is
-                in a different location. Configuration files consist of model
-                numbers, previous compatible firmware and the appropriate
-                matching new firmware.  Configuration files may be written to
-                support multiple models at a time.  See the section below
-                "Firmware Configuration Files" for more information on this
-                subject.
-
-        --fwdlDryRun
-                Use this option to compare a given config file to the drives in
-                a system without performing a firmware update. This can be used
-                to check if any drives in the system require an update.
-
-        --fwdlSegSize [segment size in 512B blocks]     (Seagate Only)
-                Use this option to specify a segment size in 512B blocks to use
-                for a segmented or deferred download. This option will not
-                affect an immediate download (full buffer at once). The default
-                segment size used is 64. Larger segment sizes may be faster,
-                however they may also be incompatible with controllers or
-                drivers in the system. Smaller values are more likely to be
-                compatible, but also slower. Use this option if the default
-                used by the tool is not working correctly for firmware updates.
-
-        --firmwareSlot/--fwBufferID slot#               (Seagate Only)
-                Use this option to specify a firmware slot (NVMe) or a buffer
-                ID (SCSI) along with the --downloadMode (SCSI) or --activateFW
-                (NVMe & SCSI) options.  If this option is not used, a value of
-                zero will be used instead, which means the drive will
-                automatically select the slot number.
-
-        --calculateFileHash [file]
-                Use this option to calculate the hash of a file. The following
-                hashes are computed and shown on the screen:
-                    MD5
-                    SHA1
-                    SHA2_224
-                    SHA2_256
-                    SHA2_384
-                    SHA2_512
-
-        --allowFlexibleFWDLAPIUse
-                This option is used to control when to use the Windows 10+
-                Firmware Download API calls. Default behavior is to only use
-                this call when the interface and drive and command all match.
-                The default behavior means that only ATA drives on an ATA
-                interface with a ATA download command will use this call. SCSI
-                SAS drives with a supported write buffer command will also use
-                this call. Using this option allows a detected ATA drive on any
-                interface to use this call if the OS/driver supports it
-                regardless of the command being sent by the opensea-transport
-                library.
-
-        --forceFWDLPassthrough
-                This option is used to control when to use the Windows 10+
-                Firmware Download API calls. This option will force using ATA
-                or SCSI passthrough to issue the FWDL commands instead of
-                automatically selecting passthrough or the Win10 API. It is
-                strongly recommended that this option only be used when
-                troubleshooting problems when updating firmware. The Win10 API
-                allows for tracking device firmware version changes in real
-                time. This is not possible with passthrough commands which may
-                require a system restart for Windows to detect the new version
-                of firmware.
-
-        NVMe Only
-        =========
-        --switchFW      (NVMe Only)     (Seagate Only)
-                Use this option to switch to a different firmware slot on an
-                NVMe drive. You must specify a slot with the --firmwareSlot
-                option or this will fail. The specified slot must already have
-                a valid firmware image in it as well.
-
-Utility Options
-===============
-        -h, --help
-                Show utility options and example usage (this output you see now)
-
-        -v [0-4], --verbose [0 | 1 | 2 | 3 | 4]
-                Show verbose information. Verbosity levels are
-                0 - quiet,
-                1 - default
-                2 - command descriptions
-                3 - command descriptions and values
-                4 - command descriptions, values, and data buffers.
-
-                Example: -v 3 or --verbose 3
-
-        -q, --quiet
-                Run SeaChest in quiet mode. This is the same as -v0
-                or --verbose 0
-
-        -V, --version
-                Show SeaChest version and copyright information & exit
-
-        --license
-                Display the Seagate End User License Agreement (EULA).
-
-        --echoCommandLine
-                Shows the command line above the banner in the standard output.
-                Useful when saving output to logs.
-
-        --enableLegacyUSBPassthrough
-                Only use this option on old USB or IEEE1394 (Firewire) products
-                that do not otherwise work with the tool. This option will
-                enable a trial and error method that attempts sending various
-                ATA Identify commands through vendor specific means. Because of
-                this, certain products may respond in unintended ways since
-                they may interpret these commands differently than the bridge
-                chip the command was designed for.
-
-        --sat12byte
-                This forces the lower layer code to issue SAT spec ATA
-                Pass-through 12-byte commands when possible instead of 16-byte
-                commands.  By default, 16-byte commands are always used for ATA
-                Pass-through.  USB products may need this option as a
-                workaround if the default does not perform.
-
-        --onlySeagate
-                Use this option to match only Seagate drives for the options
-                provided. May also be used with the --scan command.
-
-        --modelMatch [model Number]
-                Use this option to run on all drives matching the provided
-                model number. This option will provide a closest match although
-                an exact match is preferred. Ex: ST500 will match ST500LM0001.
-                The option --childModelMatch may be used to match drives in USB
-                enclosures.
-
-                Note: See the section below 'Tool Usage Hints' for information
-                about defining multiple device handles.
-
-        --onlyFW [firmware revision]
-                Use this option to run on all drives matching the provided
-                firmware revision. This option will only do an exact match.
-                The option --childOnlyFW may be used to match drives in USB
-                enclosures.
-
-        --newFW [firmware revision]
-                Use this option to skip drives matching the provided firmware
-                revision. This option will only do an exact match. This option
-                should be used to skip performing an update if a drive already
-                has this firmware revision loaded. The option --childNewFW may
-                be used to match drives in USB enclosures.
-
-        --forceATA
-                Using this option will force the current drive to be treated as
-                a ATA drive. Only ATA commands will be used to talk to the
-                drive.
-
-        --forceATADMA   (SATA Only)
-                Using this option will force the tool to issue SAT commands to
-                ATA device using the protocol set to DMA whenever possible (on
-                DMA commands). This option can be combined with --forceATA.
-
-        --forceATAPIO   (SATA Only)
-                Using this option will force the tool to issue PIO commands to
-                ATA device when possible. This option can be combined with
-                --forceATA.
-
-        --forceATAUDMA  (SATA Only)
-                Using this option will force the tool to issue SAT commands to
-                ATA device using the protocol set to UDMA whenever possible (on
-                DMA commands). This option can be combined with --forceATA.
-
-        --forceSCSI
-                Using this option will force the current drive to be treated as
-                a SCSI drive. Only SCSI commands will be used to talk to the
-                drive.
-
-        Windows only:
-        --csmiIgnorePort
-                Use this option to force setting the "ignore Port" flag for the
-                port identifier in a CSMI passthrough command. This option can
-                be combined with --csmiUsePort which will force the passthrough
-                to rely on only the SAS address. This flag is intended to help
-                troubleshoot or improve CSMI compatibility on systems that are
-                otherwise not functional.
-
-        --csmiUsePort
-                Use this option to force setting the "Use Port" flag for the
-                PHY identifier in a CSMI passthrough command. This option can
-                be combined with --csmiIgnorePort which will force the
-                passthrough to rely on only the SAS address. This flag is
-                intended to help troubleshoot or improve CSMI compatibility on
-                systems that are otherwise not functional.
-
-        --csmiVerbose
-                Use this option to show some verbose output when running the
-                tool on a CSMI handle. The debugging information shown will be
-                specific to the CSMI passthrough mechanism and may be useful
-                when troubleshooting system/driver compatibility issues.
+Examples
+========
+	SeaChest_Format --scan
+	SeaChest_Format -d /dev/sg? -i
 
 Return codes
 ============
-        0       No Error Found
-        1       Error in command line options
-        2       Invalid Device Handle or Missing Device Handle
-        3       Operation Failure
-        4       Operation not supported
-        5       Operation Aborted
-        6       File Path Not Found
-        7       Cannot Open File
-        8       File Already Exists
-        9       Need Elevated Privileges (sudo, run as administrator)
-        ---SeaChest_Firmware specific exit codes---
-        32 = Firmware Download Complete
-        33 = Deferred Firmware Download Complete
-        34 = Deferred Code Activated
-        35 = No Drive or Firmware match found
-        36 = Model number matched, but Firmware mismatched
-        37 = Firmware File Hash Error
-        38 = Firmware Already up to date
-        39 = Firmware Match Found for update
-        40 = Firmware Match Found for update - deferred update supported
-        Anything else = unknown error
+	Generic/Common exit codes
+	0 = No Error Found
+	1 = Error in command line options
+	2 = Invalid Device Handle or Missing Device Handle
+	3 = Operation Failure
+	4 = Operation not supported
+	5 = Operation Aborted
+	6 = File Path Not Found
+	7 = Cannot Open File
+	8 = File Already Exists
+	9 = Need Elevated Privileges
+	Anything else = unknown error
+
+
+Utility Options
+===============
+	--echoCommandLine
+		Echo the command line entered into the utility on the screen.
+
+	--enableLegacyUSBPassthrough
+		Only use this option on old USB or IEEE1394 (Firewire)
+		products that do not otherwise work with the tool.
+		This option will enable a trial and error method that
+		attempts sending various ATA Identify commands through
+		vendor specific means. Because of this, certain products
+		that may respond in unintended ways since they may interpret
+		these commands differently than the bridge chip the command
+		was designed for.
+
+	--forceATA
+		Using this option will force the current drive to
+		be treated as a ATA drive. Only ATA commands will
+		be used to talk to the drive.
+
+	--forceATADMA	(SATA Only)
+		Using this option will force the tool to issue SAT
+		commands to ATA device using the protocol set to DMA
+		whenever possible (on DMA commands).
+		This option can be combined with --forceATA
+
+	--forceATAPIO	(SATA Only)
+		Using this option will force the tool to issue PIO
+		commands to ATA device when possible. This option can
+		be combined with --forceATA
+
+	--forceATAUDMA	(SATA Only)
+		Using this option will force the tool to issue SAT
+		commands to ATA device using the protocol set to UDMA
+		whenever possible (on DMA commands).
+		This option can be combined with --forceATA
+
+	--forceSCSI
+		Using this option will force the current drive to
+		be treated as a SCSI drive. Only SCSI commands will
+		be used to talk to the drive.
+
+	-h, --help
+		Show utility options and example usage (this output you see now)
+		Please report bugs/suggestions to seaboard@seagate.com.
+		Include the output of --version information in the email.
+
+	--license
+		Display the Seagate End User License Agreement (EULA).
+
+	--modelMatch [model Number]
+		Use this option to run on all drives matching the provided
+		model number. This option will provide a closest match although
+		an exact match is preferred. Ex: ST500 will match ST500LM0001
+
+	--onlyFW [firmware revision]
+		Use this option to run on all drives matching the provided
+		firmware revision. This option will only do an exact match.
+
+	--onlySeagate
+		Use this option to match only Seagate drives for the options
+		provided
+
+	-q, --quiet
+		Run SeaChest_Format in quiet mode. This is the same as
+		-v 0 or --verbose 0
+
+	-v [0-4], --verbose [0 | 1 | 2 | 3 | 4]
+		Show verbose information. Verbosity levels are:
+		0 - quiet
+		1 - default
+		2 - command descriptions
+		3 - command descriptions and values
+		4 - command descriptions, values, and data buffers
+		Example: -v 3 or --verbose 3
+
+	-V, --version
+		Show SeaChest_Format version and copyright information & exit
+
+
+Utility Arguments
+=================
+	-d, --device deviceHandle
+		Use this option with most commands to specify the device
+		handle on which to perform an operation. Example: /dev/sg?
+
+	--displayLBA [LBA]
+		This option will read and display the contents of
+		the specified LBA to the screen. The display format
+		is hexadecimal with an ASCII translation on the side
+		(when available).
+
+	-F, --scanFlags [option list]
+		Use this option to control the output from scan with the
+		options listed below. Multiple options can be combined.
+			ata - show only ATA (SATA) devices
+			usb - show only USB devices
+			scsi - show only SCSI (SAS) devices
+			nvme - show only NVMe devices
+			interfaceATA - show devices on an ATA interface
+			interfaceUSB - show devices on a USB interface
+			interfaceSCSI - show devices on a SCSI or SAS interface
+			interfaceNVME = show devices on an NVMe interface
+			sd - show sd device handles
+			sgtosd - show the sd and sg device handle mapping
+
+	-i, --deviceInfo
+		Show information and features for the storage device
+
+	--poll
+		Use this option to cause another operation to poll for progress
+		until it has completed.  This argument does not return to the
+		command prompt and prints ongoing completion percentages (%)
+		 the final test result.  Full drive procedures will take a
+		very long time.  Used with --sanitize, or --writeSame (SATA).
+
+	--progress [format | nvmformat | depop | repop]
+		Get the progress for a test that was started quietly without
+		the polling option (default). You must specify a test you wish to
+		get progress from. Ex: "--progress dst" or "--progress sanitize"
+		The progress counts up from 0% to 100%.
+
+	-s, --scan
+		Scan the system and list all storage devices with logical
+		/dev/sg? assignments. Shows model, serial and firmware
+		numbers.  If your device is not listed on a scan  immediately
+		after booting, then wait 10 seconds and run it again.
+
+	-S, --Scan
+		This option is the same as --scan or -s,
+		however it will also perform a low level rescan to pick up
+		other devices. This low level rescan may wake devices from low
+		power states and may cause the OS to re-enumerate them.
+		Use this option when a device is plugged in and not discovered in
+		a normal scan.
+		NOTE: A low-level rescan may not be available on all interfaces or
+		all OSs. The low-level rescan is not guaranteed to find additional
+		devices in the system when the device is unable to come to a ready state.
+
+	--SATInfo
+		Displays SATA device information on any interface
+		using both SCSI Inquiry / VPD / Log reported data
+		(translated according to SAT) and the ATA Identify / Log
+		reported data.
+
+	--testUnitReady
+		Issues a SCSI Test Unit Ready command and displays the
+		status. If the drive is not ready, the sense key, asc,
+		ascq, and fru will be displayed and a human readable
+		translation from the SPC spec will be displayed if one
+		is available.
+
+	--depopulateMaxLBA [requested MaxLBA] (Seagate Only)
+		Use this option to specify a new maximum LBA when
+		removing (depopulating) a physical storage element.
+		This is optional. If this is not specified, the device
+		will determine the new maximum LBA.
+		NOTE: If you specify a maximum LBA the device does not
+		support, it will not start the depopulation.
+
+	--showPhysicalElementStatus
+		Use this option to see the status/health of
+		the storage elements inside a drive.
+		Use the element # shown with the --removePhysicalElement
+		option to remove that storage element from use.
+		This option can also be used to see if a depopulation
+		is still in progress or if it has completed.
+
+	--showSupportedFormats
+		This option will show the supported formats of a device.
+		These can be used to change the sector size or 
+		used with a format operation. On SAS, this is the
+		supported block lengths and protection types VPD page. (SBC4
+		and later) On SATA, this is the sector configuration log. (ACS4
+		and later) If the device does not report supported sector
+		sizes, please consult your product manual.
+
+
+	SAS Only:
+	=========
+	--showFormatStatusLog (SAS Only)
+		Use this option to view the SCSI format status log.
+		Note: This log is only valid after a successful format
+		unit operation.
+
+
+Data Destructive Commands (Seagate only)
+========================================
+	--pattern [repeat:asciinospaces | random | increment:startValue | file:filename]
+		Use this option with overwrite, sanitize, and format unit
+		operations to write a specific pattern to a range of LBAs
+		or the whole drive.
+
+		* repeat - without spaces, enter an ASCII text string or a
+		hexadecimal string terminated by a lower case "h". This
+		pattern will be repeated until it fills the logical size
+		of the LBA. i.e. helloword or FFFFFFFFh
+		Note: A hexadecimal pattern will be interpreted as a 32bit
+		unsigned integer. 4 hex bytes (8 characters) must be given
+		for a hex value to be used. Ex: 1F037AC8h or 0000FFFFh
+		* random - the entire logical sector size will be filled with
+		random bytes.This pattern will be written to all LBAs in the
+		desired range.
+		* increment - enter the starting numerical value. Starting with
+		this value, each byte will be written with 1 + previous value.
+		* file - user supplied file name to use for a pattern. The file
+		will be truncated or padded with zeros to the logical sector size
+		Note 1: Each file will be interpreted as a binary file.
+		Note 2: A path must also be provided if the file is not in the
+		        local directory.
+		Note 3: Sanitize Overwrite on SATA only supports a 32bit pattern.
+		        The file option will get truncated to a 32bit pattern for
+		        SATA products.
+
+	--removePhysicalElement [element #] (Seagate Only)
+		Use this option to remove a storage element
+		from use on a drive. When this is done, the
+		drive will erase all user data and lower the
+		capacity to a new point where the drive is still
+		usable without the provided element #.
+		Use the --showPhysicalElementStatus option to see the status
+		of the depopulation operation.
+
+		WARNING: Removing a physical element affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--repopulateElements (Seagate Only)
+		Use this option to repopulate any physical storage
+		elements that have been removed from use.
+		A full disk overwrite is necessary before
+		the drive is usable.
+
+	--setSectorSize [new sector size]	 (Seagate Only)
+		This option is only available for drives that support sector
+		size changes. On SATA Drives, the set sector configuration
+		command must be supported. On SAS Drives, fast format must
+		be supported. A format unit can be used instead of this
+		option to perform a long format and adjust sector size.
+		Use the --showSupportedFormats option to see the sector
+		sizes the drive reports supporting. If this option
+		doesn't list anything, please consult your product manual.
+		This option should be used to quickly change between 5xxe and
+		4xxx sector sizes. Using this option to change from 512 to 520
+		or similar is not recommended at this time due to limited drive
+		support
+
+		WARNING: Set sector size may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+		WARNING (SATA): Do not interrupt this operation once it has started or 
+		         it may cause the drive to become unusable. Stop all possible background
+		         activity that would attempt to communicate with the device while this
+		         operation is in progress
+		WARNING: It is not recommended to do this on USB as not
+		         all USB adapters can handle a 4k sector size.
+
+
+	SAS Only:
+	=========
+	--disableCertification
+		Use this option to disable the certification operation
+		when performing a format unit operation.
+
+	--disablePrimaryList
+		Use this option to disable using the primary defect list
+		when performing a format unit operation.
+
+	--discardGList
+		Use this option to discard the existing grown defect list
+		when performing a format unit operation. (set complete list bit)
+
+	--disableImmediateResponse
+		Use this option to disable the immediate response bit in
+		a format unit operation.
+		Note: This mode may take a long time to complete.
+
+	--formatMaxLBA [ new max LBA ]
+		Use this option to specify a new Max LBA for a drive during a
+		format unit operation. This may speed up a format unit if
+		formatting to test something, or also desiring to reduce a drive's
+		capacity while formatting.
+		NOTE: Not all devices support reducing capacity during a format.
+		Some may ignore this parameter and format the full medium anyways.
+		This is not guaranteed to stick or reduce formatting time.
+
+	--protectionIntervalExponent [ exponent value ]
+		Use this option to specify the protection interval exponent
+		for protection types 2 & 3. This option is ignored for all
+		other protection types.
+
+	--protectionType [ 0 | 1 | 2 | 3 ]
+		Use this option to specify the protection type to format the
+		medium with.
+		Note: Not all devices support protection types.
+
+	--fastFormat [fast format mode]	(SAS Only) (SBC4 required)
+		Use this option with the --formatUnit option
+		to run a fast format.
+		Available fast format modes:
+		    0 - This is a standard format unit command. All logical
+		        blocks will be overwritten. This command will take a
+		        very long time
+		    1 - This is a fast format unit command keeping existing
+		        data in physical sector. This option can be used to
+		        quickly change the the logical sector size between
+		        5xxe and 4xxx. The media may be readable, but data
+		        may be unspecified or may return errors on read access
+		        according to it's error processing algorithms.
+		    2 - This is a fast format unit command that can change the
+		        logical sector size quickly. Media may or may not be
+		        read accessible until a write has been performed to
+		        the media.
+
+	--formatUnit [current | new sector size]    (SAS Only) (Seagate Only)
+		This option will start a format unit operation on a SAS drive
+		Use "current" to perform a format unit operation with the
+		Sector size currently being used, otherwise enter a new sector
+		size to use upon format completion. This command will erase all
+		data on the drive. Combine this option with --poll to poll
+		for progress until the format is complete.
+
+		WARNING: Format Unit may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--securityInitialize
+		Use this option to set the security initialize bit in the
+		initialization pattern for a format unit command.
+		SBC recommends migrating to sanitize to overwrite previously
+		reallocated sectors.
+		Note: Not all products support this option.
+
+	--stopOnListError
+		Use this option to set the stop format bit in a format unit.
+		If the device cannot locate or access an existing primary or
+		grown defect list, the format will stop and return with an error.
+
+
+	NVMe Only:
+	=========
+	--nvmFmtMetadataSet [ xlba | separate ]	(NVMe Only)
+		Use this option to specify how metadata is transmitted to
+		the host system.
+		Options:
+		  xlba - metadata is transferred as part of the logical block data
+		  separate - metadata is transferred as a separate buffer
+		Note: Not all devices support specifying this.
+		If this option is not provided, the NVM format will
+		reuse the current setting.
+
+	--nvmFmtMS [ # of bytes for metadata ]	(NVMe Only)
+		This option is used to specify the length of metadata
+		with a requested logical block size. The device must
+		support the combination of logical block size and metadata size
+		or the format will be rejected by the device.
+
+	--nvmFmtNSID [all | current]	(NVMe Only)
+		This option changes the NSID used when issuing the NVM format
+		command. This can be used to control formatting an entire
+		device or a specific namespace if the device supports specifying
+		specific namespaces for a format command. Not all devices support
+		this behavior. This has no effect on devices that do not support
+		targeting a specific namespace and will format the entire device
+		If this option is not given, the format will be issued to all
+		namespaces by default.
+
+	--nvmFmtPI [ 0 | 1 | 2 | 3 ]	(NVMe Only)
+		Use this option to specify the protection type to format the
+		medium with.
+		Note: Not all devices support protection types.
+		If this option is not provided, the NVM format will
+		reuse the current setting.
+
+	--nvmFmtPIL [ beginning | end ]	(NVMe Only)
+		Use this option to specify the location protection
+		information in an NVM device's metadata.
+		Note: Not all devices support specifying this.
+		If this option is not provided, the NVM format will
+		reuse the current setting.
+
+	--nvmFmtSecErase [none | user | crypto]	(NVMe Only)
+		This option is used to specify the type of erase to perform
+		during an NVM format operation. All user data will be inaccessible
+		upon completion of an NVM format, no matter the erase requested.
+		Options:
+		  none - no secure erase requested (previous data will not be accessible)
+		  user - requests all user data is erased by the device.
+		  crypto - requests a cryptographic erase of all user data. Note: this mode
+		    is not supported on all devices.
+
+	--nvmFormat [current | format # | sector size]	(NVMe Only)
+		This option is used to start an NVM format operation.
+		Use "current" to perform a format operation with the
+		Sector size currently being used.
+		If a value between 0 and 15 is given, then that will issue
+		the NVM format with the specified sector size/metadata size for
+		that supported format on the drive.
+		Values 512 and higher will be treated as a new sector size
+		to switch to and will be matched to an appropriate lba format
+		supported by the drive.
+		This command will erase all data on the drive.
+		Combine this option with--poll to poll
+		for progress until the format is complete.
+
 
 ================
 Tool Usage Hints
@@ -460,92 +582,22 @@ accidental data loss or the commitment of long test times. The longer command
 arguments are similar to -I-understand-this-command-will-take-a-long-time or
 -I-understand-this-command-will-erase-all-data.
 
+Tests which alter the firmware or erase user data on the drive are limited to
+Seagate-only products which include Seagate, Maxtor, Samsung and LaCie.
+
 Advanced SAS installations may use dual ports.  These are listed as Port 0 and
 Port 1 on the device information report. When both ports are active, each one
 may have a unique /dev/sg designation.  The scan option may indicate that there
 are two drives in the system with the same serial number.  Dual port
 installations will also report two different Worldwide Numbers (WWN).
 
-============================
-Firmware Configuration Files
-============================
-There are two types of SeaChest_Firmware configuration (config) files:
-encrypted CFS and plain text CFG.
-
-Seagate-prepared configuration files are encrypted and carry the file extension
-CFS.  Seagate does not decrypt or disclose the contents of its CFS files.
-
-Alternatively, you may prepare your own plain text configuration files which
-must use the file extension CFG.  SeaChest_Firmware configuration files are
-simple text with multiple lines. Each line defines a model and previous
-firmware match up to a new firmware data file.  The structure of each line is
-this:
-
-  fullModelNumber;$FWREV$oldFwVersion;fwDataFile;(optional)$FWREV$newFwVersion
-
-No spaces, the first $FWREV$ and all three semi-colons (;) are mandatory.
-
-Note: The full model number is the ELECTRONIC version.  The label shows a
-shorter version which may not include all of the necessary digits.  When you
-run SeaChest -s or --scan the output will display the full electronic model
-number.  For example the label may show ST4000DX001 but the full model is
-actually ST4000DX001-1CE168.  You must use the full model numbers as given by
-the --scan command.
-
-The --scan commmand also shows the current firmware, such as CC46 or SN03 or
-0002 or 0001SDM7.  There are several possible variations.  This corresponds to
-the old firmware version.  You must precede the old firmware version with these
-exact characters $FWREV$, like $FWREV$0001SDM7.
-
-Seagate is the only authorized source for a firmware data file. The file name
-and or other documentation should provide the new firmware version for the file.
-
-The last section of the data line is optional, the new firmware version.  If
-you include this information correctly, then SeaChest_Firmware may give a
-message stating that the drive already has the new firmware.  If you omit the
-new firmware details then you must still end the text string with a semi-colon
-(;).
-
-For example, this is a four-line configuration file for three different models
-and three different firmware data files (not all model numbers have the longer
-electronic version):
-
-ST4000DX001-1CE168;$FWREV$CC42;BarracudaXT-CC44.LOD;$FWREV$CC44
-ST4000DX001-1CE168;$FWREV$CC43;BarracudaXT-CC44.LOD;$FWREV$CC44
-ST120FP0021;$FWREV$B770;SSD-B775.BIN;
-ST4000NM0043;$FWREV$0004;Constellation3TB-0005.lod;$FWREV$0005
-
-Remember, no spaces, the first $FWREV$ and all three semi-colons (;) are
-mandatory.
-
-Caution:  Firmware download configuration files assume you have knowledge about
-which models are compatible with the associated firmware files.  If you are
-unsure about the compatibility then you should NOT attempt to download the
-firmware to the drive.  Never apply firmware to a drive unless you are certain
-that the firmware data file is specifically prepared for your drive. Be very
-careful using SeaChest_Firmware. Power failure during a firmware download will
-cause data loss. Seagate is not responsible for lost user data.
-
-Finally, you may optionally add a hash check calculation on the firmware data
-file to the SeaChest_Firmware configuration file.  Simply, run the
---calculateFileHash option on the firmware data file.  For example, run a MD5
-calculation on the file and then add "@MD5=61b33014f2d2a4f9553f6ef64fb82e31"
-(substituting your calculation) immediately following the file name, before the
-semi-colon (;).  For example:
-
-ST4000DX001-1CE168;$FWREV$CC43;BarracudaXT-CC44.LOD@MD5=61b33014f2d2a4f9553f6ef64fb82e31;$FWREV$CC44
-
-SeaChest_Firmware will compare its own MD5 calculation to the value in the
-configuration file and if they do not match then the procedure will abort.  Six
-types of hash calculations are supported up to SHA2_512.
-
 Windows Only Usage
 ==================
 All Windows version tools support finding CSMI devices and talking to them like
 you would a normal device.  The scan output will show all drives it detects
-ONCE. CSMI device handles have a structure like SCSI0:1.  If a drive has both a
-PD? and SCSI?:? handle, then SeaChest will show the PD handle instead of the
-SCSI (CSMI) handle.
+ONCE. CSMI device handles have a structure like csmi:<controller>:<port>:<lun>.  
+If a drive has both a PD? and csmi:?:?:? handle, then SeaChest will show the PD
+handle instead of the CSMI handle.
 
 When drives are in a RAID, the PD device handle is usually not available and
 the CSMI handle may provide an alternate way to talk to the drive.  Just
@@ -553,31 +605,8 @@ because a device has a CSMI handle doesn't mean it is part of a RAID.
 
 If you want to see both handles, add --scanFlags allowDuplicates to the command
 line.  If you don't want to see any CSMI devices, add --scanFlags ignoreCSMI to
-the command line.  SeaChest_Info -d SCSI?:? --csmiInfo is useful when
+the command line.  SeaChest_Info -d csmi:?:?:? --csmiInfo is useful when
 troubleshooting CSMI device handles questions.
-
-Windows Restrictions Over SATA Firmware Downloads
--------------------------------------------------
-You should not attempt downloading firmware to a SATA disk drive in the Windows
-operating system unless the drive supports the 'deferred' mode.  You define the
-mode with the SeaChest command line option '--downloadMode deferred'.  If
-the drive does not support deferred mode then the command will be aborted.
-Windows may not be so restrictive on secondary, non-boot SATA drives or SATA
-drives attached to host bus adapters (HBAs, controllers, USB, etc).
-
-If you force a primary SATA boot drive to download firmware in Windows using a
-different --downloadMode setting, then the result will likely be a BSOD (blue
-screen of death) system crash.  This is because the legacy SATA firmware
-download modes require the drive to spin down and then back up and the
-momentary disappearance of the drive causes the operating system to crash.
-Windows is actually protecting the system when it thinks the drive has stopped
-responding (see wikis about Ring 0 Protection).
-
-The 'deferred' mode does not spin down the drive.  Instead, the drive waits for
-a future reboot of the system and self-activates the firmware at that time.
-Other operating systems may utilize the SeaChest --activateFW command to
-trigger the switch to the new firmware version.
-
 =========================
 Linux General Usage Hints
 =========================
@@ -691,6 +720,15 @@ the powershell "tee" command. Tee command writes to the STDOUT and to a file.
 For example:
 powershell ".\SeaChest --echoCommandLine -d PD1 --smartCheck | tee -append mySeaChestLog.txt"
 
+Setup for Windows
+-----------------
+The SeaChest Utilities Setup places all of the files at "C:\Program
+Files\Seagate\SeaChest" and adds an icon on the Desktop.  Clicking the icon
+will open a Windows command prompt in Administrator mode at this location.
+From there you will need to type the full command line for the tool and device
+and options to run the test you require.  See the various SeaChest Help
+documentation for descriptions and examples of the various commands.
+
 Manual Launch for Windows
 -------------------------
 An individual SeaChest utility for Windows cannot be launched by just
@@ -707,6 +745,114 @@ Administrator.  There are two easy ways to do this:
 
 Then change drives or directory to where the SeaChest utility is located and
 run the tool file name from there.
+
+
+==================================
+About the SCSI Format Unit Command
+==================================
+(from the Seagate SCSI Commands Reference Manual, 100293068 Rev. H July 2014)
+http://www.seagate.com/files/staticfiles/support/docs/manual/Interface%20manuals/100293068h.pdf
+
+The FORMAT UNIT command requests that the device server format the medium into
+application client accessible logical blocks as specified in the number of
+blocks and block length values received in the last mode parameter block
+descriptor in a MODE SELECT command. In addition, the device server may certify
+the medium and create control structures for the management of the medium and
+defects. The degree that the medium is altered by this command is
+vendor-specific.
+
+If a device server receives a FORMAT UNIT command before receiving a MODE
+SELECT command with a mode parameter block descriptor the device server shall
+use the number of blocks and block length at which the logical unit is
+currently formatted (i.e., no change is made to the number of blocks and the
+block length of the logical unit during the format operation).
+
+The simplest form of the FORMAT UNIT command (i.e., a FORMAT UNIT command with
+no parameter data) accomplishes medium formatting with little application
+client control over defect management. The device server implementation
+determines the degree of defect management that is to be performed. Additional
+forms of this command increase the application client's control over defect
+management.
+
+The application client may specify:
+  a) defect list(s) to be used;
+  b) defect locations;
+  c) that logical unit certification be enabled; and
+  d) exception handling in the event that defect lists are not accessible.
+
+While performing a format operation, the device server shall respond to
+commands attempting to enter into the task set except INQUIRY commands, REPORT
+LUNS commands, and REQUEST SENSE commands with CHECK CONDITION status with the
+sense key set to NOT READY and the additional sense code set to LOGICAL UNIT
+NOT READY, FORMAT IN PROGRESS. Handling of commands already in the task set is
+vendor-specific. If the device server receives an INQUIRY command, a REPORT
+LUNS commands, or a REQUEST SENSE command, then the device server shall process
+the command. The device server shall return data for an INQUIRY command based
+on the condition of the SCSI target device before beginning the FORMAT UNIT
+command (i.e., INQUIRY data shall not change until after successful completion
+of a format operation). The processing of commands in the task set when a
+FORMAT UNIT command is received is vendor specific.
+
+================
+About FastFormat
+================
+A FastFormat (quickly changing the logical sector size) may take a few minutes
+for the process to complete. The disk activity LED may show activity during the
+conversion.  The larger the drive, the longer it takes.
+
+NOTE: Operating systems do a device discovery during start up and set various
+parameters, like total sectors and sector size, into the storage device
+descriptions. The logical sector size times the number or logical sectors
+defines the drive capacity.  You should expect to see OS I/O errors if you
+change the logical sector size on a drive and then perform read or write
+operations before the OS has updated its storage device descriptions.  Some
+operating systems will throw an error after accessing a drive that has just run
+a FastFormat but during its error recovery routines it may re-discover the
+device parameters and update the system logs.  A system restart, however, is
+the most reliable way to refresh the storage device descriptions.
+
+Interpreting Head Health and Status
+-----------------------------------
+Beginning in 2016, some Seagate nearline drives started to support the
+Remanufacture command set which allows a disk drive with a manageable
+read/write head problem to remain in service at a reduced capacity by
+"depopulating" the head element.  You can check if a drive supports the
+Remanufacture command set by running --deviceInfo and looking for 'Storage
+Element Depopulation' in the list of supported features.  (Not to be confused
+with 'SATA Rebuild Assist' which is a feature used to rebuild RAID systems.)
+
+A drive failure (due to a head problem) that is easily removed from the system
+is replaced with a spare drive.  A drive that is nearly inaccessible may make
+sense to remain in the system at a reliable lesser capacity by depopulating the
+problem head.
+
+If supported by the drive, the --showPhysicalElementStatus command will display
+a simple table showing head number, type, health, and status.
+
+The Health level is represented like a percentage, 0-100.  0 is perfectly
+healthy, 100 = at manufacturer's limit, above this to 207 is above the
+manufacturer's limit. A report of 254 means a depopulate is in progress.
+
+The Status levels are active, in limit, degraded, truncated, truncate failed.
+
+If a drive head has developed isolated, degraded performance, and does not
+affect any other reliability in the system, then the head can be removed from
+service. A drive with seven platters and fourteen heads would lose 1/14th of
+its storage capacity, or ~7%.  Likewise, a four head drive would lose 25%.
+
+If a drive is reported as "degraded" by --showPhysicalElementStatus then it can
+be depopulated using the --removePhysicalElement command.  When a head is
+depopulated the drive must perform a complete full pack write; this is
+obviously data destructive and takes a very long time to complete.
+
+When disk drives are built the post assembly factory process includes media
+scanning, any defects mapping, defining sector sizes, and establishing system,
+cache and data zones.  This activity is generically known as a low-level
+format.  During head depopulation (i.e. removing a physical element) the drive
+performs a kind of 'mid-level format' using Sanitize Overwrite which has the
+unique behavior that once started it must finish.  If power is interrupted
+during a Sanitize Overwrite it will pick up again where it left off when power
+returns.
 
 =============
 Sample Output
@@ -830,7 +976,7 @@ Win: SeaChest_Basics -i -d PD1
         Drive Reported Utilization (%): Not Reported
         Encryption Support: Not Supported
         Cache Size (MiB): Not Reported
-        Percentage Used Endurance Indicator (%): 1.00437
+        Percentage Used Endurance Indicator (%): 0.00000
         Read Look-Ahead: Enabled
         Write Cache: Enabled
         SMART Status: Good
@@ -985,68 +1131,51 @@ Win: SeaChest_Basics -i -d PD1
                 Format Unit
                 Sanitize
 
-===============
-Version History - SeaChest_Firmware
-===============
-Latest:
-v2.8.2  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
-                     command.
+SATA SSD SMART Attributes example.
 
----------------------------------
+The drive will display its list of supported SMART attributes. Some attributes
+are industry standard and most others are vendor unique. Most attributes are
+informational and not used to determine a warranty return. Use the --smartCheck
+command to determine if one of the warranty attributes has been tripped.
 
-v0.0.1  22-Mar-2016  1_9_1 libraries.  SeaChest_Firmware Windows, initial beta
-                     test release.  Branched from SeaChest_Basics v1.1.0.  Adds
-                     firmware download batch modes by model number and various
-                     firmware revision checks.
-v0.0.2  19-May-2016  1_9_2 libraries fixed scan information from ATAPI devices.
-                     Fixed a bug where we could accidentally clear some stored
-                     identify data from the device structure. Fixed continuing
-                     on when there was a permission denied error opening a
-                     drive.
-v1.0.0  15-Jun-2016  1_9_3 libraries fixed issues with ATA secure erase
-                     commands. Fixed bugs with --modelMatch and --onlyFW
-                     filters.
-v1.1.0  06-Jul-2016  1_10_0 libraries add --forceATA and --forceSCSI.
-v1.1.0  14-Jul-2016  1_10_1 libraries adds SMART and power management
-                     functions, format polling, endianess detection, buffer
-                     size fixes, SAS device statistics, Win32 IOCTL
-                     pass-through fix on Win8 and higher.
-v2.0.3  16-Aug-2016  Adds --fwdlInfo, --activateFW, --fwdlConfig and
-                     --fwdlSegSize.  Add user defined configuration
-                     files.
-v2.0.4  23-Aug-2016  Adds --calculateFileHash.
-v2.1.0  01-Sep-2016  1_11_1 libraries updates to various printed message,
-                     minor bug fixes. Fixed --SATInfo command. After firmware
-                     download messages improved. Logic to exclude using both
-                     --fwdlConfig and --downloadFW at the same time.
-v2.1.0  21-Sep-2016  1_11_2 libraries updates adds --forceATADMA, --forceATAPIO
-                     and --forceATAUDMA  (SATA Only).
-v2.2.0  10-Oct-2016  1_11_4 libraries updates. Support for multiple devices.
-v2.2.0  25-Oct-2016  1_11_5 libraries updates improved LaCie  detection, adds
-                     SAT Vendor ID, SAT Product ID, and SAT Product Revision to
-                     the -i --SATInfo output.
-v2.2.2  27-Oct-2016  1_11_6 libraries updates WWN detection.  Added
-                     --enableLegacyUSBPassthrough
-v2.2.2  03-Nov-2016  1_11_7 libraries fixed issue with SAS EPC power mode
-                     settings.
-v2.2.2  13-Dec-2016  1_11_10 libraries fixes a problem when using maxLBA without
-                     the corresponding command range option, SAS power mode
-                     setting, and Sanitize erase patterns.
-v2.3.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
-                     22.5Gb/s physical bus speeds, support for double buffered
-                     passthrough IOCTLs. Add --fwdlDryRun. New -F, --scanFlags
-                     [options: ignoreCSMI allowDuplicates] for Windows tools.
-                     Add CSMI support to all Windows version tools.
-v2.3.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
-                     for SAS features.
-v2.3.2  09-Mar-2017  Fixes to config file processing.
-v2.3.3  12-Apr-2017  1_13_4 libraries. Fixes issue where tool was not
-                     defaulting to segmented download if not specified.  Adds
-                     several new return exit codes to help manage scripts using
-                     configuration files.
-v2.3.4  10-May-2017  1_13_4 libraries. Fixes issue where where --fwdlInfo
-                     command was sometimes missing segmented on SAS products.
-v2.4.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+Reminder: Seagate Support does not help to analyze SMART attributes.
+
+Lin: sudo ./SeaChest_Basics -d /dev/sg1 --smartAttributes
+Win: SeaChest_Basics -d PD1 --smartAttributes
+===============================================================================
+ SeaChest - Seagate drive utilities
+ Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+===============================================================================
+Attribute Name:                   Status: Nominal: Worst:     Raw (hex):
+  1 Read Error Rate               0x000F    0x75    0x63      0x0000000969AFB4
+  3 Spin Up Time                  0x0003    0x61    0x61      0x00000000000000
+  4 Start/Stop Count              0x0032    0x63    0x63      0x0000000000079E
+  5 Retired Sectors Count         0x0033    0x64    0x64      0x00000000000000
+  7 Seek Error Rate               0x000F    0x52    0x3C      0x0000000A4D0DAA
+  9 Power On Hours                0x0032    0x5D    0x5D      0x00000000001A84
+ 10 Spin Retry Count              0x0013    0x64    0x64      0x00000000000000
+ 12 Drive Power Cycle Count       0x0032    0x63    0x63      0x000000000007A5
+184 IOEDC Count                   0x0032    0x55    0x55      0x0000000000000F
+187 Reported Un-correctable       0x0032    0x64    0x64      0x00000000000000
+188 Command Timeout               0x0032    0x64    0xFD      0x00000000000000
+189 High Fly Writes               0x003A    0x64    0x64      0x00000000000000
+190 Airflow Temperature           0x0022    0x40    0x2E      0x00000026110024
+191 Shock Sensor Counter          0x0032    0x64    0x64      0x00000000000000
+192 Emergency Retract Count       0x0032    0x64    0x64      0x00000000000042
+193 Load-Unlock Count             0x0032    0x44    0x44      0x0000000000FA61
+194 Temperature                   0x0022    0x24    0x36      0x00000A00000024
+195 ECC On The Fly Count          0x001A    0x2D    0x29      0x0000000969AFB4
+197 Pending-Sparing Count         0x0012    0x64    0x64      0x00000000000000
+198 Offline Uncorrectable Sectors 0x0010    0x64    0x64      0x00000000000000
+199 Ultra DMA CRC Error           0x003E    0xC8    0xC8      0x00000000000000
+
+
+===============
+Version History - SeaChest_Format
+===============
+v0.0.1  23-May-2017  1_14_3 libraries.  SeaChest_FormatUnit initial beta
+                     test release.  Branched from SeaChest_Erase v1.4.0.
+v0.0.2  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      should exit with code = 1; added detection of parallel ATA
                      and SCSI speeds; temperature data on ATA now uses the
                      values from the SCT status log or device statistics log.
@@ -1054,37 +1183,38 @@ v2.4.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      drives like it is supposed to causing duplicate drives to
                      show up.  Adds the child drive matching options
                      --childModelMatch, --childOnlyFW, and --childNewFW.
-v2.5.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+v1.0.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Sense Data Reporting feature enabled, changes to how we
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
-v2.5.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
-v2.5.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+v1.0.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.0.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
                      reading remanufacture time for SAS when the drive reports
                      a time, fixed SAS --abortDST.
-v2.5.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+v1.0.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
                      SAS adapters, added NVMe read, write & Flush commands.
-v2.5.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+v1.1.0  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
                      device, SAT library strings, and fixes to Read-Buffer
                      error history (ISL). Updated copyright notice, invalid
                      command line options now only display an error instead of
-                     long help. Added option to specify a buffer ID or FW slot,
-                     file name added to the output of --showFileHash. Added
-                     --firmwareSlot and --fwBufferID.
-v2.5.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
-v2.5.2  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     long help. Added --setSectorSize moved from
+                     SeaChest_Configure. Name change from SeaChest_FormatUnit
+                     to SeaChest_Format.
+v1.1.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.2.0  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
                      that don't show as SATA and don't support the SAT VPD
                      page; added Automatic fallback to 12byte CDBs during
                      initial device discovery;  integrated fixes for SAS
                      firmware download and fixes for SAS LongDST time
                      calculation; added detection of TCG Pyrite and Opalite
-                     drives.
-v2.5.2  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+                     drives. Removed --defaultFormat since that is now the
+                     default behavior until other flags are added.
+v1.2.0  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
                      on some LSI adapters, corrects firmware download issue
                      under Windows 10 API.
-v2.5.2  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
-v2.5.2  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
+v1.2.0  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
+v1.2.0  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      USB flash drives, support for early 90's PATA drives that
                      don't support LBA mode, bug fix where the last digit of
                      the SCSI Unit Serial Number was being dropped, additional
@@ -1101,8 +1231,8 @@ v2.5.2  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      during device discovery to help work with some USB
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
-                     Linux.
-v2.5.4  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     Linux. Removed immediate bit from SAS Fast Format.
+v1.2.1  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
                      field to get the OS name under linux; NVMe enabled;  fixed
                      a bug in the ATA activate FW command; added in reading ID
                      Data log and Device statistics logs page 0 to check the
@@ -1113,18 +1243,22 @@ v2.5.4  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
                      spaces in the name. Added additional information to the
                      banner and -V data to show support levels. Add general
                      support for NVMe and NVMe specific identify data to "-i"
-                     command. Add --allowFlexibleFWDLAPIUse.
-v2.5.4  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
-v2.7.0  03-May-2019  1_19_18 libraries added per device verbosity, --deviceInfo
+                     command.
+v1.2.1  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
+v1.4.0  03-May-2019  1_19_18 libraries added per device verbosity, --deviceInfo
                      adds SAS (not SATA) FastFormat for Features Supported
                      section,  --deviceInfo now gives Low Current Spinup
-                     status. Adds --forceFWDLPassthrough and --swtchFW.
-v2.7.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
+                     status. Adds --showSupportedFormats, removes
+                     --showSupportedSectorSizes. Adds several new commands in
+                     support of NVMe format: --nvmFormat, --nvmFmtSecErase,
+                     --nvmFmtMS, --nvmFmtNSID, --nvmFmtPI, --nvmFmtPIL,
+                     --nvmFmtMetadataSet.
+v1.4.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      updated software SAT translator to use dataset management
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
-v2.8.1 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
+v1.5.1  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
                      (sudo, run as administrator) before trying to talk to
                      devices, new exit code 9 if privileges are missing;
                      printing the USB VID/PID in the device info; fix to sg
@@ -1135,9 +1269,27 @@ v2.8.1 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
-v2.8.2  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+v1.5.2  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
                      command.
-
+v2.0.0  18-Oct-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
+                     Intel RST NVMe support added. Numerous code quality improvements
+                     which fixed many potential bugs and memory leaks. Improved
+                     support for openfabrics NVMe drivers. Changed permissions
+                     detection to show warnings rather than errors. Removed obsolete
+                     CSMI and SAT 12B CDB options. CSMI handles now show as csmi:?:?:?
+v2.1.0  20-Nov-2020  Added Storage element depopulation commands to SeaChest_Format.
+                     Added support for new storage element repopulation command.
+v2.2.1  12-Feb-2021  Added depopulate and repopulate options to SeaChest_Format
+                     Improved argument parsing to accept hex in addition to decimal for
+                     many different options.
+                     Setting fast-format to hold busy until complete for better results.
+                     More messages are now displayed warning not to interrupt format/fast
+                     format operations and depopulate.
+                     opensea-transport code pulled in enhancements to attempt to block
+                     other applications and the OS from interrupting format, fast format,
+                     depopulate, and repopulate to prevent potential problems
+                     during these operations or which may leave the drive in a bad state
+                     if they are interrupted.
 =======================================
 About SeaChest Command Line Diagnostics
 =======================================
@@ -1230,9 +1382,6 @@ sectors, possibly eliminating an unnecessary drive return.
 =================================
 Support and Open Source Statement
 =================================
-SeaTools for Windows is available to download firmware to SAS drives, provided
-they are not obscured by RAID controllers.
-
 Seagate offers technical support for disk drive installation.  If you have any
 questions related to Seagate products and technologies, feel free to submit
 your request on our web site. See the web site for a list of world-wide
@@ -1243,17 +1392,10 @@ http://www.seagate.com/support-home/
 Contact Us:
 http://www.seagate.com/contacts/
 
-Please report bugs/suggestions to seaboard@seagate.com. Include the output of
---version information in the email. See the user guide section 'General Usage
-Hints' for information about saving output to a log file.
-
 This software uses open source packages obtained with permission from the
 relevant parties. For a complete list of open source components, sources and
 licenses, please see our Linux USB Boot Maker Utility FAQ for additional
 information.
-
-This Windows version of SeaChest uses an open source project named wingetopt,
-license shown below.
 
 SeaChest Utilities use libraries from the opensea source code projects.  These
 projects are maintained at http://github.com/seagate.
@@ -1265,14 +1407,23 @@ The newest online version of the SeaChest Utilities documentation, open source
 usage and acknowledgement licenses can be found at:
 http://support.seagate.com/seachest/SeaChest_Combo_UserGuides.html
 
-SeaChest_Firmware uses two open source projects named mbedtls and zlib.h,
+The USB Boot Maker Utility for Windows utilizes the NSIS Installer 
+v2.46.5-Unicode (http://nsis.sourceforge.net).
+
+All Linux versions of the SeaChest Utilities are compiled using GCC, the GNU 
+Compiler Collection, license shown below.
+
+All Windows versions of the SeaChest Utilities uses an open source project 
+named wingetopt, license shown below.
+
+SeaChest_Firmware uses two open source projects named mbedtls and zlib.h, 
 licenses shown below.
 
 Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ======================================================================
 
-                        END USER LICENSE AGREEMENT
-                            FOR SEAGATE SOFTWARE
+			END USER LICENSE AGREEMENT
+			    FOR SEAGATE SOFTWARE
 
 
 PLEASE READ THIS END USER LICENSE AGREEMENT ("EULA") CAREFULLY.  BY CLICKING
@@ -1341,30 +1492,30 @@ Software is licensed and distributed by Seagate for use with its storage
 products only, and may not be used with non-Seagate storage product.
 
 3.  Restrictions.  You are not licensed to do any of the following:
-        a.      Create derivative works based on the Product or any part or
-                component thereof, including, but not limited to, the
-                Software;
+	a.      Create derivative works based on the Product or any part or
+		component thereof, including, but not limited to, the
+		Software;
 
-        b.      Reproduce the Product, in whole or in part;
+	b.      Reproduce the Product, in whole or in part;
 
-        c.      Except as expressly authorized by Section 11 below, sell,
-                assign, license, disclose, or otherwise transfer or make
-                available the Product, in whole or in part, to any third
-                party;
+	c.      Except as expressly authorized by Section 11 below, sell,
+		assign, license, disclose, or otherwise transfer or make
+		available the Product, in whole or in part, to any third
+		party;
 
-        d.      Alter, translate, decompile, or attempt to reverse engineer
-                the Product or any part or component thereof, except and only
-                to the extent that such activity is expressly permitted by
-                applicable law notwithstanding this contractual prohibition;
+	d.      Alter, translate, decompile, or attempt to reverse engineer
+		the Product or any part or component thereof, except and only
+		to the extent that such activity is expressly permitted by
+		applicable law notwithstanding this contractual prohibition;
 
-        e.      Use the Product to provide services to third parties;
+	e.      Use the Product to provide services to third parties;
 
-        f.      Take any actions that would cause the Software to become
-                subject to any open source license agreement if it is not
-                already subject to such an agreement; and
+	f.      Take any actions that would cause the Software to become
+		subject to any open source license agreement if it is not
+		already subject to such an agreement; and
 
-        g.      Remove or alter any proprietary notices or marks on the
-                Product.
+	g.      Remove or alter any proprietary notices or marks on the
+		Product.
 
 4.  Updates.  If you receive an update or an upgrade to, or a new version of,
 any Software ("Update") you must possess a valid license to the previous
@@ -1481,6 +1632,7 @@ and logos are the trademarks of Seagate.
 5.4.2016
 
 ===========================================================================
+Various Open Source Licenses
 
 GNU LESSER GENERAL PUBLIC LICENSE
 
@@ -1637,14 +1789,21 @@ proxy's public statement of acceptance of any version is permanent
 authorization for you to choose that version for the Library.
 
 ===========================================================================
-wingetopt - getopt library for Windows compilers
+
+SeaChest tools for Windows utilize wingetopt
+(https://github.com/alex85k/wingetopt).
+
+getopt library for Windows compilers
 
 This library was created to allow compilation linux-based software on Windows.
-http://en.wikipedia.org/wiki/Getopt  The sources were taken from MinGW-runtime
-project.
+http://en.wikipedia.org/wiki/Getopt
 
-AUTHORS: Todd C. Miller Todd.Miller@courtesan.com; The NetBSD Foundation, Inc.
+The sources were taken from MinGW-runtime project.
 
+AUTHORS:
+
+Todd C. Miller Todd.Miller@courtesan.com
+The NetBSD Foundation, Inc.
 LICENSE
 
 Copyright (c) 2002 Todd C. Miller <Todd.Miller@courtesan.com>
@@ -1661,17 +1820,14 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 
-Sponsored in part by the Defense Advanced Research Projects Agency (DARPA) and
-Air Force Research Laboratory, Air Force Materiel Command, USAF, under
-agreement number F39502-99-1-0512.
-
-                 -------------------------------------
-
+Sponsored in part by the Defense Advanced Research Projects
+Agency (DARPA) and Air Force Research Laboratory, Air Force
+Materiel Command, USAF, under agreement number F39502-99-1-0512.
 Copyright (c) 2000 The NetBSD Foundation, Inc.
 All rights reserved.
 
-This code is derived from software contributed to The NetBSD Foundation
-by Dieter Baron and Thomas Klausner.
+This code is derived from software contributed to The NetBSD Foundation by
+Dieter Baron and Thomas Klausner.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -1691,224 +1847,6 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-===========================================================================
-mbedtls - An open source, portable, easy to use, readable and flexible SSL
-library https://tls.mbed.org
-
-Modifications: -added DES & 3DES CFB cipher encryption and decryption support
-
-         Apache License
-   Version 2.0, January 2004
-http://www.apache.org/licenses/
-
-TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
-
-1. Definitions.
-
-"License" shall mean the terms and conditions for use, reproduction, and
-distribution as defined by Sections 1 through 9 of this document.
-
-"Licensor" shall mean the copyright owner or entity authorized by the copyright
-owner that is granting the License.
-
-"Legal Entity" shall mean the union of the acting entity and all other entities
-that control, are controlled by, or are under common control with that entity.
-For the purposes of this definition, "control" means (i) the power, direct or
-indirect, to cause the direction or management of such entity, whether by
-contract or otherwise, or (ii) ownership of fifty percent (50) or more of the
-outstanding shares, or (iii) beneficial ownership of such entity.
-
-"You" (or "Your") shall mean an individual or Legal Entity exercising
-permissions granted by this License.
-
-"Source" form shall mean the preferred form for making modifications, including
-but not limited to software source code, documentation source,and configuration
-files.
-
-"Object" form shall mean any form resulting from mechanical transformation or
-translation of a Source form, including but not limited to compiled object
-code, generated documentation, and conversions to other media types.
-
-"Work" shall mean the work of authorship, whether in Source or Object form,
-made available under the License, as indicated by a copyright notice that is
-included in or attached to the work (an example is provided in the Appendix
-below).
-
-"Derivative Works" shall mean any work, whether in Source or Object form, that
-is based on (or derived from) the Work and for which the editorial revisions,
-annotations, elaborations, or other modifications represent, as a whole, an
-original work of authorship. For the purposes of this License, Derivative Works
-shall not include works that remain separable from, or merely link (or bind by
-name) to the interfaces of, the Work and Derivative Works thereof.
-
-"Contribution" shall mean any work of authorship, including the original
-version of the Work and any modifications or additions to that Work or
-Derivative Works thereof, that is intentionally submitted to Licensor for
-inclusion in the Work by the copyright owner or by an individual or Legal
-Entity authorized to submit on behalf of the copyright owner. For the purposes
-of this definition, "submitted" means any form of electronic, verbal, or
-written communication sent to the Licensor or its representatives, including
-but not limited to communication on electronic mailing lists, source code
-control systems, and issue tracking systems that are managed by, or on behalf
-of, the Licensor for the purpose of discussing and improving the Work, but
-excluding communication that is conspicuously marked or otherwise designated in
-writing by the copyright owner as "Not a Contribution."
-
-"Contributor" shall mean Licensor and any individual or Legal Entity on behalf
-of whom a Contribution has been received by Licensor and subsequently
-incorporated within the Work.
-
-2. Grant of Copyright License. Subject to the terms and conditions of this
-License, each Contributor hereby grants to You a perpetual, worldwide,
-non-exclusive, no-charge, royalty-free, irrevocable copyright license to
-reproduce, prepare Derivative Works of, publicly display, publicly perform,
-sublicense, and distribute the Work and such Derivative Works in Source or
-Object form.
-
-3. Grant of Patent License. Subject to the terms and conditions of this
-License, each Contributor hereby grants to You a perpetual, worldwide,
-non-exclusive, no-charge, royalty-free, irrevocable (except as stated in this
-section) patent license to make, have made, use, offer to sell, sell, import,
-and otherwise transfer the Work, where such license applies only to those
-patent claims licensable by such Contributor that are necessarily infringed by
-their Contribution(s) alone or by combination of their Contribution(s) with the
-Work to which such Contribution(s) was submitted. If You institute patent
-litigation against any entity (including a cross-claim or counterclaim in a
-lawsuit) alleging that the Work or a Contribution incorporated within the Work
-constitutes direct or contributory patent infringement, then any patent
-licenses granted to You under this License for that Work shall terminate as of
-the date such litigation is filed.
-
-4. Redistribution. You may reproduce and distribute copies of the Work or
-Derivative Works thereof in any medium, with or without modifications, and in
-Source or Object form, provided that You meet the following conditions:
-
-(a) You must give any other recipients of the Work or Derivative Works a copy
-of this License; and
-
-(b) You must cause any modified files to carry prominent notices stating that
-You changed the files; and
-
-(c) You must retain, in the Source form of any Derivative Works that You
-distribute, all copyright, patent, trademark, and attribution notices from the
-Source form of the Work, excluding those notices that do not pertain to any
-part of the Derivative Works; and
-
-(d) If the Work includes a "NOTICE" text file as part of its distribution, then
-any Derivative Works that You distribute must include a readable copy of the
-attribution notices contained within such NOTICE file, excluding those notices
-that do not pertain to any part of the Derivative Works, in at least one of the
-following places: within a NOTICE text file distributed as part of the
-Derivative Works; within the Source form or documentation, if provided along
-with the Derivative Works; or, within a display generated by the Derivative
-Works, if and wherever such third-party notices normally appear. The contents
-of the NOTICE file are for informational purposes only and do not modify the
-License. You may add Your own attribution notices within Derivative Works that
-You distribute, alongside or as an addendum to the NOTICE text from the Work,
-provided that such additional attribution notices cannot be construed as
-modifying the License.
-
-You may add Your own copyright statement to Your modifications and may provide
-additional or different license terms and conditions for use, reproduction, or
-distribution of Your modifications, or for any such Derivative Works as a
-whole, provided Your use, reproduction, and distribution of the Work otherwise
-complies with the conditions stated in this License.
-
-5. Submission of Contributions. Unless You explicitly state otherwise, any
-Contribution intentionally submitted for inclusion in the Work by You to the
-Licensor shall be under the terms and conditions of this License, without any
-additional terms or conditions. Notwithstanding the above, nothing herein shall
-supersede or modify the terms of any separate license agreement you may have
-executed with Licensor regarding such Contributions.
-
-6. Trademarks. This License does not grant permission to use the trade names,
-trademarks, service marks, or product names of the Licensor, except as required
-for reasonable and customary use in describing the origin of the Work and
-reproducing the content of the NOTICE file.
-
-7. Disclaimer of Warranty. Unless required by applicable law or agreed to in
-writing, Licensor provides the Work (and each Contributor provides its
-Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied, including, without limitation, any warranties
-or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
-PARTICULAR PURPOSE. You are solely responsible for determining the
-appropriateness of using or redistributing the Work and assume any risks
-associated with Your exercise of permissions under this License.
-
-8. Limitation of Liability. In no event and under no legal theory, whether in
-tort (including negligence), contract, or otherwise, unless required by
-applicable law (such as deliberate and grossly negligent acts) or agreed to in
-writing, shall any Contributor be liable to You for damages, including any
-direct, indirect, special, incidental, or consequential damages of any
-character arising as a result of this License or out of the use or inability to
-use the Work (including but not limited to damages for loss of goodwill, work
-stoppage, computer failure or malfunction, or any and all other commercial
-damages or losses), even if such Contributor has been advised of the
-possibility of such damages.
-
-9. Accepting Warranty or Additional Liability. While redistributing the Work or
-Derivative Works thereof, You may choose to offer, and charge a fee for,
-acceptance of support, warranty, indemnity, or other liability obligations
-and/or rights consistent with this License. However, in accepting such
-obligations, You may act only on Your own behalf and on Your sole
-responsibility, not on behalf of any other Contributor, and only if You agree
-to indemnify, defend, and hold each Contributor harmless for any liability
-incurred by, or claims asserted against, such Contributor by reason of your
-accepting any such warranty or additional liability.
-
-END OF TERMS AND CONDITIONS
-
-APPENDIX: How to apply the Apache License to your work.
-
-To apply the Apache License to your work, attach the following boilerplate
-notice, with the fields enclosed by brackets "[]" replaced with your own
-identifying information. (Don't include the brackets!) The text should be
-enclosed in the appropriate comment syntax for the file format. We also
-recommend that a file or class name and description of purpose be included on
-the same "printed page" as the copyright notice for easier identification
-within third-party archives.
-
-Copyright [yyyy] [name of copyright owner]
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
-===========================================================================
-
-zlib.h -- interface of the 'zlib' general purpose compression library version
-1.2.8, April 28th, 2013
-
-Copyright (C) 1995-2013 Jean-loup Gailly and Mark Adler
-
-This software is provided 'as-is', without any express or implied warranty. In
-no event will the authors be held liable for any damages arising from the use
-of this software.
-
-Permission is granted to anyone to use this software for any purpose, including
-commercial applications, and to alter it and redistribute it freely, subject to
-the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim
-that you wrote the original software. If you use this software in a product, an
-acknowledgment in the product documentation would be appreciated but is not
-required.
-
-2. Altered source versions must be plainly marked as such, and must not be
-misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution.
-
-Jean-loup Gailly        Mark Adler jloup@gzip.org
-madler@alumni.caltech.edu
 
 ======================================================================
 
