@@ -22,6 +22,11 @@ If you cannot find a binary for your operating system in this repository, you ma
 
 Seagate's security policy can be found in [SECURITY.md](SECURITY.md)
 
+## Code Of Conduct
+
+Please be respectful towards other in issues, discussions, etc.
+The code of conduct is available at [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
 ## Support
 
 ### OpenSeaChest
