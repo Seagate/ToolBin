@@ -20,7 +20,7 @@ If you cannot find a binary for your operating system in this repository, you ma
 
 ## Security Policy
 
-Seagate's security policy can be found in [SECURITY.md](#SECURITY.md)
+Seagate's security policy can be found in [SECURITY.md](SECURITY.md)
 
 ## Support
 
