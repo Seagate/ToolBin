@@ -175,18 +175,16 @@ imply endorsement.
 
 Support from Seagate Technology for open source projects is different than traditional Technical Support.  If possible, please use the **Issues tab** in the individual software projects so that others may benefit from the questions and answers.  Include the output of --version information in the message. See the user guide section 'General Usage Hints' for information about saving output to a log file.
 
-
 If you need to contact us through email, please choose one of these
 two email addresses:
 
-- opensource@seagate.com   for general questions and bug reports
-- opensea-build@seagate.com   for specific questions about programming and building the software
+* opensource@seagate.com   for general questions and bug reports
+* opensea-build@seagate.com   for specific questions about programming and building the software
 
 Seagate offers technical support for drive installation.  If you have any questions related to Seagate products and technologies, feel free to submit your request on our web site. See the web site for a list of world-wide telephone numbers.
 
-- http://www.seagate.com/support-home/
-- Contact Us:
-http://www.seagate.com/contacts/
+* [http://www.seagate.com/support-home/](http://www.seagate.com/support-home/)
+* Contact Us: [http://www.seagate.com/contacts/](http://www.seagate.com/contacts/)
 
 This software uses open source packages obtained with permission from the
 relevant parties. For a complete list of open source components, sources and
@@ -195,14 +193,15 @@ information.
 
 The newest online version of the openSeaChest Utilities documentation, open
 source usage and acknowledgement licenses, and our Linux USB Boot Maker FAQ can
-be found at: https://github.com/Seagate/openSeaChest.
+be found at: [https://github.com/Seagate/openSeaChest](https://github.com/Seagate/openSeaChest).
 
-Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 
------------------------------------------
+## License
 
 BINARIES and SOURCE CODE files of the openSeaChest open source project have
 been made available to you under the Mozilla Public License 2.0 (MPL).  Mozilla
 is the custodian of the Mozilla Public License ("MPL"), an open source/free
 software license.
 
+You can find a copy of the license at [LICENSE.md](LICENSE.md)
