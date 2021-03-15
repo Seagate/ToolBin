@@ -63,15 +63,15 @@
          },
          {
             "name":"SeaChest_Format",
-            "version":"2.0.0",
+            "version":"2.2.1",
             "date":"Mar-01-2021",
             "win":{
-               "app_path":"Format/v2.0.0/Windows/",
+               "app_path":"Format/v2.2.1/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Format_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Format/v2.0.0/Linux/",
+               "app_path":"Format/v2.2.1/Linux/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Format_x86_64-redhat-linux"
             }
