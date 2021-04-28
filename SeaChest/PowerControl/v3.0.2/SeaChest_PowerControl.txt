@@ -1,59 +1,50 @@
-SeaChest_Info                                              Revision: 27-Apr-2021
+SeaChest_PowerControl                                      Revision: 27-Apr-2021
 ===============================================================================
- SeaChest_Info - Seagate drive utilities
+ SeaChest_PowerControl - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
-Welcome to Seagate's SeaChest_Info diagnostic software.
+Welcome to Seagate's SeaChest_PowerControl diagnostic software.
 
-Disk drives are constantly monitoring and analyzing their own performance,
-integrity and environment.  The current state of this technology is the result
-of more than 20 years of innovative Seagate engineering focused on self-testing.
+Optimization within the framework of a complex company data center requires
+dynamic technology. As storage capacity demands increase due to virtualization
+and growing volumes of data, managing power usage in an intelligent way is
+critical for reducing Total Cost of Ownership (TCO).
 
-With the backing of personal computer manufacturers, the disk drive industry
-adopted an analysis system in the 1990's called Self Monitoring Analysis and
-Reporting Technology, or SMART. The idea then and today is to predict a failure
-before it happens. Various attributes are being monitored and measured against
-certain threshold limits. If any one attribute exceeds a threshold then a
-general SATA SMART Status test will change from Pass to Fail.
+There are, roughly, three general frameworks for disk drive power management.
+The earlier specification is part of Advanced Power Management (APM) which
+provided controls over many devices in a system, including disk drives.  APM
+has since been replaced by a new framework called Extended Power Controls
+(EPC).  Seagate's implementation of EPC began to phase in starting in 2010 and
+is named by the marketing term "PowerChoice".  Seagate PowerChoice
+technology‚ specifically developed for enterprise environments‚ offers more
+energy efficiency and control over the amount of power hard drives consume.
 
-Many computers automatically check SATA SMART Status when they start up which is
-when most people become aware of the issue. If still under warranty, then SMART
-Status FAIL is a valid condition for warranty replacement.
+You may need to learn what capabilities for power management your drive offers,
+such as supporting APM or EPC, and maybe both.  See the commands
+--showEPCSettings or --showAPMLevel(SATA Only) or --deviceInfo for various
+reports containing power settings and features supported.  Most enterprise
+drives after 2016 only support EPC (PowerChoice).
 
-You can use SeaChest_Basics or SeaChest_SMART software with --smartCheck to
-test the SATA SMART status of the drive.
+PowerChoice technology improves on earlier technology and allows for
+energy-saving during periods of command inactivity, allowing for greater power
+reductions. As idle time increases, the power-saving benefits also increase,
+and the drives will still quickly respond to commands even after long idling
+periods. In addition, PowerChoice technology supports four customizable modes
+to give businesses significantly more control of power usage by allowing for up
+to a 54% reduction in the amount of energy used.
 
-When a SMART Status test has a FAIL it is extremely important that you back up
-all of your important data. SMART Status FAIL is a near-term prediction of
-drive failure and the drive usually functions like normal. Unfortunately, there
-is no way to specifically predict when the failure will occur, so your best
-response is to back up your data as soon as possible.
+See the section below "How PowerChoice Technology Works"
 
-SMART attributes are also supplemented by SATA Device Statistics Notification
-(DSN) feature set, including a set of Device Statistics Notifications log
-pages.  This data provides further insight into a drive's performance and can
-be used to help measure its usage and potentially identify problem areas of
-concern.
+The third and newest drive power management framework exists for SATA drives
+and is named PowerBalance.  Seagate's PowerBalance feature will adjust drive
+performance during random operations to reduce power consumption of the drive.
 
-Likewise, SAS SCSI and FibreChannel interface products collect ongoing
-performance data and save this information in many different "vital data" and
-"log" pages, also call Vital Product Data (VPD). This data is similar and
-overlaps most of the same data collection categories as the SATA interface.
-
-SeaChest does not interpret attributes or thresholds.  As a practical matter,
-the technology supporting SMART is constantly being improved.  Each new design
-incorporates improvements that increase the accuracy of the SMART prediction.
-As a matter of policy, Seagate does not publish attributes and thresholds.
-Seagate Support does not help to analyze SMART attributes.
-
-This User Guide file contains important information about SeaChest_Info.
+This User Guide file contains important information about SeaChest_PowerControl.
 Please read this entire file before using this software.
 
 SeaChest is a comprehensive, easy-to-use command line diagnostic tool that
-helps you quickly determine the health and status of your Seagate storage
-product. It includes several tests that will examine the physical media on your
-Seagate, Samsung or Maxtor disk drive.
+helps you quickly determine the status of your Seagate storage product.
 
 Tests and commands which are completely data safe will run on any disk drive.
 Tests and commands which change the drive (like firmware download or data
@@ -71,40 +62,54 @@ decimal calculation for gigabyte or GB (10^9) shows the expected abbreviated
 size. See this FAQ for more information
 <http://knowledge.seagate.com/articles/en_US/FAQ/172191en?language=en_US>.
 
+If this is your drive, you should always keep a current backup of your
+important data.
+
 Usage - Linux (run with sudo)
 =============================
-        SeaChest_Info [-d <sg_device>] {arguments} {options}
+        SeaChest_PowerControl [-d <sg_device>] {arguments} {options}
 
 Examples - Linux
 ================
-        sudo SeaChest_Info --scan
-        sudo SeaChest_Info -d /dev/sg2 -i
+        sudo SeaChest_PowerControl --scan
+        sudo SeaChest_PowerControl -d /dev/sg2 -i
+        sudo SeaChest_PowerControl -d /dev/sg1 --deviceInfo
+        sudo SeaChest_PowerControl -d /dev/sg3 --showEPCSettings
+        sudo SeaChest_PowerControl -d /dev/sg2 --idle_a 5000
+        sudo SeaChest_PowerControl -d /dev/sg1 --idle_b disable
+        sudo SeaChest_PowerControl -d /dev/sg3 --transitionPower standby_z
+        sudo SeaChest_PowerControl -d /dev/sg45 --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
 
 Usage - Windows (run as administrator)
 ======================================
-        SeaChest_Info [-d <PD_device>] {arguments} {options}
+        SeaChest_PowerControl [-d <PD_device>] {arguments} {options}
 
 Examples - Windows
 ==================
-        SeaChest_Info --scan
-        SeaChest_Info -d PD0 -i
+        SeaChest_PowerControl --scan
+        SeaChest_PowerControl -d PD0 -i
+        SeaChest_PowerControl -d PD1 --deviceInfo
+        SeaChest_PowerControl -d PD3 --showEPCSettings
+        SeaChest_PowerControl -d PD2 --idle_a 5000
+        SeaChest_PowerControl -d PD1 --idle_b disable
+        SeaChest_PowerControl -d PD3 --transitionPower standby_z
+        SeaChest_PowerControl -d PD45 --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
 
 ==========================================================================================
- SeaChest_Info - Seagate drive utilities - NVMe Enabled
+ SeaChest_PowerControl - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 2.0.0-2_2_1 X86_64
+ SeaChest_PowerControl Version: 3.0.2-2_2_1 X86_64
  Build Date: Apr 27 2021
  Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
-	 SeaChest_Info [-d <sg_device>] {arguments} {options}
-
+	 SeaChest_PowerControl [-d <sg_device>] {arguments} {options}
 
 Examples
 ========
-	SeaChest_Info --scan
-	SeaChest_Info -d /dev/sg? -i
+	SeaChest_PowerControl --scan
+	SeaChest_PowerControl -d /dev/sg? -i
 
 Return codes
 ============
@@ -186,7 +191,7 @@ Utility Options
 		provided
 
 	-q, --quiet
-		Run SeaChest_Info in quiet mode. This is the same as
+		Run SeaChest_PowerControl in quiet mode. This is the same as
 		-v 0 or --verbose 0
 
 	-v [0-4], --verbose [0 | 1 | 2 | 3 | 4]
@@ -199,7 +204,7 @@ Utility Options
 		Example: -v 3 or --verbose 3
 
 	-V, --version
-		Show SeaChest_Info version and copyright information & exit
+		Show SeaChest_PowerControl version and copyright information & exit
 
 
 Utility Arguments
@@ -255,51 +260,313 @@ Utility Arguments
 		translation from the SPC spec will be displayed if one
 		is available.
 
-	--deviceStatistics
-		Use this option to display the device statistics reported
-		by the device. On SATA, this uses the Device Statistics
-		log, and the notifications log (if DSN feature is supported)
-		to display these statistics. On SAS, various log pages are
-		read to collect a bunch of reported parameter information.
+	--checkPowerMode
+		Get the current power mode of a drive.
+		On SCSI devices, this will only work if the drive has
+		transitioned from active state to another state.
+
+	--EPCfeature [enable | disable]
+		Enables or disables Extended Power Conditions (EPC) support for
+		devices. To disable EPC use --EPCfeature disable. Note that the
+		EPC Feature Set is not supported on all devices.
+		Use --deviceInfo option to see if EPC is supported.
+
+		WARNING: The EPC settings may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--idle_a [ enable | disable | default | timerValueMilliseconds ]
+		Use this setting to change the EPC Idle_A power mode settings.
+		    enable  - enable the power state
+		    disable - disable the power state
+		    default - restore default settings for this power state
+		    timerValue - number of milliseconds to set for the timer
+		                 used in this power state. If a timer is provided
+		                 the state will also be enabled, if not already.
+		                 EPC spec timers are set in 100 millisecond increments.
+		                 Timers will be truncated to fit 100 millisecond increments.
+
+		WARNING: EPC Settings may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--idle_b [ enable | disable | default | timerValueMilliseconds ]
+		Use this setting to change the EPC Idle_B power mode settings.
+		    enable  - enable the power state
+		    disable - disable the power state
+		    default - restore default settings for this power state
+		    timerValue - number of milliseconds to set for the timer
+		                 used in this power state. If a timer is provided
+		                 the state will also be enabled, if not already.
+		                 EPC spec timers are set in 100 millisecond increments.
+		                 Timers will be truncated to fit 100 millisecond increments.
+
+		WARNING: EPC Settings may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--idle_c [ enable | disable | default | timerValueMilliseconds ]
+		Use this setting to change the EPC Idle_C power mode settings.
+		    enable  - enable the power state
+		    disable - disable the power state
+		    default - restore default settings for this power state
+		    timerValue - number of milliseconds to set for the timer
+		                 used in this power state. If a timer is provided
+		                 the state will also be enabled, if not already.
+		                 EPC spec timers are set in 100 millisecond increments.
+		                 Timers will be truncated to fit 100 millisecond increments.
+
+		WARNING: EPC Settings may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--powerMeasurementMode [all | 5 | 12]	(Seagate Only)
+		Use this option along with --requestPowerMeasurement to specify
+		which sources to measure power on for the requested time.
+		 all - measure all power sources
+		 5   - measure only the 5v power
+		 12  - measure only the 12v power
+
+	--requestPowerMeasurement [seconds to perform measurement]	(Seagate Only)
+		This option is used to specify a time to perform a power
+		measurement for. The minimum measurement time is 22 seconds
+		and the maximum is 65535 seconds. If a time less than 22 seconds
+		is provided, 22 seconds will be used by the drive. A value greater
+		than 65535 will result in error.
+		Use the --powerMeasurementMode option to specify which mode to measure.
+
+	--powerBalanceFeature [ info | enable | disable ]	 (Seagate Only)
+		Use this option to see the state of the Seagate Power Balance
+		feature or to change its state.
+		Seagate's PowerBalance feature will adjust drive performance during
+		random operations to reduce power consumption of the drive.
+		  info - will dump the state of the Power Balance feature on the screen
+		  enable - use this to enable Power Balance
+		  disable - use this to disable Power Balance
+		Note: While this feature is available on some SAS products,
+		it is recommended that the --setPowerConsumption option is
+		used instead since it allows more levels of control.
+		This option and the --setPowerConsumption option are incompatible
+		because they use the same mode page fields (1Ah-01h).
+
+		WARNING: Seagate Power Balance may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--showEPCSettings
+		Use this option to show the current EPC settings on the screen.
+		Only drives supporting the EPC feature will show this data and
+		only supported power conditions will be shown.
+
+	--showPowerTelemetry	(Seagate Only)
+		Use this option to show the power telemetry data from
+		a Seagate drive that supports the power telemetry feature
+		If a measurement was not previously requested, this will show
+		free-running mode data from the last 10 minutes.
+		If this option is provided while a measurement is still
+		in progress, this will show all data that is currently available
+		Use the --requestPowerMeasurement option to request a power
+		measurement with a set time window.
+
+		NOTE: Power measurements are for the full device, not individual
+		      logical units. All logical units will be measured for this data.
+
+	--spinDown
+		Removes power to the disk drive motor with the Standby Immediate
+		command. Use this before moving a hard disk drive. The drive
+		will spin back up if the operating system selects the drive.
+		This means that an active drive will not stay spun down.
+
+		WARNING: Spindown may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--standby [ enable | disable | default | timerValueMilliseconds ] (Some settings are SAS only)
+		Use this setting to change the standby power mode settings.
+		NOTE: This is the legacy standby timer before EPC drives.
+		      If this is used on an EPC drive, this will modify
+		      the standby_z power state and timer values.
+		    enable  - enable the power state	(SAS Only)
+		    disable - disable the power state	(SAS Only)
+		    default - restore default settings for this power state	(SAS Only)
+		    timerValue - number of milliseconds to set for the timer
+		                 used in this power state. If a timer is provided
+		                 the state will also be enabled, if not already.
+		                 Spec timers are set in 100 millisecond increments.
+		                 Timers will be truncated to fit 100 millisecond increments.
+
+		ATA drives can only change the standby timer, not disable it.
+		On ATA drives, the standby timer set by this command is volatile
+		and drive defaults are restored on next power cycle.
+
+		WARNING: EPC Settings may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--standby_y [ enable | disable | default | timerValueMilliseconds ]
+		Use this setting to change the EPC Standby_Y power mode settings.
+		    enable  - enable the power state
+		    disable - disable the power state
+		    default - restore default settings for this power state
+		    timerValue - number of milliseconds to set for the timer
+		                 used in this power state. If a timer is provided
+		                 the state will also be enabled, if not already.
+		                 EPC spec timers are set in 100 millisecond increments.
+		                 Timers will be truncated to fit 100 millisecond increments.
+
+		WARNING: EPC Settings may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--standby_z [ enable | disable | default | timerValueMilliseconds ]
+		Use this setting to change the EPC Standby_Z power mode settings.
+		    enable  - enable the power state
+		    disable - disable the power state
+		    default - restore default settings for this power state
+		    timerValue - number of milliseconds to set for the timer
+		                 used in this power state. If a timer is provided
+		                 the state will also be enabled, if not already.
+		                 EPC spec timers are set in 100 millisecond increments.
+		                 Timers will be truncated to fit 100 millisecond increments.
+
+		WARNING: EPC Settings may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--transitionPower [active | idle | idleUnload | standby | idle_a | idle_b | idle_c | standby_y | standby_z | sleep]
+		Use this option to transition the drive to a specific power state.
+		EPC and legacy power states are supported. EPC states are only available
+		on devices supporting the EPC feature.
+		Supported power states:
+		  active
+		  idle - idle mode (legacy mode equivalent to idle_a on EPC)
+		  idleUnload - same as above, but heads are unloaded. This may not
+		               be supported on all devices.
+		  standby - standby mode (legacy mode equivalent to standby_z on EPC)
+		  idle_a - EPC idle mode
+		  idle_b - EPC lower power idle mode
+		  idle_c - EPC lowest power idle mode
+		  standby_y - EPC low power standby mode
+		  standby_z - EPC lowest power standby mode
+		  sleep - Sleep state. WARNING: This requires a reset to wake from.
+		          Once in this state, this tool cannot wake the drive on its own.
+		          The OS or adapter will need to issue a reset, which may or may not happen.
+
+		WARNING: Transitioning power modes may affect all LUNs/namespaces
+		         for devices with multiple logical units or namespaces.
 
 
 	SATA Only:
 	=========
-	--smartAttributes [raw | analyzed]	(SATA Only)
-		The drive will display its list of supported SMART attributes.
-		Some attributes names are commonly standard and most others are
-		vendor unique. In either case, the attribute thresholds are
-		always vendor unique. Most attributes are informational and not
-		used to determine a warranty return. Use the --smartCheck
-		command to determine if one of the warranty attributes has been
-		tripped. Seagate Support does not help to analyze SMART
-		attributes.
+	--disableAPM   (SATA Only)
+		Use this option to disable the APM feature on a device.
+		Note: This command is optional and some device may not
+		      disabling the APM feature.
+
+	--sataDAPSfeature [info | enable | disable]	(SATA Only)
+		Use this option to enable or disable the SATA Device Automatic
+		Partial To Slumber Transitions (DAPS) feature. Use the "info"
+		option to see the current state of the DIPM feature on the device.
+		The use of this feature requires that the DIPM feature is enabled.
+		NOTE: Please ensure that the host adapter/controller/driver can
+		handle this before enabling it, otherwise the drive link may
+		go down and the device will not be able to communicate.
+
+	--sataDIPMfeature [info | enable | disable]	(SATA Only)
+		Use this option to enable or disable the SATA Device Initiated
+		Power Management (DIPM) feature. Use the "info" option to see
+		the current state of the DIPM feature on the device.
+		NOTE: Please ensure that the host adapter/controller/driver can
+		handle this before enabling it, otherwise the drive link may
+		go down and the device will not be able to communicate.
+
+	--setAPMLevel [1 - 254]   (SATA Only)
+		Use this option to set the APM level of a device.
+		Valid values are between 1 and 254.
+		    1 = Minimum power consumption with standby mode
+		    2-127 = Intermediate power management with standby
+		        mode
+		    128 = Minimum power consumption without standby mode
+		    129-253 = Intermediate power management without
+		        standby mode
+		    254 = Maximum Performance.
+
+	--showAPMLevel   (SATA Only)
+		Use this option to show the current APM level of a device
 
 
 	SAS Only:
 	=========
-	--defectFormat [ # | shortBlock | longBlock | xbfi | xchs | bfi | chs ]	(SAS Only)
-		This option set the format of the defects to output.
-		Not all drives will support all defect modes!
-		SSDs will only support block modes!
-		Arguments: (name | #)
-		 shortBlock | 0 - show the defects in short block address mode (drives < 32bit LBA)
-		 xbfi       | 1 - show the defects in extended bytes from index mode
-		 xchs       | 2 - show the defects in extended physical cylinder-head-sector mode
-		 longBlock  | 3 - show the defects in long block address mode (drives > 32bit LBA)
-		 bfi        | 4 - show the defects in bytes from index mode
-		 chs        | 5 - show the defects in physical cylinder-head-sector mode
+	--idle [ enable | disable | default | timerValueMilliseconds ]	(SAS Only)
+		Use this setting to change the idle power mode settings.
+		NOTE: This is the legacy idle timer before EPC drives.
+		      If this is used on an EPC drive, this will modify
+		      the idle_a power state and timer values.
+		    enable  - enable the power state
+		    disable - disable the power state
+		    default - restore default settings for this power state
+		    timerValue - number of milliseconds to set for the timer
+		                 used in this power state. If a timer is provided
+		                 the state will also be enabled, if not already.
+		                 Spec timers are set in 100 millisecond increments.
+		                 Timers will be truncated to fit 100 millisecond increments.
 
-	--showSCSIDefects [ p | g | pg ]	(SAS Only)
-		This option will display the SCSI defects on the screen.
-		The arguments to this will tell whether to get the grown, 
-		primary, or primary and grown defects from the drive.
-		Use the --defectFormat option to specify the mode to display the defects.
-		If no mode is specified, physical cylinder-head-sector mode is assumed
-		Arguments:
-		  p - use this option to pull and display the primary (factory) defects
-		  g - use this option to pull and display the grown (reallocated) defects
-		 The above options can be combined to pull and display both defect lists.
+		This is only available on SAS/SCSI drives as ATA drives did not
+		have a separate configurable idle timer.
+
+		WARNING: EPC Settings may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--sasPhy [phy number] (SAS Only)
+		Use this option to specify a specific phy to use
+		with another option that uses a phy identifier value.
+		Some tool options will assume all SAS Phys when this
+		option is not present. Others will produce an error when
+		a specific phy is needed for an operation.
+		Use the -i option to learn more about the supported phys.
+
+	--sasPhyPartial [info | enable | disable] (SAS Only)
+		Use this option to enable or disable the partial phy power
+		condition. This is from the enhanced phy control mode page.
+		Use the --sasPhy option to specify an individual phy,
+		otherwise this will be changed on all phys.
+		WARNING: Configuring this setting may cause the drive to be
+		undetectable by other hardware if this power condition is not
+		supported by a controller or expander.
+
+		WARNING: Changing SAS Phy partial may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--sasPhySlumber [info | enable | disable] (SAS Only)
+		Use this option to enable or disable the slumber phy power
+		condition. This is from the enhanced phy control mode page.
+		Use the --sasPhy option to specify an individual phy,
+		otherwise this will be changed on all phys.
+		WARNING: Configuring this setting may cause the drive to be
+		undetectable by other hardware if this power condition is not
+		supported by a controller or expander.
+
+		WARNING: Changing SAS Phy slumber may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+
+	--setPowerConsumption [default | highest | intermediate | lowest | watt value]	(SAS Only) (Seagate Only)
+		This option will set the power consumption rate of
+		the device to the value input.
+		Options:
+		-default - sets the device back to default settings
+		-highest - sets the active level to "highest"
+		-intermediate - sets the active level to "intermediate"
+		-lowest - sets the active level to "lowest"
+		-watt value - sets the device to a nearest watt value
+		less than or equal to the value entered.
+		Power consumption watt values are listed with the
+		--showPowerConsumption command line option.
+
+	--showPowerConsumption	(SAS Only)
+		This option will show the power consumption
+		rates supported by the device and the current power
+		consumption rate of the device. Use a supported watt value
+		with the --setPowerConsumption option to set the
+		power consumption to that value.
+
+
+	NVMe Only:
+	=========
+	--transitionPowerState [new power state]	(NVMe Only)
+		Use this option to transition to a specific power state.
+		HINT:
+		  Use --deviceInfo to show number of supported states
 
 
 ================
@@ -535,6 +802,50 @@ Administrator.  There are two easy ways to do this:
 Then change drives or directory to where the SeaChest utility is located and
 run the tool file name from there.
 
+
+================================
+How PowerChoice Technology Works
+================================
+See the Seagate technology paper "Seagate' PowerChoice' Technology Provides
+Unprecedented Hard Drive Power Savings and Flexibility"
+http://www.seagate.com/files/docs/pdf/en-GB/whitepaper/tp608-powerchoice-tech-provides-gb.pdf
+
+Each individual power condition builds on the capabilities of the previous
+higher power condition in order to save incrementally more power. The specific
+energy-saving steps implemented for each power condition are as follows:
+
+Idle_A
+        - Disables most of the servo system, reduces processor and channel
+        power consumption
+        - Discs rotating at full speed (7,200 RPM)
+Idle_B
+        - Disables most of the servo system, reduces processor and channel
+        power consumption
+        - Heads are unloaded to drive ramp.
+        - Discs rotating at full speed (7,200 RPM)
+Idle_C/Standby_Y (SAS Only)
+        - Disables most of the servo system, reduces processor and channel
+        power consumption
+        - Heads are unloaded to drive ramp.
+        - Drive speed reduced to a lower RPM (reduced RPM)
+Standby_Z
+        - Heads are unloaded to drive ramp.
+        - Drive motor is spun down.
+        - Drive still responds to non-media access host commands.
+
+Flexibility is a key feature of PowerChoice technology, enabling commands from
+the host side to customize power condition settings and direct a drive into or
+out of power conditions as required. Two different options are available for
+the user to modify PowerChoice technology settings, depending on the interface
+used:
+
+SAS
+        Host-definable timers via mode pages
+        Immediate host-commanded power transitions via Start/Stop Unit (SSU)
+        command
+SATA
+        Host-definable timers via Set Features commands
+        Immediate host-commanded power transitions via Set Features commands
 
 =============
 Sample Output
@@ -853,39 +1164,63 @@ Attribute Name:                   Status: Nominal: Worst:     Raw (hex):
 
 
 ===============
-Version History - SeaChest_Info
+Version History - SeaChest_PowerControl
 ===============
-SeaChest_Info is branched off from SeaChest Basics v2.0.3.
+SeaChest_PowerChoice is branched off from SeaChest Basics v1.0.3.
 
-v0.0.1  02-Jun-2016  Initial SeaChest_Info using 1_9_4 libraries.
-v0.0.1  06-Jul-2016  1_10_0 libraries add --forceATA and --forceSCSI.
-v0.0.1  14-Jul-2016  1_10_1 libraries adds SMART and power management
+v0.0.1  14-Apr-2015  Intitial PowerChoice release.
+v0.0.2  12-Aug-2015  Added --testUnitReady. Improved device discovery.
+                     Corrections to verbose output.
+v0.0.4  22-Sep-2015  Added --showPowerConsumption and --setPowerConsumption,
+                     both are SAS only.
+v0.0.4  16-Oct-2015  1_7_0 libraries.  Added enhanced version information.
+                     Added -sat12byte to increase compatibility.  Added
+                     --SATInfo to compare ATA vs SCSI identification
+                     differences.
+v0.0.6  26-Jan-2016  1_8_1 libraries.  Added --EPCfeature for SATA.
+v1.0.0  02-May-2016  1_9_1 libraries.  Added new verbosity level. Added
+                     --onlySeagate restriction.  Added --modelMatch and
+                     --onlyFW filters.
+v1.0.2  19-May-2016  1_9_2 libraries fixed scan information from ATAPI devices.
+                     Fixed a bug where we could accidentally clear some stored
+                     identify data from the device structure. Fixed continuing
+                     on when there was a permission denied error opening a
+                     drive. Fixed --checkPowerMode always returning "active" on
+                     SAT interfaces (SATA over SAS). Fixed --transitionPower
+                     always failing (It was  trying an incompatible value).
+v1.0.3  15-Jun-2016  1_9_3 libraries fixed issues with ATA secure erase
+                     commands. Fixed bugs with --modelMatch and --onlyFW
+                     filters.
+v1.2.0  06-Jul-2016  1_10_0 libraries add --forceATA and --forceSCSI.  Added
+                     --showEPCSettings, --showAPMLevel, and --setAPMLevel.
+v1.2.1  14-Jul-2016  1_10_1 libraries adds SMART and power management
                      functions, format polling, endianess detection, buffer
                      size fixes, SAS device statistics, Win32 IOCTL
-                     pass-through fix on Win8 and higher.
-v0.1.0  01-Sep-2016  1_11_1 libraries updates to various printed message,
+                     pass-through fix on Win8 and higher. Added --disableAPM.
+v1.3.0  01-Sep-2016  1_11_1 libraries updates to various printed message,
                      minor bug fixes. Fixed --SATInfo command.
-v0.1.0  21-Sep-2016  1_11_2 libraries updates adds --forceATADMA, --forceATAPIO
+v1.3.0  21-Sep-2016  1_11_2 libraries updates adds --forceATADMA, --forceATAPIO
                      and --forceATAUDMA  (SATA Only).
-v1.0.0  10-Oct-2016  1_11_4 libraries updates. Support for multiple devices.
-v1.0.0  25-Oct-2016  1_11_5 libraries updates improved LaCie  detection, adds
+v1.4.0  10-Oct-2016  1_11_4 libraries updates. Support for multiple devices.
+v1.4.0  25-Oct-2016  1_11_5 libraries updates improved LaCie  detection, adds
                      SAT Vendor ID, SAT Product ID, and SAT Product Revision to
                      the -i --SATInfo output.
-v1.0.1  27-Oct-2016  1_11_6 libraries updates WWN detection.  Added
+v1.4.1  27-Oct-2016  1_11_6 libraries updates WWN detection.  Added
                      --enableLegacyUSBPassthrough
-v1.0.1  03-Nov-2016  1_11_7 libraries fixed issue with SAS EPC power mode
+v1.4.2  03-Nov-2016  1_11_7 libraries fixed issue with SAS EPC power mode
                      settings.
-v1.0.1  13-Dec-2016  1_11_10 libraries fixes a problem when using maxLBA without
+v1.4.2  13-Dec-2016  1_11_10 libraries fixes a problem when using maxLBA without
                      the corresponding command range option, SAS power mode
                      setting, and Sanitize erase patterns.
-v1.1.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
+v1.5.0  23-Feb-2017  1_13_0 libraries adds support for SAS 12.0Gb/s and
                      22.5Gb/s physical bus speeds, support for double buffered
-                     passthrough IOCTLs. New -F, --scanFlags [options:
-                     ignoreCSMI allowDuplicates] for Windows tools. Add CSMI
-                     support to all Windows version tools.
-v1.1.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
-                     for SAS features.  Add --csmiInfo.
-v1.2.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
+                     passthrough IOCTLs. EPCfeature now supports SAS. New -F,
+                     --scanFlags [options: ignoreCSMI allowDuplicates] for
+                     Windows tools. Add CSMI support to all Windows version
+                     tools.
+v1.5.0  06-Mar-2017  1_13_2 libraries adds Enhanced device information output
+                     for SAS features.
+v1.6.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      should exit with code = 1; added detection of parallel ATA
                      and SCSI speeds; temperature data on ATA now uses the
                      values from the SCT status log or device statistics log.
@@ -893,35 +1228,38 @@ v1.2.0  14-Jun-2017  1_15_0 libraries adds bug fix malformed command line
                      drives like it is supposed to causing duplicate drives to
                      show up.  Adds the child drive matching options
                      --childModelMatch, --childOnlyFW, and --childNewFW.
-v1.3.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
+v1.7.0  14-Jul-2017  1_16_1 libraries adds support for ATA drives that have the
                      Sense Data Reporting feature enabled, changes to how we
                      interpret the completion status from the drive, new Sense
                      Data ASC, ASCQ definitions from SPC5. Adds --Scan (or -S,
                      note the capital S) aggressive system scan.
-v1.3.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
-v1.3.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
+v1.7.0  27-Jul-2017  1_16_2 libraries enhances Seagate brand detection.
+v1.7.0  19-Sep-2017  1_16_4 libraries fixes SCSI "--progress format", added
                      reading remanufacture time for SAS when the drive reports
                      a time, fixed SAS --abortDST.
-v1.3.0  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
+v1.8.1  25-Sep-2017  1_17_0 libraries adds improved SATA device discovery on
                      SAS adapters, added NVMe read, write & Flush commands.
-v1.3.1  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
+                     Added --powerBalanceFeature, --sataDAPSfeature and
+                     --sataDIPMfeature, all of which are SATA only.
+v1.8.2  10-Oct-2017  1_17_1 libraries adds Better handling of NVMe as a SCSI
                      device, SAT library strings, and fixes to Read-Buffer
                      error history (ISL). Updated copyright notice, invalid
                      command line options now only display an error instead of
-                     long help.
-v1.3.1  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
-v1.3.1  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
+                     long help. Name change from SeaChest_PowerChoice to
+                     SeaChest_PowerControl.
+v1.8.2  12-Oct-2017  1_17_3 libraries improves Fast-Format compatibility on SAS.
+v1.8.2  26-Oct-2017  1_17_5 libraries fixes SATA drive discovery behind HBAs
                      that don't show as SATA and don't support the SAT VPD
                      page; added Automatic fallback to 12byte CDBs during
                      initial device discovery;  integrated fixes for SAS
                      firmware download and fixes for SAS LongDST time
                      calculation; added detection of TCG Pyrite and Opalite
                      drives.
-v1.3.1  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
+v1.8.2  31-Oct-2017  1_17_6 libraries adds ATA Security compatibility with SATL
                      on some LSI adapters, corrects firmware download issue
                      under Windows 10 API.
-v1.3.1  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
-v1.3.1  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
+v1.8.2  02-Nov-2017  1_17_7 libraries fixes Long DST time on SCSI/SAS products.
+v1.9.0  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      USB flash drives, support for early 90's PATA drives that
                      don't support LBA mode, bug fix where the last digit of
                      the SCSI Unit Serial Number was being dropped, additional
@@ -938,9 +1276,9 @@ v1.3.1  19-Apr-2018  1_18_0 libraries improves device detection of CD-ROM and
                      during device discovery to help work with some USB
                      devices, some Legacy SCSI support enhancements (partially
                      from USB hacks development), enhanced SD to SG mapping in
-                     Linux.
-v1.4.0  25-Jul-2018  Adds --defectFormat, --showSCSIDefects
-v1.4.1  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
+                     Linux.  Added --idle (Immediate), --idleUnload, --standby
+                     (Immediate), --active.
+v1.9.1  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
                      field to get the OS name under linux; NVMe enabled;  fixed
                      a bug in the ATA activate FW command; added in reading ID
                      Data log and Device statistics logs page 0 to check the
@@ -952,17 +1290,17 @@ v1.4.1  21-Sep-2018  1_18_2 libraries Added in reading os-release PRETTY_NAME
                      banner and -V data to show support levels. Add general
                      support for NVMe and NVMe specific identify data to "-i"
                      command.
-v1.4.1  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
-v1.5.0  03-May-2019  1_19_18 libraries added per device verbosity, --deviceInfo
+v1.9.1  18-Oct-2018  1_18_3 libraries Added NVMe generic read command support.
+v1.10.0  03-May-2019 1_19_18 libraries added per device verbosity, --deviceInfo
                      adds SAS (not SATA) FastFormat for Features Supported
                      section,  --deviceInfo now gives Low Current Spinup
                      status.
-v1.5.0  10-Jun-2019  1_19_23 libraries added SNTL (SCSI to NVMe translator),
+v1.10.0  10-Jun-2019 1_19_23 libraries added SNTL (SCSI to NVMe translator),
                      updated software SAT translator to use dataset management
                      XL command, fixes for issuing vendor unique commands under
                      Windows, improved fast format support detection, and
                      refactored verbose output for NVMe commands.
-v1.6.0 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
+v2.0.0  19-Feb-2020  1_21_30 libraries add in check for Elevated Privileges
                      (sudo, run as administrator) before trying to talk to
                      devices, new exit code 9 if privileges are missing;
                      printing the USB VID/PID in the device info; fix to sg
@@ -973,15 +1311,46 @@ v1.6.0 19-Feb-2020   1_21_30 libraries add in check for Elevated Privileges
                      approach which uses a lookup table listing various USB
                      bridge VIDs/PIDs and their specific issues; separate
                      Seagate SAS SN and PCBA SN.
-v1.6.1  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
+
+                     v2 is a significant overhaul of the tool:
+                     These old v1 commands are retired:
+                     --active,--changePower, --defaultMode, --disableMode,
+                     --enableMode, --idle, --idleUnload, --powerMode
+                     [powermode], --sleep, --standby, --modeTimer [timer value
+                     in milliseconds], --transitionPower.
+
+                     And transitioned to these new v2 commands: --idle [ enable
+                     | disable | default | timerValueMilliseconds ], --idle_a [
+                     enable | disable | default | timerValueMilliseconds ],
+                     --idle_b [ enable | disable | default |
+                     timerValueMilliseconds ], --idle_c [ enable | disable |
+                     default | timerValueMilliseconds ], --standby_y [ enable |
+                     disable | default | timerValueMilliseconds ], --standby_z
+                     [ enable | disable | default | timerValueMilliseconds ],
+                     --standby [ enable | disable | default |
+                     timerValueMilliseconds ] (Some settings are SAS only),
+                     --transitionPower [active | idle | idleUnload | standby |
+                     idle_a | idle_b | idle_c | standby_y | standby_z | sleep]
+
+                     These v2 commands are new: --powerMeasurementMode [all | 5
+                     | 12], --requestPowerMeasurement [seconds to perform
+                     measurement], --showPowerTelemetry, --sasPhy [phy number]
+                     (SAS Only), --sasPhyPartial [info | enable | disable] (SAS
+                     Only), --sasPhySlumber [info | enable | disable] (SAS
+                     Only), --transitionPowerState [new power state]
+v2.0.1  13-Apr-2020  1_21_30 libraries, fix memory allocation during the scan
                      command.
-v2.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
+v3.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
                      Intel RST NVMe support added. Numerous code quality improvements
                      which fixed many potential bugs and memory leaks. Improved
                      support for openfabrics NVMe drivers. Changed permissions
                      detection to show warnings rather than errors. Removed obsolete
                      CSMI and SAT 12B CDB options. CSMI handles now show as csmi:?:?:?
-
+                     Fixed a bug where changing SATA EPC settings only updated idle_a
+v3.0.1  12-Feb-2021  Improved argument parsing to accept hex in addition to decimal for
+                     many different options.
+v3.0.2  27-Apr-2021  Change in API to get time for showing to the screen in power
+                     telemetry. 
 =======================================
 About SeaChest Command Line Diagnostics
 =======================================

@@ -1,4 +1,4 @@
-SeaChest_NVMe                                              Revision: 25-Feb-2021
+SeaChest_NVMe                                              Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_NVMe - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -70,9 +70,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_NVMe - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_NVMe Version: 2.0.0-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_NVMe Version: 2.0.0-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====

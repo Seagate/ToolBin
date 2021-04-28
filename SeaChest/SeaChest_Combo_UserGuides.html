@@ -176,7 +176,7 @@ licenses shown below.
 <H1>SeaChest_Basics 2/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file1">prev</A>][<A HREF="#file3">next</A>]
 <PRE>
-SeaChest_Basics                                            Revision: 25-Feb-2021
+SeaChest_Basics                                            Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_Basics - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -253,9 +253,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Basics - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Basics Version: 3.0.2-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_Basics Version: 3.0.2-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -857,7 +857,7 @@ v3.0.2  12-Feb-2021  Added additional language for running/aborting Seagate IDD
 <H1>SeaChest_Configure 3/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file2">prev</A>][<A HREF="#file4">next</A>]
 <PRE>
-SeaChest_Configure                                         Revision: 25-Feb-2021
+SeaChest_Configure                                         Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_Configure - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -926,9 +926,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Configure - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Configure Version: 2.0.1-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_Configure Version: 2.0.1-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -1302,7 +1302,7 @@ Utility Arguments
 		settings. Valid page numbers range from 0 to 3Fh. Valid subpage numbers
 		range from 0 to FFh.
 		(MP) Mode page 3Fh specifies all mode pages and can be used to reset all mode pages.
-		(SP) Subpage FFH specifies all subpages of a given page and will reset all those subpages.
+		(SP) Subpage FFh specifies all subpages of a given page and will reset all those subpages.
 		Using both MP 3Fh and SP FFh will reset all pages and subpages on a device.
 
 		WARNING: Resetting mode pages may affect all LUNs/namespaces for devices
@@ -1549,7 +1549,7 @@ v2.0.1  12-Feb-2021  Improved argument parsing to accept hex in addition to deci
 <H1>SeaChest_Erase 4/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file3">prev</A>][<A HREF="#file5">next</A>]
 <PRE>
-SeaChest_Erase                                             Revision: 25-Feb-2021
+SeaChest_Erase                                             Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_Erase - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -1631,9 +1631,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Erase - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Erase Version: 3.0.3-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_Erase Version: 3.1.0-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -2050,12 +2050,21 @@ Data Destructive Commands (Seagate only)
 		writesame16 command. On ATA devices, this uses the SCT writesame
 		feature. Combine this option with the writeSameRange option to
 		select the range. This operation will write 0's to the device for the
-		specified range. For SATA drives, adding the --poll option will
-		cause this operation to poll for progress until complete. This
-		is not available on SAS and SCSI drives because SCSI drives do not
-		report the progress on a Write Same operation.
+		specified range. For SATA drives, this option will poll for progress
+		until the write same has completed. SAS/SCSI drives will hold the
+		tool busy until the write same has completed without progress
+		indication since this is not possible on SAS/SCSI due to specification
+		limitations on how write same was defined.
 		On SATA, if any other commands are sent to the drive while it's
 		performing a write same, the write same will be aborted.
+		NOTE: On SAS/SCSI drives this command is optional. Additionally,
+		      the range may be limited to much less than the full device
+		      size. Due to the history of this command, there is not a great
+		      way to confirm support in all cases. Some ranges will be too
+		      large, and some devices may or may not allow writing the full
+		      medium in a single command. If you wish to write an entire
+		      device, consider a different command such as format unit or
+		      sanitize overwrite to accomplish this.
 
 	--writeSameRange [range]
 		Specify a range to writesame to. Use this option with the
@@ -2312,13 +2321,17 @@ v3.0.3  12-Feb-2021  Improved argument parsing to accept hex in addition to deci
                      other applications and the OS from interrupting format, fast format,
                      depopulate, and ATA security erase to prevent potential problems
                      during these operations or which may leave the drive in a bad state
-                     if they are interrupted.</PRE>
+                     if they are interrupted.
+v3.1.0  27-Apr-2021  SATA write same automatically implied poll since progress checks
+                     are not possible without stopping the write same that is in progress.
+                     Fixed bugs in SAS write same detection.
+</PRE>
 <HR>
 <A NAME="file5">
 <H1>SeaChest_Firmware 5/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file4">prev</A>][<A HREF="#file6">next</A>]
 <PRE>
-SeaChest_Firmware                                          Revision: 25-Feb-2021
+SeaChest_Firmware                                          Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_Firmware - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -2382,9 +2395,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Firmware - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Firmware Version: 3.0.0-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_Firmware Version: 3.0.0-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -2809,7 +2822,7 @@ v3.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
 <H1>SeaChest_Format 6/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file5">prev</A>][<A HREF="#file7">next</A>]
 <PRE>
-SeaChest_Format                                            Revision: 25-Feb-2021
+SeaChest_Format                                            Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_Format - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -2892,9 +2905,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Format - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 2.2.1-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_Format Version: 2.3.1-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -2935,6 +2948,19 @@ Utility Options
 		that may respond in unintended ways since they may interpret
 		these commands differently than the bridge chip the command
 		was designed for.
+
+	--force
+		Use the --force option to attempt to override and force a specific
+		operation on a drive in case it is returning &quot;Not supported&quot;
+		messages. This can be used to override some checks for command or
+		feature support. Be aware that sending unsupported commands may
+		result in command failures, and in some circumstances, it may also
+		cause indeterminate behavior of a device.
+		Do not use this command unless you are certain that a device supports
+		the command or feature you are attempting to use.
+		This option is not guaranteed to make things work or fix issues. This
+		option is not available to override every support check or other
+		incompatibility check in the software.
 
 	--forceATA
 		Using this option will force the current drive to
@@ -3175,6 +3201,28 @@ Data Destructive Commands (Seagate only)
 		         operation is in progress
 		WARNING: It is not recommended to do this on USB as not
 		         all USB adapters can handle a 4k sector size.
+
+
+	SATA Only:
+	==========
+	--seagateQuickFormat (SATA Only) (Seagate Only)
+		This option performs a quick format of a Seagate SATA drive.
+		The purpose of this is to help bring a drive out of a bad state
+		when an operation such as Fast Format (--setSectorSize) or
+		depopulation/repopulation is interrupted by the host when the drive
+		was still processing the command. Once this command completes, these
+		operations can be retried if the quick format completes successfully.
+		Be aware that this option may erase data and the drive may not be
+		completely readable until is has been written again. It is strongly
+		recommended that a full overwrite is performed after this is complete
+		to ensure the drive operates without and further errors during reads.
+		This operation may succeed or it may fail depending on the state of the
+		drive when this is run.
+		NOTE: You can use the --force option to attempt to force this command if
+		      the tool returns &quot;Not supported&quot; errors, but it may still fail
+		      to issue the command.
+		NOTE: For SAS products, retrying a fast format is the best thing to try,
+		      but if that does not work, a full format may be required.
 
 
 	SAS Only:
@@ -3444,13 +3492,17 @@ v2.2.1  12-Feb-2021  Added depopulate and repopulate options to SeaChest_Format
                      depopulate, and repopulate to prevent potential problems
                      during these operations or which may leave the drive in a bad state
                      if they are interrupted.
+v 2.3.1  27-Apr-2021 Adding Seagate quick format option for SATA drives. If a setSectorSize
+                     operation fails, this may be necessary in order to get the drive back
+                     to a good state. If a failure is detected this will automatically be run
+                     to try and make sure the drive is left in a good state.
 </PRE>
 <HR>
 <A NAME="file7">
 <H1>SeaChest_GenericTests 7/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file6">prev</A>][<A HREF="#file8">next</A>]
 <PRE>
-SeaChest_GenericTests                                      Revision: 25-Feb-2021
+SeaChest_GenericTests                                      Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_GenericTests - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -3544,9 +3596,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_GenericTests - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_GenericTests Version: 2.0.1-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_GenericTests Version: 2.0.1-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4036,7 +4088,7 @@ v2.0.1  12-Feb-2021  Improved argument parsing to accept hex in addition to deci
 <H1>SeaChest_Info 8/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file7">prev</A>][<A HREF="#file9">next</A>]
 <PRE>
-SeaChest_Info                                              Revision: 25-Feb-2021
+SeaChest_Info                                              Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_Info - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -4130,9 +4182,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Info - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 2.0.0-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_Info Version: 2.0.0-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4476,7 +4528,7 @@ v2.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
 <H1>SeaChest_Lite 9/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file8">prev</A>][<A HREF="#file10">next</A>]
 <PRE>
-SeaChest_Lite                                              Revision: 25-Feb-2021
+SeaChest_Lite                                              Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_Lite - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -4546,9 +4598,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Lite - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Lite Version: 1.4.0-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_Lite Version: 1.5.0-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4731,19 +4783,23 @@ v1.4.0  20-Nov-2020  CSMI rewrite and initial Intel RST NVMe support added.
                      Added additional warnings about set sector size over USB
                      adapters. Adding additional warnings about changing SATA
                      sector sizes.
-v2.0.0  12-Feb-2021  Adding additional warnings around set sector size (fast format).
+v1.4.1  12-Feb-2021  Adding additional warnings around set sector size (fast format).
                      opensea-transport code pulled in enhancements to attempt to block
                      other applications and the OS from interrupting format, fast format,
                      set sector configuration and more to prevent potential problems
                      during these operations or which may leave the drive in a bad state
                      if they are interrupted.
+v 1.5.0 27-Apr-2021  Added Seagate quick format option that can be run if setSectorSize
+                     fails. This can help return drives to a good state if a failure occurs.
+                     This will automatically run if a failure is detected in the software
+                     to try and keep the drive in a good state no matter what happens.
 </PRE>
 <HR>
 <A NAME="file10">
 <H1>SeaChest_NVMe 10/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file9">prev</A>][<A HREF="#file11">next</A>]
 <PRE>
-SeaChest_NVMe                                              Revision: 25-Feb-2021
+SeaChest_NVMe                                              Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_NVMe - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -4815,9 +4871,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_NVMe - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_NVMe Version: 2.0.0-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_NVMe Version: 2.0.0-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -5207,7 +5263,7 @@ v2.0.0  12-Feb-2021  opensea-transport code pulled in compatiblity fixes for Int
 <H1>SeaChest_PowerControl 11/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file10">prev</A>][<A HREF="#file12">next</A>]
 <PRE>
-SeaChest_PowerControl                                      Revision: 25-Feb-2021
+SeaChest_PowerControl                                      Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_PowerControl - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -5307,9 +5363,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_PowerControl - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 3.0.1-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_PowerControl Version: 3.0.2-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -5964,13 +6020,15 @@ v3.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
                      Fixed a bug where changing SATA EPC settings only updated idle_a
 v3.0.1  12-Feb-2021  Improved argument parsing to accept hex in addition to decimal for
                      many different options.
+v3.0.2  27-Apr-2021  Change in API to get time for showing to the screen in power
+                     telemetry. 
 </PRE>
 <HR>
 <A NAME="file12">
 <H1>SeaChest_Security 12/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file11">prev</A>][<A HREF="#file13">next</A>]
 <PRE>
-SeaChest_Security                                          Revision: 25-Feb-2021
+SeaChest_Security                                          Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_Security - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -6038,9 +6096,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Security - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Security Version: 3.0.0-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_Security Version: 3.0.0-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -6561,7 +6619,7 @@ v3.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
 <H1>SeaChest_SMART 13/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file12">prev</A>][<A HREF="#file14">next</A>]
 <PRE>
-SeaChest_SMART                                             Revision: 25-Feb-2021
+SeaChest_SMART                                             Revision: 27-Apr-2021
 ===============================================================================
  SeaChest_SMART - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -6670,9 +6728,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_SMART - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_SMART Version: 2.0.1-2_1_3 X86_64
- Build Date: Feb 25 2021
- Today: Thu Feb 25 18:59:44 2021	User: tyler
+ SeaChest_SMART Version: 2.0.1-2_2_1 X86_64
+ Build Date: Apr 27 2021
+ Today: Tue Apr 27 15:11:15 2021	User: tyler
 ==========================================================================================
 Usage
 =====
