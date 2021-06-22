@@ -1,4 +1,4 @@
-SeaChest_PowerControl                                      Revision: 27-Apr-2021
+SeaChest_PowerControl                                      Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_PowerControl - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -98,9 +98,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_PowerControl - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 3.0.2-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_PowerControl Version: 3.0.2-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:33 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -1351,6 +1351,14 @@ v3.0.1  12-Feb-2021  Improved argument parsing to accept hex in addition to deci
                      many different options.
 v3.0.2  27-Apr-2021  Change in API to get time for showing to the screen in power
                      telemetry. 
+v3.0.2  16-Jun-2021  Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+                     Update to new method for enabling Seagate Power-Balance on new
+                     SAS products. Old method is preserved for old products as well.
 =======================================
 About SeaChest Command Line Diagnostics
 =======================================

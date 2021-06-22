@@ -1,4 +1,4 @@
-SeaChest_Format                                            Revision: 27-Apr-2021
+SeaChest_Format                                            Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Format - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -81,9 +81,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Format - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 2.3.1-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Format Version: 2.3.1-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:33 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -1325,10 +1325,16 @@ v2.2.1  12-Feb-2021  Added depopulate and repopulate options to SeaChest_Format
                      depopulate, and repopulate to prevent potential problems
                      during these operations or which may leave the drive in a bad state
                      if they are interrupted.
-v 2.3.1  27-Apr-2021 Adding Seagate quick format option for SATA drives. If a setSectorSize
+v2.3.1  27-Apr-2021  Adding Seagate quick format option for SATA drives. If a setSectorSize
                      operation fails, this may be necessary in order to get the drive back
                      to a good state. If a failure is detected this will automatically be run
                      to try and make sure the drive is left in a good state.
+v2.3.1  16-Jun-2021  Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
 =======================================
 About SeaChest Command Line Diagnostics
 =======================================

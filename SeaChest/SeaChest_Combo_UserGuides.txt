@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 27-Apr-2021
+Date last edit: 17-Jun-2021
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -37,7 +37,7 @@ About SeaChest Diagnostics
 END USER LICENSE AGREEMENT
 Various Open Source Licenses
 
-SeaChest_Basics                                            Revision: 27-Apr-2021
+SeaChest_Basics                                            Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Basics - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -114,9 +114,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Basics - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Basics Version: 3.0.2-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Basics Version: 3.1.0-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -348,6 +348,14 @@ Utility Arguments
 
 		WARNING: Firmware Updates may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
+
+	--showLockedRegions
+		This option should only be used when performing firmware
+		updates on legacy products. What this does is it ignores
+		a failing error code from the OS on the final segment of a
+		firmware update, but this update is actually successful.
+		This is needed to workaround hardware or firmware limitations
+		that were present in some old products.
 
 	--shortDST
 		Execute a short diagnostic drive self test. This test can take
@@ -712,7 +720,17 @@ v3.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
 v3.0.2  12-Feb-2021  Added additional language for running/aborting Seagate IDD
                      operations. Also improved argument parsing for many options so
                      that hex or decimal inputs can be given for LBAs.
-SeaChest_Configure                                         Revision: 27-Apr-2021
+v3.1.0  16-Jun-2021  Pulled in FWDL change for making the ignore final segment
+                     a standalone option: --fwdlIgnoreFinalSegment
+                     This is only needed when updating specific legacy products
+                     to new firmware.
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Analyzed SMART attribute output for Seagate SATA HDDs.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+SeaChest_Configure                                         Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Configure - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -781,9 +799,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Configure - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Configure Version: 2.0.1-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Configure Version: 2.0.2-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -1398,7 +1416,13 @@ v2.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
                      CSMI and SAT 12B CDB options. CSMI handles now show as csmi:?:?:?
 v2.0.1  12-Feb-2021  Improved argument parsing to accept hex in addition to decimal for
                      many different options.
-SeaChest_Erase                                             Revision: 27-Apr-2021
+v2.0.2  16-Jun-2021  Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+                     Fixed a bug in --setSCSIMP file=myFile.txt where it would
+                     never properly interpret the file.SeaChest_Erase                                             Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Erase - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -1480,9 +1504,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Erase - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Erase Version: 3.1.0-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Erase Version: 3.1.1-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -1678,6 +1702,12 @@ Utility Arguments
 		This option can be used to specify the value of the PSID.
 		This may be required in order to perform certain TCG
 		operations.
+		On Seagate drives, PSIDs are 32 digits long, all uppercase,
+		and uses zeros and ones but do NOT use O's and I's.
+		Additionally, it is possible to exhaust the number of attempts
+		 the device allows. Seagate drives have this set to 5 attempts.
+		Once this is exhausted, a full power cycle of the device is required
+		before you can try again.
 
 	--seconds [seconds]
 		Use this option to specify a time in seconds
@@ -2174,7 +2204,14 @@ v3.0.3  12-Feb-2021  Improved argument parsing to accept hex in addition to deci
 v3.1.0  27-Apr-2021  SATA write same automatically implied poll since progress checks
                      are not possible without stopping the write same that is in progress.
                      Fixed bugs in SAS write same detection.
-SeaChest_Firmware                                          Revision: 27-Apr-2021
+v3.1.1  16-Jun-2021  Added more information about Seagate PSIDs to assist with
+                     troubleshooting why a revert or revertSP may have failed.
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+SeaChest_Firmware                                          Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Firmware - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -2238,9 +2275,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Firmware - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Firmware Version: 3.0.0-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Firmware Version: 3.1.0-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -2481,6 +2518,18 @@ Utility Arguments
 		system without performing a firmware update. This can be used to check
 		if any drives in the system require an update.
 
+	--fwdlInfo
+		Use this option to show the firmware download support
+		information for a drive.
+
+	--showLockedRegions
+		This option should only be used when performing firmware
+		updates on legacy products. What this does is it ignores
+		a failing error code from the OS on the final segment of a
+		firmware update, but this update is actually successful.
+		This is needed to workaround hardware or firmware limitations
+		that were present in some old products.
+
 	--fwdlSegSize [segment size in 512B blocks]	(Seagate Only)
 		Use this option to specify a segment size in 512B blocks
 		to use for a segmented or deferred download. This option
@@ -2491,10 +2540,6 @@ Utility Arguments
 		more likely to be compatible, but also slower.
 		Use this option if the default used by the tool is not
 		working correctly for firmware updates.
-
-	--fwdlInfo
-		Use this option to show the firmware download support
-		information for a drive.
 
 	--switchFW 	(NVMe Only) (Seagate Only)
 		Use this option to switch to a different firmware slot on an
@@ -2658,8 +2703,16 @@ v3.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
                      support for openfabrics NVMe drivers. Changed permissions
                      detection to show warnings rather than errors. Removed obsolete
                      CSMI and SAT 12B CDB options. CSMI handles now show as csmi:?:?:?
-
-SeaChest_Format                                            Revision: 27-Apr-2021
+v3.1.0  16-Jun-2021  Pulled in FWDL change for making the ignore final segment
+                     a standalone option: --fwdlIgnoreFinalSegment
+                     This is only needed when updating specific legacy products
+                     to new firmware.
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+SeaChest_Format                                            Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Format - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -2742,9 +2795,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Format - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 2.3.1-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Format Version: 2.3.1-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -3329,11 +3382,17 @@ v2.2.1  12-Feb-2021  Added depopulate and repopulate options to SeaChest_Format
                      depopulate, and repopulate to prevent potential problems
                      during these operations or which may leave the drive in a bad state
                      if they are interrupted.
-v 2.3.1  27-Apr-2021 Adding Seagate quick format option for SATA drives. If a setSectorSize
+v2.3.1  27-Apr-2021  Adding Seagate quick format option for SATA drives. If a setSectorSize
                      operation fails, this may be necessary in order to get the drive back
                      to a good state. If a failure is detected this will automatically be run
                      to try and make sure the drive is left in a good state.
-SeaChest_GenericTests                                      Revision: 27-Apr-2021
+v2.3.1  16-Jun-2021  Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+SeaChest_GenericTests                                      Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_GenericTests - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -3427,9 +3486,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_GenericTests - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_GenericTests Version: 2.0.1-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_GenericTests Version: 2.0.1-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -3913,7 +3972,12 @@ v2.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
                      CSMI and SAT 12B CDB options. CSMI handles now show as csmi:?:?:?
 v2.0.1  12-Feb-2021  Improved argument parsing to accept hex in addition to decimal for
                      many different options.
-SeaChest_Info                                              Revision: 27-Apr-2021
+v2.0.1  16-Jun-2021  Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).SeaChest_Info                                              Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Info - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -4007,9 +4071,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Info - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 2.0.0-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Info Version: 2.1.0-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4176,6 +4240,11 @@ Utility Arguments
 		log, and the notifications log (if DSN feature is supported)
 		to display these statistics. On SAS, various log pages are
 		read to collect a bunch of reported parameter information.
+
+	--showConcurrentRanges
+		Use this option to display the concurrent positioning ranges
+		supported by a device. Concurrent positioning ranges are used
+		to inform which actuator is used for a given range in LBA space.
 
 
 	SATA Only:
@@ -4346,8 +4415,15 @@ v2.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
                      support for openfabrics NVMe drivers. Changed permissions
                      detection to show warnings rather than errors. Removed obsolete
                      CSMI and SAT 12B CDB options. CSMI handles now show as csmi:?:?:?
-
-SeaChest_Lite                                              Revision: 27-Apr-2021
+v2.1.0  16-Jun-2021  New option for showing the concurrent positioining ranges of new
+                     multi-actuator drives.
+                     Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+SeaChest_Lite                                              Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Lite - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -4417,9 +4493,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Lite - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Lite Version: 1.5.0-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Lite Version: 1.5.0-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4608,11 +4684,17 @@ v1.4.1  12-Feb-2021  Adding additional warnings around set sector size (fast for
                      set sector configuration and more to prevent potential problems
                      during these operations or which may leave the drive in a bad state
                      if they are interrupted.
-v 1.5.0 27-Apr-2021  Added Seagate quick format option that can be run if setSectorSize
+v1.5.0  27-Apr-2021  Added Seagate quick format option that can be run if setSectorSize
                      fails. This can help return drives to a good state if a failure occurs.
                      This will automatically run if a failure is detected in the software
                      to try and keep the drive in a good state no matter what happens.
-SeaChest_NVMe                                              Revision: 27-Apr-2021
+v1.5.0  16-Jun-2021  Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+SeaChest_NVMe                                              Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_NVMe - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -4684,9 +4766,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_NVMe - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_NVMe Version: 2.0.0-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_NVMe Version: 2.0.0-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -5070,7 +5152,13 @@ v2.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
 v2.0.0  12-Feb-2021  opensea-transport code pulled in compatiblity fixes for Intel RST
                      NVMe devices in configurations that are not RAID, but show up
                      as RAID in the low-level OS code.
-SeaChest_PowerControl                                      Revision: 27-Apr-2021
+v2.0.0  16-Jun-2021  Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+SeaChest_PowerControl                                      Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_PowerControl - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -5170,9 +5258,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_PowerControl - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 3.0.2-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_PowerControl Version: 3.0.2-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -5829,7 +5917,15 @@ v3.0.1  12-Feb-2021  Improved argument parsing to accept hex in addition to deci
                      many different options.
 v3.0.2  27-Apr-2021  Change in API to get time for showing to the screen in power
                      telemetry. 
-SeaChest_Security                                          Revision: 27-Apr-2021
+v3.0.2  16-Jun-2021  Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+                     Update to new method for enabling Seagate Power-Balance on new
+                     SAS products. Old method is preserved for old products as well.
+SeaChest_Security                                          Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_Security - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -5897,9 +5993,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Security - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Security Version: 3.0.0-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_Security Version: 3.0.1-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -6080,6 +6176,12 @@ Utility arguments
 		This option can be used to specify the value of the PSID.
 		This may be required in order to perform certain TCG
 		operations.
+		On Seagate drives, PSIDs are 32 digits long, all uppercase,
+		and uses zeros and ones but do NOT use O's and I's.
+		Additionally, it is possible to exhaust the number of attempts
+		 the device allows. Seagate drives have this set to 5 attempts.
+		Once this is exhausted, a full power cycle of the device is required
+		before you can try again.
 
 	--rwfwdlPort [lock | unlock] (Seagate Only)
 		This option will set the logical rollback firmware download
@@ -6413,8 +6515,15 @@ v3.0.0  20-Nov-2020  Changed how scan-flags are parsed. CSMI rewrite and initial
                      CSMI and SAT 12B CDB options. CSMI handles now show as csmi:?:?:?
                      Added better error messages if PSID is not provided with --psid,
                      but how it was provided in earlier versions.
-
-SeaChest_SMART                                             Revision: 27-Apr-2021
+v3.0.1  16-Jun-2021  Added more information about Seagate PSIDs to assist with
+                     troubleshooting why a revert or revertSP may have failed.
+                     Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+SeaChest_SMART                                             Revision: 17-Jun-2021
 ===============================================================================
  SeaChest_SMART - Seagate drive utilities
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -6523,9 +6632,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_SMART - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_SMART Version: 2.0.1-2_2_1 X86_64
- Build Date: Apr 27 2021
- Today: Tue Apr 27 15:11:15 2021	User: tyler
+ SeaChest_SMART Version: 2.0.1-2_2_3 X86_64
+ Build Date: Jun 17 2021
+ Today: Thu Jun 17 17:11:34 2021	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -7071,6 +7180,13 @@ v2.0.1  12-Feb-2021  Added more information about IDD and aborting IDD to output
                      in certain scenarios.
                      opensea-transport pulls in some enhancements to try and block
                      other software or the OS from interrupting IDD while it is running.
+v2.0.1  16-Jun-2021  Pulled in updates to opensea-libs which includes the following:
+                     Minor USB compatibility improvements and more products added
+                     to the list with their specific workarounds.
+                     Updated NVMe compatibility for FreeBSD 11.
+                     Support for detection and showing of concurrent positioning 
+                     (new multi-actuator support from the standards).
+                     Analyzed SMART attribute output for Seagate SATA HDDs
 ================
 Tool Usage Hints
 ================
