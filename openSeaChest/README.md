@@ -2,7 +2,7 @@
 
 ## Cross platform utilities useful for performing various operations on SATA, SAS, NVMe, and USB storage devices
 
-### Copyright (c) 2014-2019 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+### Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 
 Welcome to the openSeaChest open source project!
 

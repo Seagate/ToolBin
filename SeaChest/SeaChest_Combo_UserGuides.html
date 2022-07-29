@@ -176,10 +176,10 @@ licenses shown below.
 <H1>SeaChest_Basics 2/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file1">prev</A>][<A HREF="#file3">next</A>]
 <PRE>
-SeaChest_Basics                                            Revision: 17-Jun-2021
+SeaChest_Basics                                            Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_Basics - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest Basics diagnostic software.
@@ -252,10 +252,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_Basics - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Basics Version: 3.1.0-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Basics Version: 3.3.1-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:40 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -360,6 +360,10 @@ Utility Options
 		timeout. In some cases a good drive may need more time to
 		complete the test due to other legitimate system activity.
 
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
+
 	--onlySeagate
 		Use this option to match only Seagate drives for the options
 		provided
@@ -449,7 +453,7 @@ Utility Arguments
 		is hexadecimal with an ASCII translation on the side
 		(when available).
 
-	--activateFW 	 (Seagate Only)
+	--activateFW
 		Use this option to issue the command to activate code that was
 		sent to the drive using a deferred download command. This will
 		immediately activate the new code on the drive.
@@ -460,7 +464,7 @@ Utility Arguments
 		WARNING: Firmware activation may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--downloadFW [firmware_filename]		(Seagate Only)
+	--downloadFW [firmware_filename]
 		Download firmware to a Seagate storage product. Use only
 		Seagate authorized firmware data files which are designated
 		for the specific model drive. Improper use of this option may
@@ -472,7 +476,7 @@ Utility Arguments
 		WARNING: Firmware updates may affect all LUNs/namespaces
 		         for devices with multiple logical units or namespaces.
 
-	--downloadMode [ full | segmented | deferred ]	(Seagate Only)
+	--downloadMode [ full | segmented | deferred ]
 		Use this option along with the --downloadFW option
 		to set the firmware download mode.
 		Supported Modes:
@@ -523,7 +527,7 @@ Utility Arguments
 	--abortDST
 		Abort a diagnostic Drive Self Test that is in progress.
 
-	--phySpeed [0 | 1 | 2 | 3 | 4 | 5] (Seagate Only)
+	--phySpeed [0 | 1 | 2 | 3 | 4 | 5]
 		Use this option to change the PHY speed to a
 		new maximum value. On SAS, this option will
 		set all phys to the specified speed unless the
@@ -534,6 +538,8 @@ Utility Arguments
 		3 - allow negotiation up to 6.0Gb/s
 		4 - allow negotiation up to 12.0Gb/s (SAS Only)
 		5 - allow negotiation up to 22.5Gb/s (SAS Only)
+
+		NOTE: SATA phy speed changes are only available on Seagate drives.
 
 		WARNING: Changing Phy speed may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
@@ -546,11 +552,26 @@ Utility Arguments
 		WARNING: Changing Read look-ahead may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--setMaxLBA newMaxLBA	(Seagate Only)
+	--restoreMaxLBA
+		Restore the max accessible address of your drive to its native
+		size. A power cycle is required after this command before
+		setting a new max LBA.
+
+	--setMaxLBA newMaxLBA
 		Set the max accessible address of your drive to any value less
 		than the device's default native size. A power cycle is
 		required after this command before resetting or setting a new
 		max LBA.
+
+	--showConcurrentRanges
+		Use this option to display the concurrent positioning ranges
+		supported by a device. Concurrent positioning ranges are used
+		to inform which actuator is used for a given range in LBA space.
+
+	--smartCheck
+		Perform a SMART check on a device to see if any internal
+		thresholds have been tripped or if the drive is still operating
+		within specification.
 
 	--spinDown
 		Removes power to the disk drive motor with the Standby Immediate
@@ -560,16 +581,6 @@ Utility Arguments
 
 		WARNING: Spindown may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
-
-	--smartCheck
-		Perform a SMART check on a device to see if any internal
-		thresholds have been tripped or if the drive is still operating
-		within specification.
-
-	--restoreMaxLBA	(Seagate Only)
-		Restore the max accessible address of your drive to its native
-		size. A power cycle is required after this command before
-		setting a new max LBA.
 
 	--writeCache [info | enable | disable]
 		Use this option to enable or disable write cache
@@ -582,7 +593,7 @@ Utility Arguments
 
 	SATA Only:
 	=========
-	--smartAttributes [raw | analyzed]	(SATA Only)
+	--smartAttributes [raw | hybrid | analyzed]	(SATA Only)
 		The drive will display its list of supported SMART attributes.
 		Some attributes names are commonly standard and most others are
 		vendor unique. In either case, the attribute thresholds are
@@ -591,6 +602,15 @@ Utility Arguments
 		command to determine if one of the warranty attributes has been
 		tripped. Seagate Support does not help to analyze SMART
 		attributes.
+		Output modes:
+		  raw - All hex output for those that need every single bit.
+		  hybrid - classic table view with some interpretation of some
+		           fields. Partial raw interpretation, but not all drive
+		           and firmware combinations are supported.
+		  analyzed - a full breakdown of all parts of each individual
+		             attribute's data. Full raw data interpretation only
+		             available on select devices.
+		NOTE: Migration to device statistics is recommended.
 
 
 	SAS Only:
@@ -618,8 +638,8 @@ Utility Arguments
 		Use the -i option to learn more about the supported phys.
 
 
-Data Destructive Commands (Seagate only)
-========================================
+Data Destructive Commands
+=========================
 	--overwrite [starting LBA]
 		Use this option to start an overwrite erase at
 		the specified starting LBA. Combine this option
@@ -875,10 +895,10 @@ v3.1.0  16-Jun-2021  Pulled in FWDL change for making the ignore final segment
 <H1>SeaChest_Configure 3/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file2">prev</A>][<A HREF="#file4">next</A>]
 <PRE>
-SeaChest_Configure                                         Revision: 17-Jun-2021
+SeaChest_Configure                                         Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_Configure - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Configure diagnostic software.
@@ -943,10 +963,10 @@ Examples - Windows
         SeaChest_Configure -d PD0 --deviceInfo
 ==========================================================================================
  SeaChest_Configure - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Configure Version: 2.0.2-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Configure Version: 2.1.0-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:40 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -1029,6 +1049,10 @@ Utility Options
 		model number. This option will provide a closest match although
 		an exact match is preferred. Ex: ST500 will match ST500LM0001
 
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
+
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
 		firmware revision. This option will only do an exact match.
@@ -1107,7 +1131,7 @@ Utility Arguments
 		translation from the SPC spec will be displayed if one
 		is available.
 
-	--phySpeed [0 | 1 | 2 | 3 | 4 | 5] (Seagate Only)
+	--phySpeed [0 | 1 | 2 | 3 | 4 | 5]
 		Use this option to change the PHY speed to a
 		new maximum value. On SAS, this option will
 		set all phys to the specified speed unless the
@@ -1118,6 +1142,8 @@ Utility Arguments
 		3 - allow negotiation up to 6.0Gb/s
 		4 - allow negotiation up to 12.0Gb/s (SAS Only)
 		5 - allow negotiation up to 22.5Gb/s (SAS Only)
+
+		NOTE: SATA phy speed changes are only available on Seagate drives.
 
 		WARNING: Changing Phy speed may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
@@ -1130,12 +1156,12 @@ Utility Arguments
 		WARNING: Changing Read look-ahead may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--restoreMaxLBA	(Seagate Only)
+	--restoreMaxLBA
 		Restore the max accessible address of your drive to its native
 		size. A power cycle is required after this command before
 		setting a new max LBA.
 
-	--setMaxLBA newMaxLBA	(Seagate Only)
+	--setMaxLBA newMaxLBA
 		Set the max accessible address of your drive to any value less
 		than the device's default native size. A power cycle is
 		required after this command before resetting or setting a new
@@ -1174,7 +1200,7 @@ Utility Arguments
 		Note: Some products will support low, but not the ultra
 		      low current spinup mode.
 
-	--puisFeature [ enable | disable ]  (SATA Only) (Seagate Only)
+	--puisFeature [ enable | disable ]  (SATA Only)
 		Use this option to enable or disable the power up in standby
 		(PUIS) feature on SATA drives. 
 		Note: If this is configured on the drive with a jumper, this
@@ -1191,7 +1217,7 @@ Utility Arguments
 		enable - enable SSC
 		disable - disable SSC
 
-	--sctReadTimer [info | value] (SATA Only) (Seagate Only)
+	--sctReadTimer [info | value] (SATA Only)
 		Use this option to set the read command timer value for
 		synchronous commands and NCQ commands with in-order data
 		delivery enabled. Note: this timer starts at the time that
@@ -1209,7 +1235,7 @@ Utility Arguments
 		Note: On some SAT HBAs/bridges, status will not be able to be
 		determined due to HBA/bridge limitations.
 
-	--sctWriteCache [info | enable | disable | default] (SATA Only) (Seagate Only)
+	--sctWriteCache [info | enable | disable | default] (SATA Only)
 		Use this option to enable or disable write cache
 		support on a drive using SMART command transport.
 		When using this option, the setting is non-volatile.
@@ -1226,7 +1252,7 @@ Utility Arguments
 		HBAs/bridges, status will not be able to be
 		determined due to HBA/bridge limitations.
 
-	--sctWriteCacheReordering [info | enable | disable | default] (SATA Only) (Seagate Only)
+	--sctWriteCacheReordering [info | enable | disable | default] (SATA Only)
 		Use this option to enable or disable write cache reordering
 		support on a drive using SMART command transport.
 		Write cache reordering allows the drive to reorder moving data
@@ -1241,7 +1267,7 @@ Utility Arguments
 		HBAs/bridges, status will not be able to be
 		determined due to HBA/bridge limitations.
 
-	--sctWriteTimer [info | value] (SATA Only) (Seagate Only)
+	--sctWriteTimer [info | value] (SATA Only)
 		Use this option to set the write command timer value for
 		synchronous commands and NCQ commands with in-order data
 		delivery enabled. Note: this timer starts at the time that
@@ -1348,7 +1374,7 @@ Utility Arguments
 		WARNING: Saving mode pages may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--setSCSIMP [ mp[-sp]:byte:highestBit:fieldWidthInBits=value | file=filename.txt ]	(SAS only) (Seagate Only)
+	--setSCSIMP [ mp[-sp]:byte:highestBit:fieldWidthInBits=value | file=filename.txt ]	(SAS only)
 		Use this option to set a specific field in a mode page to a value.
 		There are two argument formats to this option:
 		1. The first format expects a mode page (in hex), optionally a subpage code (in hex),
@@ -1393,8 +1419,8 @@ Utility Arguments
 		    all - show all of the above formats for a given mode page.
 
 
-Data Destructive Commands (Seagate only)
-========================================
+Data Destructive Commands
+=========================
 	--provision newMaxLBA
 		Provision your drive to a new max LBA to any value less
 		than the device's current max LBA. A power cycle is required
@@ -1573,10 +1599,10 @@ v2.0.2  16-Jun-2021  Minor USB compatibility improvements and more products adde
 <H1>SeaChest_Erase 4/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file3">prev</A>][<A HREF="#file5">next</A>]
 <PRE>
-SeaChest_Erase                                             Revision: 17-Jun-2021
+SeaChest_Erase                                             Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_Erase - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Erase diagnostic software.
@@ -1654,10 +1680,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_Erase - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Erase Version: 3.1.1-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Erase Version: 3.2.0-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:40 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -1743,6 +1769,10 @@ Utility Options
 		Use this option to run on all drives matching the provided
 		model number. This option will provide a closest match although
 		an exact match is preferred. Ex: ST500 will match ST500LM0001
+
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
 
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
@@ -1930,8 +1960,8 @@ Utility Arguments
 		  invertcase - switches uppercase for lower, and lowercase for upper
 
 
-Data Destructive Commands (Seagate only)
-========================================
+Data Destructive Commands
+=========================
 	--overwrite [starting LBA]
 		Use this option to start an overwrite erase at
 		the specified starting LBA. Combine this option
@@ -1968,7 +1998,7 @@ Data Destructive Commands (Seagate only)
 		        The file option will get truncated to a 32bit pattern for
 		        SATA products.
 
-	--performQuickestErase (Seagate Only)
+	--performQuickestErase
 		This option checks the drive to determine which methods of
 		data erasure are supported and determines which is the
 		quickest to erase ALL data on the drive. It then starts the
@@ -1982,7 +2012,7 @@ Data Destructive Commands (Seagate only)
 		WARNING: Some erase methods may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--revert	(Seagate Only)
+	--revert
 		This operation performs an Opal SSC spec Revert on the adminSP.
 		This operation is only available on Seagate TCG Opal drives.
 		The --psid flag can be provided to perform the revert with
@@ -1999,7 +2029,7 @@ Data Destructive Commands (Seagate only)
 		WARNING: The Revert may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--revertSP	(Seagate Only)
+	--revertSP
 		This operation performs a revertSP on a Seagate SED drive
 		in the adminSP with the PSID.
 		The PSID must be provided using the --psid option.
@@ -2011,7 +2041,7 @@ Data Destructive Commands (Seagate only)
 		WARNING: The RevertSP may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--removePhysicalElement [element #] (Seagate Only)
+	--removePhysicalElement [element #]
 		Use this option to remove a storage element
 		from use on a drive. When this is done, the
 		drive will erase all user data and lower the
@@ -2151,7 +2181,11 @@ Data Destructive Commands (Seagate only)
 		        read accessible until a write has been performed to
 		        the media.
 
-	--formatUnit [current | new sector size]    (SAS Only) (Seagate Only)
+		WARNING: Disable any out-of-band management systems/services/daemons
+		         before using this option. Interruptions can be caused by these
+		         and may prevent completion of a a fast format operation.
+
+	--formatUnit [current | new sector size]    (SAS Only)
 		This option will start a format unit operation on a SAS drive
 		Use &quot;current&quot; to perform a format unit operation with the
 		Sector size currently being used, otherwise enter a new sector
@@ -2161,6 +2195,10 @@ Data Destructive Commands (Seagate only)
 
 		WARNING: Format Unit may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
+
+		WARNING: Customer unique firmware may have specific requirements that 
+		         restrict sector sizes on some products. It may not be possible to format/ 
+		         fast format to common sizes like 4K or 512B due to these customer requirements.
 
 
 ===============
@@ -2368,10 +2406,10 @@ v3.1.1  16-Jun-2021  Added more information about Seagate PSIDs to assist with
 <H1>SeaChest_Firmware 5/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file4">prev</A>][<A HREF="#file6">next</A>]
 <PRE>
-SeaChest_Firmware                                          Revision: 17-Jun-2021
+SeaChest_Firmware                                          Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_Firmware - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Firmware diagnostic software.
@@ -2431,10 +2469,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_Firmware - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Firmware Version: 3.1.0-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Firmware Version: 3.1.5-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -2444,6 +2482,14 @@ Examples
 ========
 	SeaChest_Firmware --scan
 	SeaChest_Firmware -d /dev/sg? -i
+	Updating firmware:
+	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin
+	Updating firmware with deferred download and activating:
+	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin --downloadMode deferred --activateFW
+	Updating firmware and specifying a firmware slot (NVMe)
+	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin --downloadMode deferred
+	  +
+	SeaChest_Firmware -d /dev/sg? --activateFW --firmwareSlot 2
 
 Return codes
 ============
@@ -2531,6 +2577,10 @@ Utility Options
 		This option should be used to skip performing an update if
 		a drive already has this firmware revision loaded.
 
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
+
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
 		firmware revision. This option will only do an exact match.
@@ -2609,7 +2659,7 @@ Utility Arguments
 		translation from the SPC spec will be displayed if one
 		is available.
 
-	--activateFW 	 (Seagate Only)
+	--activateFW
 		Use this option to issue the command to activate code that was
 		sent to the drive using a deferred download command. This will
 		immediately activate the new code on the drive.
@@ -2631,7 +2681,7 @@ Utility Arguments
 		    SHA2_384
 		    SHA2_512
 
-	--downloadFW [firmware_filename]		(Seagate Only)
+	--downloadFW [firmware_filename]
 		Download firmware to a Seagate storage product. Use only
 		Seagate authorized firmware data files which are designated
 		for the specific model drive. Improper use of this option may
@@ -2643,7 +2693,7 @@ Utility Arguments
 		WARNING: Firmware updates may affect all LUNs/namespaces
 		         for devices with multiple logical units or namespaces.
 
-	--downloadMode [ full | segmented | deferred ]	(Seagate Only)
+	--downloadMode [ full | segmented | deferred ]
 		Use this option along with the --downloadFW option
 		to set the firmware download mode.
 		Supported Modes:
@@ -2659,13 +2709,13 @@ Utility Arguments
 		WARNING: Firmware Updates may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--firmwareSlot/--fwBufferID slot#		(Seagate Only)
+	--firmwareSlot/--fwBufferID slot#
 		Use this option to specify a firmware slot (NVMe) or a buffer ID (SCSI)
 		along with the --downloadMode (SCSI) or --activateFW (NVMe &amp; SCSI) options.
 		If this option is not used, a value of zero will be used instead,
 		which means the drive will automatically select the slot number.
 
-	--fwdlConfig [config file]	(Seagate Only)
+	--fwdlConfig [config file]
 		Use this option to specify a Seagate config file to perform an
 		update based on a firmware match on multiple drives or a
 		single drive in the system.
@@ -2687,7 +2737,7 @@ Utility Arguments
 		This is needed to workaround hardware or firmware limitations
 		that were present in some old products.
 
-	--fwdlSegSize [segment size in 512B blocks]	(Seagate Only)
+	--fwdlSegSize [segment size in 512B blocks]
 		Use this option to specify a segment size in 512B blocks
 		to use for a segmented or deferred download. This option
 		will not affect an immediate download (full buffer at once).
@@ -2698,7 +2748,7 @@ Utility Arguments
 		Use this option if the default used by the tool is not
 		working correctly for firmware updates.
 
-	--switchFW 	(NVMe Only) (Seagate Only)
+	--switchFW 	(NVMe Only)
 		Use this option to switch to a different firmware slot on an
 		NVMe drive. You must specify a slot with the --firmwareSlot option
 		or this will fail. The specified slot must already have a
@@ -2875,10 +2925,10 @@ v3.1.0  16-Jun-2021  Pulled in FWDL change for making the ignore final segment
 <H1>SeaChest_Format 6/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file5">prev</A>][<A HREF="#file7">next</A>]
 <PRE>
-SeaChest_Format                                            Revision: 17-Jun-2021
+SeaChest_Format                                            Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_Format - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Format diagnostic software.
@@ -2957,10 +3007,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_Format - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 2.3.1-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Format Version: 2.4.0-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -3054,6 +3104,10 @@ Utility Options
 		Use this option to run on all drives matching the provided
 		model number. This option will provide a closest match although
 		an exact match is preferred. Ex: ST500 will match ST500LM0001
+
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
 
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
@@ -3152,7 +3206,7 @@ Utility Arguments
 		translation from the SPC spec will be displayed if one
 		is available.
 
-	--depopulateMaxLBA [requested MaxLBA] (Seagate Only)
+	--depopulateMaxLBA [requested MaxLBA]
 		Use this option to specify a new maximum LBA when
 		removing (depopulating) a physical storage element.
 		This is optional. If this is not specified, the device
@@ -3177,6 +3231,10 @@ Utility Arguments
 		and later) If the device does not report supported sector
 		sizes, please consult your product manual.
 
+		WARNING: Customer unique firmware may have specific requirements that 
+		         restrict sector sizes on some products. It may not be possible to format/ 
+		         fast format to common sizes like 4K or 512B due to these customer requirements.
+
 
 	SAS Only:
 	=========
@@ -3186,8 +3244,8 @@ Utility Arguments
 		unit operation.
 
 
-Data Destructive Commands (Seagate only)
-========================================
+Data Destructive Commands
+=========================
 	--pattern [repeat:asciinospaces | random | increment:startValue | file:filename]
 		Use this option with overwrite, sanitize, and format unit
 		operations to write a specific pattern to a range of LBAs
@@ -3214,7 +3272,7 @@ Data Destructive Commands (Seagate only)
 		        The file option will get truncated to a 32bit pattern for
 		        SATA products.
 
-	--removePhysicalElement [element #] (Seagate Only)
+	--removePhysicalElement [element #]
 		Use this option to remove a storage element
 		from use on a drive. When this is done, the
 		drive will erase all user data and lower the
@@ -3226,13 +3284,13 @@ Data Destructive Commands (Seagate only)
 		WARNING: Removing a physical element affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--repopulateElements (Seagate Only)
+	--repopulateElements
 		Use this option to repopulate any physical storage
 		elements that have been removed from use.
 		A full disk overwrite is necessary before
 		the drive is usable.
 
-	--setSectorSize [new sector size]	 (Seagate Only)
+	--setSectorSize [new sector size]
 		This option is only available for drives that support sector
 		size changes. On SATA Drives, the set sector configuration
 		command must be supported. On SAS Drives, fast format must
@@ -3254,6 +3312,9 @@ Data Destructive Commands (Seagate only)
 		         operation is in progress
 		WARNING: It is not recommended to do this on USB as not
 		         all USB adapters can handle a 4k sector size.
+		WARNING: Disable any out-of-band management systems/services/daemons
+		         before using this option. Interruptions can be caused by these
+		         and may prevent completion of a sector size change.
 
 
 	SATA Only:
@@ -3334,7 +3395,11 @@ Data Destructive Commands (Seagate only)
 		        read accessible until a write has been performed to
 		        the media.
 
-	--formatUnit [current | new sector size]    (SAS Only) (Seagate Only)
+		WARNING: Disable any out-of-band management systems/services/daemons
+		         before using this option. Interruptions can be caused by these
+		         and may prevent completion of a a fast format operation.
+
+	--formatUnit [current | new sector size]    (SAS Only)
 		This option will start a format unit operation on a SAS drive
 		Use &quot;current&quot; to perform a format unit operation with the
 		Sector size currently being used, otherwise enter a new sector
@@ -3344,6 +3409,10 @@ Data Destructive Commands (Seagate only)
 
 		WARNING: Format Unit may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
+
+		WARNING: Customer unique firmware may have specific requirements that 
+		         restrict sector sizes on some products. It may not be possible to format/ 
+		         fast format to common sizes like 4K or 512B due to these customer requirements.
 
 	--securityInitialize
 		Use this option to set the security initialize bit in the
@@ -3561,10 +3630,10 @@ v2.3.1  16-Jun-2021  Pulled in updates to opensea-libs which includes the follow
 <H1>SeaChest_GenericTests 7/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file6">prev</A>][<A HREF="#file8">next</A>]
 <PRE>
-SeaChest_GenericTests                                      Revision: 17-Jun-2021
+SeaChest_GenericTests                                      Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_GenericTests - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_GenericTests diagnostic software.
@@ -3654,10 +3723,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_GenericTests - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_GenericTests Version: 2.0.1-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_GenericTests Version: 2.0.4-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -3743,6 +3812,10 @@ Utility Options
 		Use this option to run on all drives matching the provided
 		model number. This option will provide a closest match although
 		an exact match is preferred. Ex: ST500 will match ST500LM0001
+
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
 
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
@@ -3884,12 +3957,12 @@ Utility Arguments
 		be adjusted for you to reflect the drive
 		architecture.
 
-	--genericMode [ read | write (Seagate Only) | verify ]
+	--genericMode [ read | write | verify ]
 		This options allows selection of the type of commands
 		to use while performing a generic test. The modes supported
 		are listed below:
 			read - performs a generic test using read commands
-			write - performs a generic test using write commands (Seagate Only)
+			write - performs a generic test using write commands
 			verify - performs a generic test using verify commands
 
 	--hours [hours]
@@ -3970,14 +4043,14 @@ A read at the Outer Diameter (OD) of the drive for 45
 		the User Generic Read tests.
 
 
-Data Destructive Commands (Seagate only)
-========================================
-	--repairAtEnd		(Seagate Only)
+Data Destructive Commands
+=========================
+	--repairAtEnd
 		Use this option to repair any bad sectors
 		found during a long or user generic read
 		test at the end of the test.
 
-	--repairOnFly		(Seagate Only)
+	--repairOnFly
 		Use this option to repair any bad sectors
 		found during a long or user generic read
 		test as they are found.
@@ -4152,10 +4225,10 @@ v2.0.1  16-Jun-2021  Pulled in updates to opensea-libs which includes the follow
 <H1>SeaChest_Info 8/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file7">prev</A>][<A HREF="#file9">next</A>]
 <PRE>
-SeaChest_Info                                              Revision: 17-Jun-2021
+SeaChest_Info                                              Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_Info - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Info diagnostic software.
@@ -4245,10 +4318,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_Info - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 2.1.0-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Info Version: 2.1.2-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4330,6 +4403,10 @@ Utility Options
 		Use this option to run on all drives matching the provided
 		model number. This option will provide a closest match although
 		an exact match is preferred. Ex: ST500 will match ST500LM0001
+
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
 
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
@@ -4424,7 +4501,7 @@ Utility Arguments
 
 	SATA Only:
 	=========
-	--smartAttributes [raw | analyzed]	(SATA Only)
+	--smartAttributes [raw | hybrid | analyzed]	(SATA Only)
 		The drive will display its list of supported SMART attributes.
 		Some attributes names are commonly standard and most others are
 		vendor unique. In either case, the attribute thresholds are
@@ -4433,6 +4510,15 @@ Utility Arguments
 		command to determine if one of the warranty attributes has been
 		tripped. Seagate Support does not help to analyze SMART
 		attributes.
+		Output modes:
+		  raw - All hex output for those that need every single bit.
+		  hybrid - classic table view with some interpretation of some
+		           fields. Partial raw interpretation, but not all drive
+		           and firmware combinations are supported.
+		  analyzed - a full breakdown of all parts of each individual
+		             attribute's data. Full raw data interpretation only
+		             available on select devices.
+		NOTE: Migration to device statistics is recommended.
 
 
 	SAS Only:
@@ -4604,10 +4690,10 @@ v2.1.0  16-Jun-2021  New option for showing the concurrent positioining ranges o
 <H1>SeaChest_Lite 9/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file8">prev</A>][<A HREF="#file10">next</A>]
 <PRE>
-SeaChest_Lite                                              Revision: 17-Jun-2021
+SeaChest_Lite                                              Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_Lite - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest Lite diagnostic software.
@@ -4673,10 +4759,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_Lite - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Lite Version: 1.5.0-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Lite Version: 1.6.0-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4708,7 +4794,7 @@ Utility Arguments
 		If your device is not listed on a scan  immediately after
 		booting, then wait 10 seconds and run it again.
 
-	--downloadFW [firmware_filename]		(Seagate Only)
+	--downloadFW [firmware_filename]
 		Download firmware to a Seagate storage product. Use only
 		Seagate authorized firmware data files which are designated
 		for the specific model drive. Improper use of this option may
@@ -4753,6 +4839,10 @@ Utility Arguments
 		and later) If the device does not report supported sector
 		sizes, please consult your product manual.
 
+		WARNING: Customer unique firmware may have specific requirements that 
+		         restrict sector sizes on some products. It may not be possible to format/ 
+		         fast format to common sizes like 4K or 512B due to these customer requirements.
+
 
 Utility Options
 ===============
@@ -4778,6 +4868,10 @@ Utility Options
 		timeout. In some cases a good drive may need more time to
 		complete the test due to other legitimate system activity.
 
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
+
 	-V, --version
 		Show SeaChest_Lite version and copyright information &amp; exit
 
@@ -4788,7 +4882,7 @@ Data destructive commands will require additional command line arguments as
 confirmation of your understanding that data will be lost on the drive.
 Seagate is not responsible for lost user data.
 
-	--setSectorSize [new sector size]	 (Seagate Only)
+	--setSectorSize [new sector size]
 		This option is only available for drives that support sector
 		size changes. On SATA Drives, the Set Sector Configuration
 		command must be supported. On SAS Drives, Fast Format must be
@@ -4801,8 +4895,17 @@ Seagate is not responsible for lost user data.
 		depending on the direction of the conversion.  The conversion
 		between logical sector sizes can take a few minutes.  Do not
 		interrupt this operation.
+		WARNING: Set sector size may affect all LUNs/namespaces for devices
+		         with multiple logical units or namespaces.
+		WARNING (SATA): Do not interrupt this operation once it has started or 
+		         it may cause the drive to become unusable. Stop all possible background
+		         activity that would attempt to communicate with the device while this
+		         operation is in progress
 		WARNING: It is not recommended to do this on USB as not
 		         all USB adapters can handle a 4k sector size.
+		WARNING: Disable any out-of-band management systems/services/daemons
+		         before using this option. Interruptions can be caused by these
+		         and may prevent completion of a sector size change.
 
 	--confirm this-will-erase-data
 		This option should be used only with Data Destructive Commands
@@ -4881,10 +4984,10 @@ v1.5.0  16-Jun-2021  Pulled in updates to opensea-libs which includes the follow
 <H1>SeaChest_NVMe 10/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file9">prev</A>][<A HREF="#file11">next</A>]
 <PRE>
-SeaChest_NVMe                                              Revision: 17-Jun-2021
+SeaChest_NVMe                                              Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_NVMe - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest NVMe diagnostic software.
@@ -4952,10 +5055,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_NVMe - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_NVMe Version: 2.0.0-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_NVMe Version: 2.0.8-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -5004,6 +5107,10 @@ Utility Options
 		firmware revision. This option will only do an exact match.
 		This option should be used to skip performing an update if
 		a drive already has this firmware revision loaded.
+
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
 
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
@@ -5065,7 +5172,7 @@ Utility Arguments
 		translation from the SPC spec will be displayed if one
 		is available.
 
-	--activateFW 	 (Seagate Only)
+	--activateFW
 		Use this option to issue the command to activate code that was
 		sent to the drive using a deferred download command. This will
 		immediately activate the new code on the drive.
@@ -5086,7 +5193,7 @@ Utility Arguments
 		HINT:
 		  Use --deviceInfo to show number of supported states
 
-	--downloadFW [firmware_filename]		(Seagate Only)
+	--downloadFW [firmware_filename]
 		Download firmware to a Seagate storage product. Use only
 		Seagate authorized firmware data files which are designated
 		for the specific model drive. Improper use of this option may
@@ -5098,7 +5205,7 @@ Utility Arguments
 		WARNING: Firmware updates may affect all LUNs/namespaces
 		         for devices with multiple logical units or namespaces.
 
-	--downloadMode [ full | segmented | deferred ]	(Seagate Only)
+	--downloadMode [ full | segmented | deferred ]
 		Use this option along with the --downloadFW option
 		to set the firmware download mode.
 		Supported Modes:
@@ -5114,13 +5221,13 @@ Utility Arguments
 		WARNING: Firmware Updates may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--firmwareSlot/--fwBufferID slot#		(Seagate Only)
+	--firmwareSlot/--fwBufferID slot#
 		Use this option to specify a firmware slot (NVMe) or a buffer ID (SCSI)
 		along with the --downloadMode (SCSI) or --activateFW (NVMe &amp; SCSI) options.
 		If this option is not used, a value of zero will be used instead,
 		which means the drive will automatically select the slot number.
 
-	--fwdlSegSize [segment size in 512B blocks]	(Seagate Only)
+	--fwdlSegSize [segment size in 512B blocks]
 		Use this option to specify a segment size in 512B blocks
 		to use for a segmented or deferred download. This option
 		will not affect an immediate download (full buffer at once).
@@ -5226,6 +5333,10 @@ Utility Arguments
 		and later) On SATA, this is the sector configuration log. (ACS4
 		and later) If the device does not report supported sector
 		sizes, please consult your product manual.
+
+		WARNING: Customer unique firmware may have specific requirements that 
+		         restrict sector sizes on some products. It may not be possible to format/ 
+		         fast format to common sizes like 4K or 512B due to these customer requirements.
 
 
 Data Destructive Commands
@@ -5351,10 +5462,10 @@ v2.0.0  16-Jun-2021  Pulled in updates to opensea-libs which includes the follow
 <H1>SeaChest_PowerControl 11/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file10">prev</A>][<A HREF="#file12">next</A>]
 <PRE>
-SeaChest_PowerControl                                      Revision: 17-Jun-2021
+SeaChest_PowerControl                                      Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_PowerControl - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_PowerControl diagnostic software.
@@ -5450,10 +5561,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_PowerControl - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 3.0.2-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_PowerControl Version: 3.1.10-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -5463,6 +5574,11 @@ Examples
 ========
 	SeaChest_PowerControl --scan
 	SeaChest_PowerControl -d /dev/sg? -i
+	SeaChest_PowerControl -d /dev/sg? --showEPCSettings
+	SeaChest_PowerControl -d /dev/sg? --idle_a 5000
+	SeaChest_PowerControl -d /dev/sg? --idle_b disable
+	SeaChest_PowerControl -d /dev/sg? --transitionPower standby_z
+	SeaChest_PowerControl -d /dev/sg? --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
 
 Return codes
 ============
@@ -5534,6 +5650,10 @@ Utility Options
 		Use this option to run on all drives matching the provided
 		model number. This option will provide a closest match although
 		an exact match is preferred. Ex: ST500 will match ST500LM0001
+
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
 
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
@@ -5684,14 +5804,15 @@ Utility Arguments
 		than 65535 will result in error.
 		Use the --powerMeasurementMode option to specify which mode to measure.
 
-	--powerBalanceFeature [ info | enable | disable ]	 (Seagate Only)
+	--powerBalanceFeature [ info | enable | disable | limited]	 (Seagate Only)
 		Use this option to see the state of the Seagate Power Balance
 		feature or to change its state.
 		Seagate's PowerBalance feature will adjust drive performance during
 		random operations to reduce power consumption of the drive.
 		  info - will dump the state of the Power Balance feature on the screen
-		  enable - use this to enable Power Balance
-		  disable - use this to disable Power Balance
+		  enable - use this to enable Power Balance (lowest power consumption)
+		  disable - use this to disable Power Balance (hihgest power consumption)
+		  limited - 12w limited mode. Dual actuator SATA only
 		Note: While this feature is available on some SAS products,
 		it is recommended that the --setPowerConsumption option is
 		used instead since it allows more levels of control.
@@ -5893,7 +6014,7 @@ Utility Arguments
 		WARNING: Changing SAS Phy slumber may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--setPowerConsumption [default | highest | intermediate | lowest | watt value]	(SAS Only) (Seagate Only)
+	--setPowerConsumption [default | highest | intermediate | lowest | watt value]	(SAS Only) 
 		This option will set the power consumption rate of
 		the device to the value input.
 		Options:
@@ -6124,10 +6245,10 @@ v3.0.2  16-Jun-2021  Pulled in updates to opensea-libs which includes the follow
 <H1>SeaChest_Security 12/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file11">prev</A>][<A HREF="#file13">next</A>]
 <PRE>
-SeaChest_Security                                          Revision: 17-Jun-2021
+SeaChest_Security                                          Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_Security - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_Security diagnostic software.
@@ -6191,10 +6312,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_Security - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Security Version: 3.0.1-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_Security Version: 3.0.5-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -6276,6 +6397,10 @@ Utility Options
 		Use this option to run on all drives matching the provided
 		model number. This option will provide a closest match although
 		an exact match is preferred. Ex: ST500 will match ST500LM0001
+
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
 
 	--onlyFW [firmware revision]
 		Use this option to run on all drives matching the provided
@@ -6361,7 +6486,7 @@ Utility arguments
 		translation from the SPC spec will be displayed if one
 		is available.
 
-	--disableDataLocking (Seagate Only)
+	--disableDataLocking
 		Use this option to disable data locking on a TCG drive.
 		This option is only available when the drive has not had
 		SID changed (taken ownership). This prevents locking the
@@ -6508,7 +6633,7 @@ Utility arguments
 
 Data Destructive Commands (Seagate only)
 ========================================
-	--revert	(Seagate Only)
+	--revert
 		This operation performs an Opal SSC spec Revert on the adminSP.
 		This operation is only available on Seagate TCG Opal drives.
 		The --psid flag can be provided to perform the revert with
@@ -6525,7 +6650,7 @@ Data Destructive Commands (Seagate only)
 		WARNING: The Revert may affect all LUNs/namespaces for devices
 		         with multiple logical units or namespaces.
 
-	--revertSP	(Seagate Only)
+	--revertSP
 		This operation performs a revertSP on a Seagate SED drive
 		in the adminSP with the PSID.
 		The PSID must be provided using the --psid option.
@@ -6728,10 +6853,10 @@ v3.0.1  16-Jun-2021  Added more information about Seagate PSIDs to assist with
 <H1>SeaChest_SMART 13/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file12">prev</A>][<A HREF="#file14">next</A>]
 <PRE>
-SeaChest_SMART                                             Revision: 17-Jun-2021
+SeaChest_SMART                                             Revision: 26-Jul-2022
 ===============================================================================
  SeaChest_SMART - Seagate drive utilities
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
  See Version History below.
 ===============================================================================
 Welcome to Seagate's SeaChest_SMART diagnostic software.
@@ -6836,10 +6961,10 @@ Examples - Windows
 
 ==========================================================================================
  SeaChest_SMART - Seagate drive utilities - NVMe Enabled
- Copyright (c) 2014-2021 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_SMART Version: 2.0.1-2_2_3 X86_64
- Build Date: Jun 17 2021
- Today: Thu Jun 17 17:11:34 2021	User: tyler
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ SeaChest_SMART Version: 2.1.1-3_2_1 X86_64
+ Build Date: Jul 26 2022
+ Today: Tue Jul 26 15:38:41 2022	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -6929,6 +7054,10 @@ Utility Options
 		value. For example, --shortDST has a 10 minute default
 		timeout. In some cases a good drive may need more time to
 		complete the test due to other legitimate system activity.
+
+	--noBanner
+		Use this option to suppress the text banner that displays each time
+		openSeaChest is run.
 
 	--onlySeagate
 		Use this option to match only Seagate drives for the options
@@ -7045,6 +7174,13 @@ Utility Arguments
 		it will automatically be aborted while polling for progress.
 		To override this behavior, use the --noTimeLimit option.
 
+	--deviceStatistics
+		Use this option to display the device statistics reported
+		by the device. On SATA, this uses the Device Statistics
+		log, and the notifications log (if DSN feature is supported)
+		to display these statistics. On SAS, various log pages are
+		read to collect a bunch of reported parameter information.
+
 	--errorLimit [limit in number of LBAs]
 		Use this option to specify a different error
 		limit for a user generic or long generic read
@@ -7118,7 +7254,7 @@ Utility Arguments
 		thresholds have been tripped or if the drive is still operating
 		within specification.
 
-	--smartFeature [ enable | disable ]  (SATA Only) (Seagate Only)
+	--smartFeature [ enable | disable ]  (SATA Only)
 		Use this option to enable or disable the SMART
 		feature on a SATA drive.
 		Note: This command is declared obsolete in ACS4.
@@ -7126,7 +7262,7 @@ Utility Arguments
 
 	SATA Only:
 	=========
-	--smartAttributes [raw | analyzed]	(SATA Only)
+	--smartAttributes [raw | hybrid | analyzed]	(SATA Only)
 		The drive will display its list of supported SMART attributes.
 		Some attributes names are commonly standard and most others are
 		vendor unique. In either case, the attribute thresholds are
@@ -7135,13 +7271,22 @@ Utility Arguments
 		command to determine if one of the warranty attributes has been
 		tripped. Seagate Support does not help to analyze SMART
 		attributes.
+		Output modes:
+		  raw - All hex output for those that need every single bit.
+		  hybrid - classic table view with some interpretation of some
+		           fields. Partial raw interpretation, but not all drive
+		           and firmware combinations are supported.
+		  analyzed - a full breakdown of all parts of each individual
+		             attribute's data. Full raw data interpretation only
+		             available on select devices.
+		NOTE: Migration to device statistics is recommended.
 
-	--smartAttributeAutosave [ enable | disable ]  (SATA Only) (Seagate Only)
+	--smartAttributeAutosave [ enable | disable ]  (SATA Only)
 		Use this option to enable or disable SMART
 		attribute auto-save on an ATA drive.
 		Note: This command is declared obsolete in ACS4.
 
-	--smartAutoOffline [ enable | disable ]  (SATA Only) (Seagate Only)
+	--smartAutoOffline [ enable | disable ]  (SATA Only)
 		Use this option to enable or disable SMART
 		auto-off-line feature on an ATA drive.
 
@@ -7177,7 +7322,7 @@ Utility Arguments
 		 bfi        | 4 - show the defects in bytes from index mode
 		 chs        | 5 - show the defects in physical cylinder-head-sector mode
 
-	--setMRIE [ default | 0 - 6 ]  (SAS Only) (SEAGATE Only)
+	--setMRIE [ default | 0 - 6 ]  (SAS Only)
 		Use this option to change the MRIE mode on the informational
 		exceptions mode page.
 		    default - set to the drive default
@@ -7204,8 +7349,16 @@ Utility Arguments
 		 The above options can be combined to pull and display both defect lists.
 
 
-Data Destructive Commands (Seagate only)
-========================================
+	NVMe Only:
+	=========
+	--showNvmeHealth	(NVMe Only)
+		The drive will display the NVMe Health log (also called
+		SMART log). All standardized fields will be printed to the
+		screen for the device.
+
+
+Data Destructive Commands
+=========================
 	--dstAndClean
 		Runs DST, then checks for an error and repairs the
 		error if possible. This continues until all errors
@@ -8102,7 +8255,7 @@ Lin: sudo ./SeaChest_Basics -i -d /dev/sg1
 Win: SeaChest_Basics -i -d PD1
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST4000DX001-1CE168
         Serial Number: ZQ3034X7R
@@ -8178,7 +8331,7 @@ Lin: sudo ./SeaChest_Basics -i -d /dev/sg1
 Win: SeaChest_Basics -i -d PD1
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST120FP0021
         Serial Number: PQ57011BD
@@ -8245,13 +8398,13 @@ Lin: sudo ./SeaChest_Basics -i -d /dev/sg1
 Win: SeaChest_Basics -i -d PD1
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST4000NM0043
         Serial Number: Z1QZ04KVG
         Firmware Revision: 0004
         World Wide Name: 500Q0C5005594AEFB
-        Copyright: Copyright (c) 2014 Seagate All rights reserved
+        Copyright: Copyright (c) 2014-2022 Seagate All rights reserved
         Drive Capacity (TB/TiB): 4.00/3.64
         Temperature Data:
                 Current Temperature (C): 28
@@ -8309,13 +8462,13 @@ Lin: sudo ./SeaChest_Basics -i -d /dev/sg1
 Win: SeaChest_Basics -i -d PD1
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
         Model Number: ST400FM0053
         Serial Number: P3QF13026
         Firmware Revision: 0006
         World Wide Name: 5000QC50069010B4B
-        Copyright: Copyright (c) 2014 Seagate All rights reserved -
+        Copyright: Copyright (c) 2014-2022 Seagate All rights reserved -
         Drive Capacity (GB/GiB): 400.09/372.61
         Temperature Data:
                 Current Temperature (C): 34
@@ -8382,7 +8535,7 @@ Lin: sudo ./SeaChest_Basics -d /dev/sg1 --smartAttributes
 Win: SeaChest_Basics -d PD1 --smartAttributes
 ===============================================================================
  SeaChest - Seagate drive utilities
- Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+ Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
 Attribute Name:                   Status: Nominal: Worst:     Raw (hex):
   1 Read Error Rate               0x000F    0x75    0x63      0x0000000969AFB4
@@ -8414,7 +8567,7 @@ Attribute Name:                   Status: Nominal: Worst:     Raw (hex):
 <H1>Seagate EULA 27/28</H1>
 [<A HREF="#top">top</A>][<A HREF="#file26">prev</A>][<A HREF="#file28">next</A>]
 <PRE>
-Copyright (c) 2014-2020 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
+Copyright (c) 2014-2022 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ======================================================================
 
 			END USER LICENSE AGREEMENT

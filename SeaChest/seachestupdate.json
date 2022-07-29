@@ -3,186 +3,201 @@
       "seachest_apps":[
          {
             "name":"SeaChest_Basics",
-            "version":"3.1.0",
-            "date":"Jun-17-2021",
+            "version":"3.1.1",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"Basics/v3.1.0/Windows/",
+               "app_path":"Basics/v3.1.1/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Basics_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Basics/v3.1.0/Linux/",
+               "app_path":"Basics/v3.1.1/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_Basics_x86_64-redhat-linux"
+               "64bit":"SeaChest_Basics_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_Configure",
-            "version":"2.0.2",
-            "date":"Jun-17-2021",
+            "version":"2.1.0",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"Configure/v2.0.2/Windows/",
+               "app_path":"Configure/v2.1.0/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Configure_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Configure/v2.0.2/Linux/",
+               "app_path":"Configure/v2.1.0/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_Configure_x86_64-redhat-linux"
+               "64bit":"SeaChest_Configure_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_Erase",
-            "version":"3.1.1",
-            "date":"Jun-17-2021",
+            "version":"3.2.0",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"Erase/v3.1.1/Windows/",
+               "app_path":"Erase/v3.2.0/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Erase_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Erase/v3.1.1/Linux/",
+               "app_path":"Erase/v3.2.0/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_Erase_x86_64-redhat-linux"
+               "64bit":"SeaChest_Erase_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_Firmware",
-            "version":"3.1.0",
-            "date":"Jun-17-2021",
+            "version":"3.1.5",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"Firmware/v3.1.0/Windows/",
+               "app_path":"Firmware/v3.1.5/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Firmware_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Firmware/v3.1.0/Linux/",
+               "app_path":"Firmware/v3.1.5/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_Firmware_x86_64-redhat-linux"
+               "64bit":"SeaChest_Firmware_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_Format",
-            "version":"2.3.1",
-            "date":"Jun-17-2021",
+            "version":"2.4.0",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"Format/v2.3.1/Windows/",
+               "app_path":"Format/v2.4.0/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Format_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Format/v2.3.1/Linux/",
+               "app_path":"Format/v2.4.0/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_Format_x86_64-redhat-linux"
+               "64bit":"SeaChest_Format_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_GenericTests",
-            "version":"2.0.1",
-            "date":"Jun-17-2021",
+            "version":"2.0.4",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"GenericTests/v2.0.1/Windows/",
+               "app_path":"GenericTests/v2.0.4/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_GenericTests_x64_windows.exe"
             },
             "lin":{
-               "app_path":"GenericTests/v2.0.1/Linux/",
+               "app_path":"GenericTests/v2.0.4/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_GenericTests_x86_64-redhat-linux"
+               "64bit":"SeaChest_GenericTests_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_Info",
-            "version":"2.1.0",
-            "date":"Jun-17-2021",
+            "version":"2.1.2",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"Info/v2.1.0/Windows/",
+               "app_path":"Info/v2.1.2/Windows/",
                "32bit":"not_available_at_this_time.exe",
                "64bit":"SeaChest_Info_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Info/v2.1.0/Linux/",
+               "app_path":"Info/v2.1.2/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_Info_x86_64-redhat-linux"
+               "64bit":"SeaChest_Info_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_Lite",
-            "version":"1.5.0",
-            "date":"Jun-17-2021",
+            "version":"1.6.0",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"Lite/v1.5.0/Windows/",
+               "app_path":"Lite/v1.6.0/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Lite_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Lite/v1.5.0/Linux/",
+               "app_path":"Lite/v1.6.0/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_Lite_x86_64-redhat-linux"
+               "64bit":"SeaChest_Lite_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_NVMe",
-            "version":"2.0.0",
-            "date":"Jun-17-2021",
+            "version":"2.0.8",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"NVMe/v2.0.0/Windows/",
+               "app_path":"NVMe/v2.0.8/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_NVMe_x64_windows.exe"
             },
             "lin":{
-               "app_path":"NVMe/v2.0.0/Linux/",
+               "app_path":"NVMe/v2.0.8/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_NVMe_x86_64-redhat-linux"
+               "64bit":"SeaChest_NVMe_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_PowerControl",
-            "version":"3.0.2",
-            "date":"Jun-17-2021",
+            "version":"3.1.10",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"PowerControl/v3.0.2/Windows/",
+               "app_path":"PowerControl/v3.1.10/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_PowerControl_x64_windows.exe"
             },
             "lin":{
-               "app_path":"PowerControl/v3.0.2/Linux/",
+               "app_path":"PowerControl/v3.1.10/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_PowerControl_x86_64-redhat-linux"
+               "64bit":"SeaChest_PowerControl_x86_64-alpine-linux-musl_static"
+            }
+         },
+         {
+            "name":"SeaChest_Reservations",
+            "version":"0.0.3",
+            "date":"Jul-26-2022",
+            "win":{
+               "app_path":"Reservations/v0.0.3/Windows/",
+               "32bit":"not_available_at_this_time",
+               "64bit":"SeaChest_Reservations_x64_windows.exe"
+            },
+            "lin":{
+               "app_path":"Reservations/v0.0.3/Linux/",
+               "32bit":"not_available_at_this_time",
+               "64bit":"SeaChest_Reservations_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_Security",
-            "version":"3.0.1",
-            "date":"Jun-17-2021",
+            "version":"3.0.5",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"Security/v3.0.1/Windows/",
+               "app_path":"Security/v3.0.5/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_Security_x64_windows.exe"
             },
             "lin":{
-               "app_path":"Security/v3.0.1/Linux/",
+               "app_path":"Security/v3.0.5/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_Security_x86_64-redhat-linux"
+               "64bit":"SeaChest_Security_x86_64-alpine-linux-musl_static"
             }
          },
          {
             "name":"SeaChest_SMART",
-            "version":"2.0.1",
-            "date":"Jun-17-2021",
+            "version":"2.1.1",
+            "date":"Jul-26-2022",
             "win":{
-               "app_path":"SMART/v2.0.1/Windows/",
+               "app_path":"SMART/v2.1.1/Windows/",
                "32bit":"not_available_at_this_time",
                "64bit":"SeaChest_SMART_x64_windows.exe"
             },
             "lin":{
-               "app_path":"SMART/v2.0.1/Linux/",
+               "app_path":"SMART/v2.1.1/Linux/",
                "32bit":"not_available_at_this_time",
-               "64bit":"SeaChest_SMART_x86_64-redhat-linux"
+               "64bit":"SeaChest_SMART_x86_64-alpine-linux-musl_static"
             }
          },
          {
-            "touch_date":"2021-06-21"
+            "touch_date":"2022-07-26"
          },
          {
             "git_path":"https://raw.githubusercontent.com/Seagate/ToolBin/master/SeaChest/"
