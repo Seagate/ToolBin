@@ -1,4 +1,4 @@
-SeaChest_NVMe                                              Revision: 01-Mar-2023
+SeaChest_NVMe                                              Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_NVMe - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -70,9 +70,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_NVMe - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_NVMe Version: 2.2.2-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_NVMe Version: 2.2.2-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -81,29 +81,29 @@ Usage
 Examples
 ========
 	SeaChest_NVMe --scan
-	SeaChest_NVMe -d /dev/sg? -i
-	SeaChest_NVMe -d /dev/sg? --SATInfo
-	SeaChest_NVMe -d /dev/sg? --llInfo
+	SeaChest_NVMe -d /dev/sg<#> -i
+	SeaChest_NVMe -d /dev/sg<#> --SATInfo
+	SeaChest_NVMe -d /dev/sg<#> --llInfo
 	Updating firmware:
-	SeaChest_NVMe -d /dev/sg? --downloadFW file.bin
+	SeaChest_NVMe -d /dev/sg<#> --downloadFW file.bin
 	Updating firmware with deferred download and activating:
-	SeaChest_NVMe -d /dev/sg? --downloadFW file.bin --downloadMode deferred --activateFW
+	SeaChest_NVMe -d /dev/sg<#> --downloadFW file.bin --downloadMode deferred --activateFW
 	Updating firmware and specifying a firmware slot (NVMe)
-	SeaChest_NVMe -d /dev/sg? --downloadFW file.bin --downloadMode deferred
+	SeaChest_NVMe -d /dev/sg<#> --downloadFW file.bin --downloadMode deferred
 	  +
-	SeaChest_NVMe -d /dev/sg? --activateFW --firmwareSlot 2
+	SeaChest_NVMe -d /dev/sg<#> --activateFW --firmwareSlot 2
 	Formatting an NVMe device:
-	SeaChest_NVMe -d /dev/sg? --showSupportedFormats
-	SeaChest_NVMe -d /dev/sg? --nvmFormat current --poll
-	SeaChest_NVMe -d /dev/sg? --nvmFormat 4096 --poll
-	SeaChest_NVMe -d /dev/sg? --nvmFormat current --poll --nvmFmtSecErase user
-	SeaChest_NVMe -d /dev/sg? --nvmFormat current --poll --nvmFmtPI 1
+	SeaChest_NVMe -d /dev/sg<#> --showSupportedFormats
+	SeaChest_NVMe -d /dev/sg<#> --nvmFormat current --poll
+	SeaChest_NVMe -d /dev/sg<#> --nvmFormat 4096 --poll
+	SeaChest_NVMe -d /dev/sg<#> --nvmFormat current --poll --nvmFmtSecErase user
+	SeaChest_NVMe -d /dev/sg<#> --nvmFormat current --poll --nvmFmtPI 1
 	Checking and changing power states:
-	SeaChest_NVMe -d /dev/sg? --checkPowerMode
-	SeaChest_NVMe -d /dev/sg? --transitionPowerState 1
+	SeaChest_NVMe -d /dev/sg<#> --checkPowerMode
+	SeaChest_NVMe -d /dev/sg<#> --transitionPowerState 1
 	Pulling the Telemetry log:
-	SeaChest_NVMe -d /dev/sg? --getTelemetry host
-	SeaChest_NVMe -d /dev/sg? --getTelemetry host, --telemetryDataArea 2 --logMode bin
+	SeaChest_NVMe -d /dev/sg<#> --getTelemetry host
+	SeaChest_NVMe -d /dev/sg<#> --getTelemetry host, --telemetryDataArea 2 --logMode bin
 Return codes
 ============
 	Generic/Common exit codes
@@ -176,7 +176,7 @@ Utility Arguments
 =================
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -196,10 +196,15 @@ Utility Arguments
 
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-i, --deviceInfo
 		Show information and features for the storage device
@@ -1078,7 +1083,10 @@ v2.2.2  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      Added --logLength option to specify an expected number of bytes
                      when reading an NVMe log since it is not possible to determine
                      this for all logs, especially vendor unique log pages.
-                     =======================================
+v2.2.2  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+                     
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface

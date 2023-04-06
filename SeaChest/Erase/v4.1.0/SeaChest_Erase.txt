@@ -1,4 +1,4 @@
-SeaChest_Erase                                             Revision: 01-Mar-2023
+SeaChest_Erase                                             Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Erase - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -80,9 +80,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Erase - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Erase Version: 4.1.0-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_Erase Version: 4.1.0-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -91,30 +91,30 @@ Usage
 Examples
 ========
 	SeaChest_Erase --scan
-	SeaChest_Erase -d /dev/sg? -i
-	SeaChest_Erase -d /dev/sg? --SATInfo
-	SeaChest_Erase -d /dev/sg? --llInfo
-	SeaChest_Erase -d /dev/sg? --showEraseSupport
-	SeaChest_Erase -d /dev/sg? --performQuickestErase --poll
-	SeaChest_Erase -d /dev/sg? --overwrite 0
-	SeaChest_Erase -d /dev/sg? --overwrite 1000 --overwriteRange 2000
-	SeaChest_Erase -d /dev/sg? --overwrite 0 --hours 1
-	SeaChest_Erase -d /dev/sg? --overwrite 0 --pattern repeat:04ABCDEFh
-	SeaChest_Erase -d /dev/sg? --writeSame 0 --poll
-	SeaChest_Erase -d /dev/sg? --writeSame 1000 --writeSameRange 2000 --poll
-	SeaChest_Erase -d /dev/sg? --sanitize overwrite --poll
-	SeaChest_Erase -d /dev/sg? --sanitize overwrite --poll --pattern random
-	SeaChest_Erase -d /dev/sg? --sanitize cryptoerase --poll
-	SeaChest_Erase -d /dev/sg? --ataSecureErase enhanced
-	SeaChest_Erase -d /dev/sg? --ataSecureErase enhanced --ataSecPassword AutoATAWindowsString12345678901 --ataSecPassType user
-	SeaChest_Erase -d /dev/sg? --trim 0
-	SeaChest_Erase -d /dev/sg? --trim 1000 --trimRange 2000
-	SeaChest_Erase -d /dev/sg? --formatUnit current --poll
-	SeaChest_Erase -d /dev/sg? --formatUnit current --poll --pattern file:path/to/myFile.bin
-	SeaChest_Erase -d /dev/sg? --nvmFormat current --poll
-	SeaChest_Erase -d /dev/sg? --nvmFormat 4096 --poll
-	SeaChest_Erase -d /dev/sg? --nvmFormat current --poll --nvmFmtSecErase user
-	SeaChest_Erase -d /dev/sg? --nvmFormat current --poll --nvmFmtPI 1
+	SeaChest_Erase -d /dev/sg<#> -i
+	SeaChest_Erase -d /dev/sg<#> --SATInfo
+	SeaChest_Erase -d /dev/sg<#> --llInfo
+	SeaChest_Erase -d /dev/sg<#> --showEraseSupport
+	SeaChest_Erase -d /dev/sg<#> --performQuickestErase --poll
+	SeaChest_Erase -d /dev/sg<#> --overwrite 0
+	SeaChest_Erase -d /dev/sg<#> --overwrite 1000 --overwriteRange 2000
+	SeaChest_Erase -d /dev/sg<#> --overwrite 0 --hours 1
+	SeaChest_Erase -d /dev/sg<#> --overwrite 0 --pattern repeat:04ABCDEFh
+	SeaChest_Erase -d /dev/sg<#> --writeSame 0 --poll
+	SeaChest_Erase -d /dev/sg<#> --writeSame 1000 --writeSameRange 2000 --poll
+	SeaChest_Erase -d /dev/sg<#> --sanitize overwrite --poll
+	SeaChest_Erase -d /dev/sg<#> --sanitize overwrite --poll --pattern random
+	SeaChest_Erase -d /dev/sg<#> --sanitize cryptoerase --poll
+	SeaChest_Erase -d /dev/sg<#> --ataSecureErase enhanced
+	SeaChest_Erase -d /dev/sg<#> --ataSecureErase enhanced --ataSecPassword AutoATAWindowsString12345678901 --ataSecPassType user
+	SeaChest_Erase -d /dev/sg<#> --trim 0
+	SeaChest_Erase -d /dev/sg<#> --trim 1000 --trimRange 2000
+	SeaChest_Erase -d /dev/sg<#> --formatUnit current --poll
+	SeaChest_Erase -d /dev/sg<#> --formatUnit current --poll --pattern file:path/to/myFile.bin
+	SeaChest_Erase -d /dev/sg<#> --nvmFormat current --poll
+	SeaChest_Erase -d /dev/sg<#> --nvmFormat 4096 --poll
+	SeaChest_Erase -d /dev/sg<#> --nvmFormat current --poll --nvmFmtSecErase user
+	SeaChest_Erase -d /dev/sg<#> --nvmFormat current --poll --nvmFmtPI 1
 
 Return codes
 ============
@@ -225,10 +225,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	--displayLBA [LBA]
 		This option will read and display the contents of
@@ -271,7 +276,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -391,8 +396,8 @@ Data Destructive Commands
 		with overwriteRange or time options (hours, minutes
 		seconds) to erase a portion of the drive.
 
-	--overwriteRange [range]
-		Use with option with the overwrite option to
+	--overwriteRange [range in # of LBAs]
+		Use with the overwrite option (--overwrite) to
 		erase a range of LBAs on the selected drive.
 
 	--pattern [repeat:asciinospaces | random | increment:startValue | file:filename]
@@ -510,10 +515,10 @@ Data Destructive Commands
 		unmap operation on a drive at the provided LBA.
 		A range must also be provided with the range option.
 
-	--trimRange or --unmapRange [range]
+	--trimRange or --unmapRange [range in # of LBAs]
 		Use one of these options to specify a range to trim
 		or unmap on a drive. A starting point must be specified
-		with the --trim/--unmap option.
+		with the --trim/--unmapRange option.
 
 	--writeSame [starting LBA]
 		Enter a starting lba to begin a write same on to erase a range
@@ -537,7 +542,7 @@ Data Destructive Commands
 		      device, consider a different command such as format unit or
 		      sanitize overwrite to accomplish this.
 
-	--writeSameRange [range]
+	--writeSameRange [range in # of LBAs]
 		Specify a range to writesame to. Use this option with the
 		writeSame option in order to begin a write same operation.
 
@@ -1657,7 +1662,11 @@ v4.1.0  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      has also been pulled into the performQuickestErase option.
                      Fixed error in parsing --psid option causing it to report it was
                      always missing.
-                     
+v4.1.0  27-Mar-2023  opensea-operations library updated to fix to add
+                     workaround for overwrite not erasing some drives in Windows.
+                     opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+                        
 =======================================
 About SeaChest Command Line Diagnostics
 =======================================

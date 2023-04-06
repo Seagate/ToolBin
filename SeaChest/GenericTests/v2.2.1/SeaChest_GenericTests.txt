@@ -1,4 +1,4 @@
-SeaChest_GenericTests                                      Revision: 01-Mar-2023
+SeaChest_GenericTests                                      Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_GenericTests - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -92,9 +92,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_GenericTests - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_GenericTests Version: 2.2.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_GenericTests Version: 2.2.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -103,19 +103,19 @@ Usage
 Examples
 ========
 	SeaChest_GenericTests --scan
-	SeaChest_GenericTests -d /dev/sg? -i
-	SeaChest_GenericTests -d /dev/sg? --SATInfo
-	SeaChest_GenericTests -d /dev/sg? --llInfo
-	SeaChest_GenericTests -d /dev/sg? --shortGeneric
-	SeaChest_GenericTests -d /dev/sg? --longGeneric
-	SeaChest_GenericTests -d /dev/sg? --twoMinuteGeneric
-	SeaChest_GenericTests -d /dev/sg? --bufferTest
-	SeaChest_GenericTests -d /dev/sg? --userGenericStart 1000 --userGenericRange 65535
-	SeaChest_GenericTests -d /dev/sg? --longGeneric --genericMode verify
-	SeaChest_GenericTests -d /dev/sg? --randomTest --hours 1
-	SeaChest_GenericTests -d /dev/sg? --butterflyTest --minutes 15
-	SeaChest_GenericTests -d /dev/sg? --longGeneric --genericMode verify --repairAtEnd
-	SeaChest_GenericTests -d /dev/sg? --longGeneric --stopOnError read
+	SeaChest_GenericTests -d /dev/sg<#> -i
+	SeaChest_GenericTests -d /dev/sg<#> --SATInfo
+	SeaChest_GenericTests -d /dev/sg<#> --llInfo
+	SeaChest_GenericTests -d /dev/sg<#> --shortGeneric
+	SeaChest_GenericTests -d /dev/sg<#> --longGeneric
+	SeaChest_GenericTests -d /dev/sg<#> --twoMinuteGeneric
+	SeaChest_GenericTests -d /dev/sg<#> --bufferTest
+	SeaChest_GenericTests -d /dev/sg<#> --userGenericStart 1000 --userGenericRange 65535
+	SeaChest_GenericTests -d /dev/sg<#> --longGeneric --genericMode verify
+	SeaChest_GenericTests -d /dev/sg<#> --randomTest --hours 1
+	SeaChest_GenericTests -d /dev/sg<#> --butterflyTest --minutes 15
+	SeaChest_GenericTests -d /dev/sg<#> --longGeneric --genericMode verify --repairAtEnd
+	SeaChest_GenericTests -d /dev/sg<#> --longGeneric --stopOnError read
 
 Return codes
 ============
@@ -226,10 +226,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	--displayLBA [LBA]
 		This option will read and display the contents of
@@ -259,7 +264,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -425,7 +430,7 @@ A read at the Outer Diameter (OD) of the drive for 45
 		error, repair flags, and/or error limit flags to further
 		customize this test.
 
-	--userGenericRange [range]
+	--userGenericRange [range in # of LBAs]
 		Use this option to specify the range for a 
 		generic read test. See the --userGenericStart
 		help for additional information about using
@@ -1216,7 +1221,10 @@ v2.2.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      a crash or the tool to list no devices found.
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
-                     Fixed some big endian compatibility issues discovered on AIX.=======================================
+                     Fixed some big endian compatibility issues discovered on AIX.
+v2.2.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface

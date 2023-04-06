@@ -1,4 +1,4 @@
-SeaChest_Format                                            Revision: 01-Mar-2023
+SeaChest_Format                                            Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Format - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -81,9 +81,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Format - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 3.0.0-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_Format Version: 3.0.0-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -92,23 +92,23 @@ Usage
 Examples
 ========
 	SeaChest_Format --scan
-	SeaChest_Format -d /dev/sg? -i
-	SeaChest_Format -d /dev/sg? --SATInfo
-	SeaChest_Format -d /dev/sg? --llInfo
-	SeaChest_Format -d /dev/sg? --showPhysicalElementStatus
-	SeaChest_Format -d /dev/sg? --removePhysicalElement 2
-	SeaChest_Format -d /dev/sg? --repopulateElements
-	SeaChest_Format -d /dev/sg? --showSupportedFormats
-	SeaChest_Format -d /dev/sg? --showFormatStatusLog
-	SeaChest_Format -d /dev/sg? --formatUnit current --poll
-	SeaChest_Format -d /dev/sg? --formatUnit current --poll --pattern file:path/to/myFile.bin
-	SeaChest_Format -d /dev/sg? --formatUnit 4096 --fastFormat 1 --poll
-	SeaChest_Format -d /dev/sg? --formatUnit current --poll --discardGList --disableCertification --disablePrimaryList
-	SeaChest_Format -d /dev/sg? --formatUnit current --protectionType 1 --poll
-	SeaChest_Format -d /dev/sg? --nvmFormat current --poll
-	SeaChest_Format -d /dev/sg? --nvmFormat 4096 --poll
-	SeaChest_Format -d /dev/sg? --nvmFormat current --poll --nvmFmtSecErase user
-	SeaChest_Format -d /dev/sg? --nvmFormat current --poll --nvmFmtPI 1
+	SeaChest_Format -d /dev/sg<#> -i
+	SeaChest_Format -d /dev/sg<#> --SATInfo
+	SeaChest_Format -d /dev/sg<#> --llInfo
+	SeaChest_Format -d /dev/sg<#> --showPhysicalElementStatus
+	SeaChest_Format -d /dev/sg<#> --removePhysicalElement 2
+	SeaChest_Format -d /dev/sg<#> --repopulateElements
+	SeaChest_Format -d /dev/sg<#> --showSupportedFormats
+	SeaChest_Format -d /dev/sg<#> --showFormatStatusLog
+	SeaChest_Format -d /dev/sg<#> --formatUnit current --poll
+	SeaChest_Format -d /dev/sg<#> --formatUnit current --poll --pattern file:path/to/myFile.bin
+	SeaChest_Format -d /dev/sg<#> --formatUnit 4096 --fastFormat 1 --poll
+	SeaChest_Format -d /dev/sg<#> --formatUnit current --poll --discardGList --disableCertification --disablePrimaryList
+	SeaChest_Format -d /dev/sg<#> --formatUnit current --protectionType 1 --poll
+	SeaChest_Format -d /dev/sg<#> --nvmFormat current --poll
+	SeaChest_Format -d /dev/sg<#> --nvmFormat 4096 --poll
+	SeaChest_Format -d /dev/sg<#> --nvmFormat current --poll --nvmFmtSecErase user
+	SeaChest_Format -d /dev/sg<#> --nvmFormat current --poll --nvmFmtPI 1
 
 Return codes
 ============
@@ -227,10 +227,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	--displayLBA [LBA]
 		This option will read and display the contents of
@@ -273,7 +278,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -1416,7 +1421,10 @@ v2.7.0  28-Feb-2023  New acceptance string for low-level format options that are
                      Fixed some big endian compatibility issues discovered on AIX.
                      Added capability for NVM format with user data erase in Windows as well
                      as crypto erase with format in Windows. Reworked conditions for issuing
-                     sanitize on NVMe devices so that it might work in Windows too.=======================================
+                     sanitize on NVMe devices so that it might work in Windows too.
+v2.7.0  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface

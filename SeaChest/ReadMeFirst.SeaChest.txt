@@ -1,11 +1,11 @@
-ReadMeFirst.SeaChest.txt                                  Revision: 01-Mar-2023
+ReadMeFirst.SeaChest.txt                                  Revision: 29-Mar-2023
 ===============================================================================
  Seagate Utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
 ===============================================================================
 Please READ ME FIRST
 
-Thank you for downloading SeaChest Utilities, build v23.03
+Thank you for downloading SeaChest Utilities, build v23.03.1
 
 SeaChest Utilities are command line utilities which are available for expert
 users.  These command line tools assume the user is knowledgeable about running

@@ -1,4 +1,4 @@
-SeaChest_Info                                              Revision: 01-Mar-2023
+SeaChest_Info                                              Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Info - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -92,9 +92,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Info - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 2.3.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_Info Version: 2.3.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -104,13 +104,13 @@ Usage
 Examples
 ========
 	SeaChest_Info --scan
-	SeaChest_Info -d /dev/sg? -i
-	SeaChest_Info -d /dev/sg? --SATInfo
-	SeaChest_Info -d /dev/sg? --llInfo
-	SeaChest_Info -d /dev/sg? --showConcurrentRanges
-	SeaChest_Info -d /dev/sg? --deviceStatistics
-	SeaChest_Info -d /dev/sg? --smartAttributes hybrid
-	SeaChest_Info -d /dev/sg? --showSCSIDefects g --defectFormat bfi
+	SeaChest_Info -d /dev/sg<#> -i
+	SeaChest_Info -d /dev/sg<#> --SATInfo
+	SeaChest_Info -d /dev/sg<#> --llInfo
+	SeaChest_Info -d /dev/sg<#> --showConcurrentRanges
+	SeaChest_Info -d /dev/sg<#> --deviceStatistics
+	SeaChest_Info -d /dev/sg<#> --smartAttributes hybrid
+	SeaChest_Info -d /dev/sg<#> --showSCSIDefects g --defectFormat bfi
 
 Return codes
 ============
@@ -216,10 +216,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -243,7 +248,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -1030,7 +1035,10 @@ v2.3.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      a crash or the tool to list no devices found.
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
-                     Fixed some big endian compatibility issues discovered on AIX.=======================================
+                     Fixed some big endian compatibility issues discovered on AIX.
+v2.3.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface

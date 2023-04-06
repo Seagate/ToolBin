@@ -1,4 +1,4 @@
-SeaChest_Firmware                                          Revision: 01-Mar-2023
+SeaChest_Firmware                                          Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Firmware - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -62,9 +62,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Firmware - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Firmware Version: 3.4.0-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_Firmware Version: 3.4.0-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -73,18 +73,18 @@ Usage
 Examples
 ========
 	SeaChest_Firmware --scan
-	SeaChest_Firmware -d /dev/sg? -i
-	SeaChest_Firmware -d /dev/sg? --SATInfo
-	SeaChest_Firmware -d /dev/sg? --llInfo
-	SeaChest_Firmware -d /dev/sg? --fwdlInfo
+	SeaChest_Firmware -d /dev/sg<#> -i
+	SeaChest_Firmware -d /dev/sg<#> --SATInfo
+	SeaChest_Firmware -d /dev/sg<#> --llInfo
+	SeaChest_Firmware -d /dev/sg<#> --fwdlInfo
 	Updating firmware:
-	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin
+	SeaChest_Firmware -d /dev/sg<#> --downloadFW file.bin
 	Updating firmware with deferred download and activating:
-	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin --downloadMode deferred --activateFW
+	SeaChest_Firmware -d /dev/sg<#> --downloadFW file.bin --downloadMode deferred --activateFW
 	Updating firmware and specifying a firmware slot (NVMe)
-	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin --downloadMode deferred
+	SeaChest_Firmware -d /dev/sg<#> --downloadFW file.bin --downloadMode deferred
 	  +
-	SeaChest_Firmware -d /dev/sg? --activateFW --firmwareSlot 2
+	SeaChest_Firmware -d /dev/sg<#> --activateFW --firmwareSlot 2
 
 Return codes
 ============
@@ -205,10 +205,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -232,7 +237,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -1192,7 +1197,12 @@ v3.4.0  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      use segmented download. Also includes some options to override 
                      the default nvme firmware update behavior as needed in special
                      circumstances.
-                     =======================================
+v3.4.0  27-Mar-2023  opensea-operations library updated to add automatic retry to
+                     the automatic firmware update mode in some scenarios to workaround
+                     a drive bug.
+                     opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface

@@ -1,6 +1,6 @@
 All SeaChest Utilities User Guides
 
-Date last edit: 01-Mar-2023
+Date last edit: 29-Mar-2023
 
 About SeaChest Utilities Command Line Diagnostics and Open Source Statement.
 
@@ -37,7 +37,7 @@ About SeaChest Diagnostics
 END USER LICENSE AGREEMENT
 Various Open Source Licenses
 
-SeaChest_Basics                                            Revision: 01-Mar-2023
+SeaChest_Basics                                            Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Basics - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -114,9 +114,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Basics - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Basics Version: 3.5.2-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_Basics Version: 3.5.2-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -125,36 +125,36 @@ Usage
 Examples
 ========
 	SeaChest_Basics --scan
-	SeaChest_Basics -d /dev/sg? -i
-	SeaChest_Basics -d /dev/sg? --SATInfo
-	SeaChest_Basics -d /dev/sg? --llInfo
-	SeaChest_Basics -d /dev/sg? --smartCheck
-	SeaChest_Basics -d /dev/sg? --shortDST --poll
-	SeaChest_Basics -d /dev/sg? --abortDST
-	SeaChest_Basics -d /dev/sg? --checkPowerMode
-	SeaChest_Basics -d /dev/sg? --spinDown
-	SeaChest_Basics -d /dev/sg? --testUnitReady
-	SeaChest_Basics -d /dev/sg? --smartAttributes hybrid
-	SeaChest_Basics -d /dev/sg? --showConcurrentRanges
-	SeaChest_Basics -d /dev/sg? --readyLED info
-	SeaChest_Basics -d /dev/sg? --readyLED on
-	SeaChest_Basics -d /dev/sg? --phySpeed 2
-	SeaChest_Basics -d /dev/sg? --phySpeed 3 --sasPhy 1
-	SeaChest_Basics -d /dev/sg? --readLookAhead info
-	SeaChest_Basics -d /dev/sg? --readLookAhead enable
-	SeaChest_Basics -d /dev/sg? --writeCache info
-	SeaChest_Basics -d /dev/sg? --writeCache disable
-	SeaChest_Basics -d /dev/sg? --downloadFW firmwareFile.bin
-	SeaChest_Basics -d /dev/sg? --downloadFW firmwareFile.bin --downloadMode deferred --activateFW
-	SeaChest_Basics -d /dev/sg? --displayLBA 1000
-	SeaChest_Basics -d /dev/sg? --overwrite 0
-	SeaChest_Basics -d /dev/sg? --overwrite 1000 --overwriteRange 2000
-	SeaChest_Basics -d /dev/sg? --overwrite 0 --hours 1
-	SeaChest_Basics -d /dev/sg? --trim 0
-	SeaChest_Basics -d /dev/sg? --trim 1000 --trimRange 2000
-	SeaChest_Basics -d /dev/sg? --provision 134217728
-	SeaChest_Basics -d /dev/sg? --setMaxLBA 134217728
-	SeaChest_Basics -d /dev/sg? --restoreMaxLBA
+	SeaChest_Basics -d /dev/sg<#> -i
+	SeaChest_Basics -d /dev/sg<#> --SATInfo
+	SeaChest_Basics -d /dev/sg<#> --llInfo
+	SeaChest_Basics -d /dev/sg<#> --smartCheck
+	SeaChest_Basics -d /dev/sg<#> --shortDST --poll
+	SeaChest_Basics -d /dev/sg<#> --abortDST
+	SeaChest_Basics -d /dev/sg<#> --checkPowerMode
+	SeaChest_Basics -d /dev/sg<#> --spinDown
+	SeaChest_Basics -d /dev/sg<#> --testUnitReady
+	SeaChest_Basics -d /dev/sg<#> --smartAttributes hybrid
+	SeaChest_Basics -d /dev/sg<#> --showConcurrentRanges
+	SeaChest_Basics -d /dev/sg<#> --readyLED info
+	SeaChest_Basics -d /dev/sg<#> --readyLED on
+	SeaChest_Basics -d /dev/sg<#> --phySpeed 2
+	SeaChest_Basics -d /dev/sg<#> --phySpeed 3 --sasPhy 1
+	SeaChest_Basics -d /dev/sg<#> --readLookAhead info
+	SeaChest_Basics -d /dev/sg<#> --readLookAhead enable
+	SeaChest_Basics -d /dev/sg<#> --writeCache info
+	SeaChest_Basics -d /dev/sg<#> --writeCache disable
+	SeaChest_Basics -d /dev/sg<#> --downloadFW firmwareFile.bin
+	SeaChest_Basics -d /dev/sg<#> --downloadFW firmwareFile.bin --downloadMode deferred --activateFW
+	SeaChest_Basics -d /dev/sg<#> --displayLBA 1000
+	SeaChest_Basics -d /dev/sg<#> --overwrite 0
+	SeaChest_Basics -d /dev/sg<#> --overwrite 1000 --overwriteRange 2000
+	SeaChest_Basics -d /dev/sg<#> --overwrite 0 --hours 1
+	SeaChest_Basics -d /dev/sg<#> --trim 0
+	SeaChest_Basics -d /dev/sg<#> --trim 1000 --trimRange 2000
+	SeaChest_Basics -d /dev/sg<#> --provision 134217728
+	SeaChest_Basics -d /dev/sg<#> --setMaxLBA 134217728
+	SeaChest_Basics -d /dev/sg<#> --restoreMaxLBA
 
 Return codes
 ============
@@ -283,7 +283,7 @@ Utility Arguments
 =================
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -314,10 +314,15 @@ Utility Arguments
 
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-i, --deviceInfo
 		Show information and features for the storage device
@@ -558,8 +563,8 @@ Data Destructive Commands
 		with overwriteRange or time options (hours, minutes
 		seconds) to erase a portion of the drive.
 
-	--overwriteRange [range]
-		Use with option with the overwrite option to
+	--overwriteRange [range in # of LBAs]
+		Use with the overwrite option (--overwrite) to
 		erase a range of LBAs on the selected drive.
 
 	--provision newMaxLBA
@@ -575,10 +580,10 @@ Data Destructive Commands
 		unmap operation on a drive at the provided LBA.
 		A range must also be provided with the range option.
 
-	--trimRange or --unmapRange [range]
+	--trimRange or --unmapRange [range in # of LBAs]
 		Use one of these options to specify a range to trim
 		or unmap on a drive. A starting point must be specified
-		with the --trim/--unmap option.
+		with the --trim/--unmapRange option.
 
 
 ===============
@@ -813,7 +818,15 @@ v3.5.2  28-Feb-2023  Improved user experience with automatic FWDL mode. This wil
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
                      Fixed some big endian compatibility issues discovered on AIX.
-SeaChest_Configure                                         Revision: 01-Mar-2023
+v3.5.2  27-Mar-2023  opensea-operations library updated to fix hybrid smart attribute
+                     counters output. Also added note about DST log display order and
+                     fixed attribute 198 name for Seagate HDDs.
+                     Added automatic FWDL retry if deferred download fails in certain
+                     scenarios to work around drive bugs.
+                     Added workaround for overwrite not erasing some drives in Windows.
+                     opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+SeaChest_Configure                                         Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Configure - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -882,9 +895,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Configure - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Configure Version: 2.3.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_Configure Version: 2.3.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -894,35 +907,35 @@ Usage
 Examples
 ========
 	SeaChest_Configure --scan
-	SeaChest_Configure -d /dev/sg? -i
-	SeaChest_Configure -d /dev/sg? --SATInfo
-	SeaChest_Configure -d /dev/sg? --llInfo
-	SeaChest_Configure -d /dev/sg? --phySpeed 2
-	SeaChest_Configure -d /dev/sg? --phySpeed 3 --sasPhy 1
-	SeaChest_Configure -d /dev/sg? --readLookAhead enable
-	SeaChest_Configure -d /dev/sg? --nvCache info
-	SeaChest_Configure -d /dev/sg? --writeCache disable
-	SeaChest_Configure -d /dev/sg? --sctWriteCache default
-	SeaChest_Configure -d /dev/sg? --sctWriteCacheReordering enable
-	SeaChest_Configure -d /dev/sg? --freeFall 0
-	SeaChest_Configure -d /dev/sg? --lowCurrentSpinup low
-	SeaChest_Configure -d /dev/sg? --puisFeature disable
-	SeaChest_Configure -d /dev/sg? --sscFeature enable
-	SeaChest_Configure -d /dev/sg? --readyLED info
-	SeaChest_Configure -d /dev/sg? --readyLED on
-	SeaChest_Configure -d /dev/sg? --sctReadTimer 5s
-	SeaChest_Configure -d /dev/sg? --sctWriteTimer 0
-	SeaChest_Configure -d /dev/sg? --scsiLPReset all --scsiLPResetPage 06h
-	SeaChest_Configure -d /dev/sg? --scsiLPReset cumulative --scsiLPResetPage 02h --volatile
-	SeaChest_Configure -d /dev/sg? --showSCSIMP 0Ah
-	SeaChest_Configure -d /dev/sg? --showSCSIMP 0Ah --showSCSIMPControl saved
-	SeaChest_Configure -d /dev/sg? --showSCSIMP 0Ah --showMPOutputMode classic
-	SeaChest_Configure -d /dev/sg? --scsiMPReset 3Fh-FFh
-	SeaChest_Configure -d /dev/sg? --scsiMPSave 3Fh-FFh
-	SeaChest_Configure -d /dev/sg? --scsiMPRestore 3Fh-FFh
-	SeaChest_Configure -d /dev/sg? --setSCSIMP 08:2:2:1=0
-	SeaChest_Configure -d /dev/sg? --setSCSIMP file=modePageToChange.txt
-	SeaChest_Configure -d /dev/sg? --provision 134217728
+	SeaChest_Configure -d /dev/sg<#> -i
+	SeaChest_Configure -d /dev/sg<#> --SATInfo
+	SeaChest_Configure -d /dev/sg<#> --llInfo
+	SeaChest_Configure -d /dev/sg<#> --phySpeed 2
+	SeaChest_Configure -d /dev/sg<#> --phySpeed 3 --sasPhy 1
+	SeaChest_Configure -d /dev/sg<#> --readLookAhead enable
+	SeaChest_Configure -d /dev/sg<#> --nvCache info
+	SeaChest_Configure -d /dev/sg<#> --writeCache disable
+	SeaChest_Configure -d /dev/sg<#> --sctWriteCache default
+	SeaChest_Configure -d /dev/sg<#> --sctWriteCacheReordering enable
+	SeaChest_Configure -d /dev/sg<#> --freeFall 0
+	SeaChest_Configure -d /dev/sg<#> --lowCurrentSpinup low
+	SeaChest_Configure -d /dev/sg<#> --puisFeature disable
+	SeaChest_Configure -d /dev/sg<#> --sscFeature enable
+	SeaChest_Configure -d /dev/sg<#> --readyLED info
+	SeaChest_Configure -d /dev/sg<#> --readyLED on
+	SeaChest_Configure -d /dev/sg<#> --sctReadTimer 5s
+	SeaChest_Configure -d /dev/sg<#> --sctWriteTimer 0
+	SeaChest_Configure -d /dev/sg<#> --scsiLPReset all --scsiLPResetPage 06h
+	SeaChest_Configure -d /dev/sg<#> --scsiLPReset cumulative --scsiLPResetPage 02h --volatile
+	SeaChest_Configure -d /dev/sg<#> --showSCSIMP 0Ah
+	SeaChest_Configure -d /dev/sg<#> --showSCSIMP 0Ah --showSCSIMPControl saved
+	SeaChest_Configure -d /dev/sg<#> --showSCSIMP 0Ah --showMPOutputMode classic
+	SeaChest_Configure -d /dev/sg<#> --scsiMPReset 3Fh-FFh
+	SeaChest_Configure -d /dev/sg<#> --scsiMPSave 3Fh-FFh
+	SeaChest_Configure -d /dev/sg<#> --scsiMPRestore 3Fh-FFh
+	SeaChest_Configure -d /dev/sg<#> --setSCSIMP 08:2:2:1=0
+	SeaChest_Configure -d /dev/sg<#> --setSCSIMP file=modePageToChange.txt
+	SeaChest_Configure -d /dev/sg<#> --provision 134217728
 
 Return codes
 ============
@@ -1028,10 +1041,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -1055,7 +1073,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -1550,7 +1568,10 @@ v2.0.2  16-Jun-2021  Minor USB compatibility improvements and more products adde
 v2.3.1  28-Feb-2023  Includes new --noBanner option and new fast discovery option
                      that can be used in situations where super critical performance
                      is required at a loss of information about a drive's capabilities.
-                     Help now has many more examples of the options in the tool.SeaChest_Erase                                             Revision: 01-Mar-2023
+                     Help now has many more examples of the options in the tool.
+v2.3.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+SeaChest_Erase                                             Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Erase - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -1632,9 +1653,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Erase - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Erase Version: 4.1.0-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_Erase Version: 4.1.0-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -1643,30 +1664,30 @@ Usage
 Examples
 ========
 	SeaChest_Erase --scan
-	SeaChest_Erase -d /dev/sg? -i
-	SeaChest_Erase -d /dev/sg? --SATInfo
-	SeaChest_Erase -d /dev/sg? --llInfo
-	SeaChest_Erase -d /dev/sg? --showEraseSupport
-	SeaChest_Erase -d /dev/sg? --performQuickestErase --poll
-	SeaChest_Erase -d /dev/sg? --overwrite 0
-	SeaChest_Erase -d /dev/sg? --overwrite 1000 --overwriteRange 2000
-	SeaChest_Erase -d /dev/sg? --overwrite 0 --hours 1
-	SeaChest_Erase -d /dev/sg? --overwrite 0 --pattern repeat:04ABCDEFh
-	SeaChest_Erase -d /dev/sg? --writeSame 0 --poll
-	SeaChest_Erase -d /dev/sg? --writeSame 1000 --writeSameRange 2000 --poll
-	SeaChest_Erase -d /dev/sg? --sanitize overwrite --poll
-	SeaChest_Erase -d /dev/sg? --sanitize overwrite --poll --pattern random
-	SeaChest_Erase -d /dev/sg? --sanitize cryptoerase --poll
-	SeaChest_Erase -d /dev/sg? --ataSecureErase enhanced
-	SeaChest_Erase -d /dev/sg? --ataSecureErase enhanced --ataSecPassword AutoATAWindowsString12345678901 --ataSecPassType user
-	SeaChest_Erase -d /dev/sg? --trim 0
-	SeaChest_Erase -d /dev/sg? --trim 1000 --trimRange 2000
-	SeaChest_Erase -d /dev/sg? --formatUnit current --poll
-	SeaChest_Erase -d /dev/sg? --formatUnit current --poll --pattern file:path/to/myFile.bin
-	SeaChest_Erase -d /dev/sg? --nvmFormat current --poll
-	SeaChest_Erase -d /dev/sg? --nvmFormat 4096 --poll
-	SeaChest_Erase -d /dev/sg? --nvmFormat current --poll --nvmFmtSecErase user
-	SeaChest_Erase -d /dev/sg? --nvmFormat current --poll --nvmFmtPI 1
+	SeaChest_Erase -d /dev/sg<#> -i
+	SeaChest_Erase -d /dev/sg<#> --SATInfo
+	SeaChest_Erase -d /dev/sg<#> --llInfo
+	SeaChest_Erase -d /dev/sg<#> --showEraseSupport
+	SeaChest_Erase -d /dev/sg<#> --performQuickestErase --poll
+	SeaChest_Erase -d /dev/sg<#> --overwrite 0
+	SeaChest_Erase -d /dev/sg<#> --overwrite 1000 --overwriteRange 2000
+	SeaChest_Erase -d /dev/sg<#> --overwrite 0 --hours 1
+	SeaChest_Erase -d /dev/sg<#> --overwrite 0 --pattern repeat:04ABCDEFh
+	SeaChest_Erase -d /dev/sg<#> --writeSame 0 --poll
+	SeaChest_Erase -d /dev/sg<#> --writeSame 1000 --writeSameRange 2000 --poll
+	SeaChest_Erase -d /dev/sg<#> --sanitize overwrite --poll
+	SeaChest_Erase -d /dev/sg<#> --sanitize overwrite --poll --pattern random
+	SeaChest_Erase -d /dev/sg<#> --sanitize cryptoerase --poll
+	SeaChest_Erase -d /dev/sg<#> --ataSecureErase enhanced
+	SeaChest_Erase -d /dev/sg<#> --ataSecureErase enhanced --ataSecPassword AutoATAWindowsString12345678901 --ataSecPassType user
+	SeaChest_Erase -d /dev/sg<#> --trim 0
+	SeaChest_Erase -d /dev/sg<#> --trim 1000 --trimRange 2000
+	SeaChest_Erase -d /dev/sg<#> --formatUnit current --poll
+	SeaChest_Erase -d /dev/sg<#> --formatUnit current --poll --pattern file:path/to/myFile.bin
+	SeaChest_Erase -d /dev/sg<#> --nvmFormat current --poll
+	SeaChest_Erase -d /dev/sg<#> --nvmFormat 4096 --poll
+	SeaChest_Erase -d /dev/sg<#> --nvmFormat current --poll --nvmFmtSecErase user
+	SeaChest_Erase -d /dev/sg<#> --nvmFormat current --poll --nvmFmtPI 1
 
 Return codes
 ============
@@ -1777,10 +1798,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	--displayLBA [LBA]
 		This option will read and display the contents of
@@ -1823,7 +1849,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -1943,8 +1969,8 @@ Data Destructive Commands
 		with overwriteRange or time options (hours, minutes
 		seconds) to erase a portion of the drive.
 
-	--overwriteRange [range]
-		Use with option with the overwrite option to
+	--overwriteRange [range in # of LBAs]
+		Use with the overwrite option (--overwrite) to
 		erase a range of LBAs on the selected drive.
 
 	--pattern [repeat:asciinospaces | random | increment:startValue | file:filename]
@@ -2062,10 +2088,10 @@ Data Destructive Commands
 		unmap operation on a drive at the provided LBA.
 		A range must also be provided with the range option.
 
-	--trimRange or --unmapRange [range]
+	--trimRange or --unmapRange [range in # of LBAs]
 		Use one of these options to specify a range to trim
 		or unmap on a drive. A starting point must be specified
-		with the --trim/--unmap option.
+		with the --trim/--unmapRange option.
 
 	--writeSame [starting LBA]
 		Enter a starting lba to begin a write same on to erase a range
@@ -2089,7 +2115,7 @@ Data Destructive Commands
 		      device, consider a different command such as format unit or
 		      sanitize overwrite to accomplish this.
 
-	--writeSameRange [range]
+	--writeSameRange [range in # of LBAs]
 		Specify a range to writesame to. Use this option with the
 		writeSame option in order to begin a write same operation.
 
@@ -2459,8 +2485,12 @@ v4.1.0  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      has also been pulled into the performQuickestErase option.
                      Fixed error in parsing --psid option causing it to report it was
                      always missing.
-                     
-SeaChest_Firmware                                          Revision: 01-Mar-2023
+v4.1.0  27-Mar-2023  opensea-operations library updated to fix to add
+                     workaround for overwrite not erasing some drives in Windows.
+                     opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+                        
+SeaChest_Firmware                                          Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Firmware - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -2524,9 +2554,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Firmware - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Firmware Version: 3.4.0-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_Firmware Version: 3.4.0-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -2535,18 +2565,18 @@ Usage
 Examples
 ========
 	SeaChest_Firmware --scan
-	SeaChest_Firmware -d /dev/sg? -i
-	SeaChest_Firmware -d /dev/sg? --SATInfo
-	SeaChest_Firmware -d /dev/sg? --llInfo
-	SeaChest_Firmware -d /dev/sg? --fwdlInfo
+	SeaChest_Firmware -d /dev/sg<#> -i
+	SeaChest_Firmware -d /dev/sg<#> --SATInfo
+	SeaChest_Firmware -d /dev/sg<#> --llInfo
+	SeaChest_Firmware -d /dev/sg<#> --fwdlInfo
 	Updating firmware:
-	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin
+	SeaChest_Firmware -d /dev/sg<#> --downloadFW file.bin
 	Updating firmware with deferred download and activating:
-	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin --downloadMode deferred --activateFW
+	SeaChest_Firmware -d /dev/sg<#> --downloadFW file.bin --downloadMode deferred --activateFW
 	Updating firmware and specifying a firmware slot (NVMe)
-	SeaChest_Firmware -d /dev/sg? --downloadFW file.bin --downloadMode deferred
+	SeaChest_Firmware -d /dev/sg<#> --downloadFW file.bin --downloadMode deferred
 	  +
-	SeaChest_Firmware -d /dev/sg? --activateFW --firmwareSlot 2
+	SeaChest_Firmware -d /dev/sg<#> --activateFW --firmwareSlot 2
 
 Return codes
 ============
@@ -2667,10 +2697,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -2694,7 +2729,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -3009,7 +3044,12 @@ v3.4.0  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      use segmented download. Also includes some options to override 
                      the default nvme firmware update behavior as needed in special
                      circumstances.
-                     SeaChest_Format                                            Revision: 01-Mar-2023
+v3.4.0  27-Mar-2023  opensea-operations library updated to add automatic retry to
+                     the automatic firmware update mode in some scenarios to workaround
+                     a drive bug.
+                     opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+SeaChest_Format                                            Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Format - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -3092,9 +3132,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Format - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Format Version: 3.0.0-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_Format Version: 3.0.0-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -3103,23 +3143,23 @@ Usage
 Examples
 ========
 	SeaChest_Format --scan
-	SeaChest_Format -d /dev/sg? -i
-	SeaChest_Format -d /dev/sg? --SATInfo
-	SeaChest_Format -d /dev/sg? --llInfo
-	SeaChest_Format -d /dev/sg? --showPhysicalElementStatus
-	SeaChest_Format -d /dev/sg? --removePhysicalElement 2
-	SeaChest_Format -d /dev/sg? --repopulateElements
-	SeaChest_Format -d /dev/sg? --showSupportedFormats
-	SeaChest_Format -d /dev/sg? --showFormatStatusLog
-	SeaChest_Format -d /dev/sg? --formatUnit current --poll
-	SeaChest_Format -d /dev/sg? --formatUnit current --poll --pattern file:path/to/myFile.bin
-	SeaChest_Format -d /dev/sg? --formatUnit 4096 --fastFormat 1 --poll
-	SeaChest_Format -d /dev/sg? --formatUnit current --poll --discardGList --disableCertification --disablePrimaryList
-	SeaChest_Format -d /dev/sg? --formatUnit current --protectionType 1 --poll
-	SeaChest_Format -d /dev/sg? --nvmFormat current --poll
-	SeaChest_Format -d /dev/sg? --nvmFormat 4096 --poll
-	SeaChest_Format -d /dev/sg? --nvmFormat current --poll --nvmFmtSecErase user
-	SeaChest_Format -d /dev/sg? --nvmFormat current --poll --nvmFmtPI 1
+	SeaChest_Format -d /dev/sg<#> -i
+	SeaChest_Format -d /dev/sg<#> --SATInfo
+	SeaChest_Format -d /dev/sg<#> --llInfo
+	SeaChest_Format -d /dev/sg<#> --showPhysicalElementStatus
+	SeaChest_Format -d /dev/sg<#> --removePhysicalElement 2
+	SeaChest_Format -d /dev/sg<#> --repopulateElements
+	SeaChest_Format -d /dev/sg<#> --showSupportedFormats
+	SeaChest_Format -d /dev/sg<#> --showFormatStatusLog
+	SeaChest_Format -d /dev/sg<#> --formatUnit current --poll
+	SeaChest_Format -d /dev/sg<#> --formatUnit current --poll --pattern file:path/to/myFile.bin
+	SeaChest_Format -d /dev/sg<#> --formatUnit 4096 --fastFormat 1 --poll
+	SeaChest_Format -d /dev/sg<#> --formatUnit current --poll --discardGList --disableCertification --disablePrimaryList
+	SeaChest_Format -d /dev/sg<#> --formatUnit current --protectionType 1 --poll
+	SeaChest_Format -d /dev/sg<#> --nvmFormat current --poll
+	SeaChest_Format -d /dev/sg<#> --nvmFormat 4096 --poll
+	SeaChest_Format -d /dev/sg<#> --nvmFormat current --poll --nvmFmtSecErase user
+	SeaChest_Format -d /dev/sg<#> --nvmFormat current --poll --nvmFmtPI 1
 
 Return codes
 ============
@@ -3238,10 +3278,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	--displayLBA [LBA]
 		This option will read and display the contents of
@@ -3284,7 +3329,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -3770,7 +3815,10 @@ v2.7.0  28-Feb-2023  New acceptance string for low-level format options that are
                      Fixed some big endian compatibility issues discovered on AIX.
                      Added capability for NVM format with user data erase in Windows as well
                      as crypto erase with format in Windows. Reworked conditions for issuing
-                     sanitize on NVMe devices so that it might work in Windows too.SeaChest_GenericTests                                      Revision: 01-Mar-2023
+                     sanitize on NVMe devices so that it might work in Windows too.
+v2.7.0  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+SeaChest_GenericTests                                      Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_GenericTests - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -3864,9 +3912,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_GenericTests - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_GenericTests Version: 2.2.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_GenericTests Version: 2.2.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -3875,19 +3923,19 @@ Usage
 Examples
 ========
 	SeaChest_GenericTests --scan
-	SeaChest_GenericTests -d /dev/sg? -i
-	SeaChest_GenericTests -d /dev/sg? --SATInfo
-	SeaChest_GenericTests -d /dev/sg? --llInfo
-	SeaChest_GenericTests -d /dev/sg? --shortGeneric
-	SeaChest_GenericTests -d /dev/sg? --longGeneric
-	SeaChest_GenericTests -d /dev/sg? --twoMinuteGeneric
-	SeaChest_GenericTests -d /dev/sg? --bufferTest
-	SeaChest_GenericTests -d /dev/sg? --userGenericStart 1000 --userGenericRange 65535
-	SeaChest_GenericTests -d /dev/sg? --longGeneric --genericMode verify
-	SeaChest_GenericTests -d /dev/sg? --randomTest --hours 1
-	SeaChest_GenericTests -d /dev/sg? --butterflyTest --minutes 15
-	SeaChest_GenericTests -d /dev/sg? --longGeneric --genericMode verify --repairAtEnd
-	SeaChest_GenericTests -d /dev/sg? --longGeneric --stopOnError read
+	SeaChest_GenericTests -d /dev/sg<#> -i
+	SeaChest_GenericTests -d /dev/sg<#> --SATInfo
+	SeaChest_GenericTests -d /dev/sg<#> --llInfo
+	SeaChest_GenericTests -d /dev/sg<#> --shortGeneric
+	SeaChest_GenericTests -d /dev/sg<#> --longGeneric
+	SeaChest_GenericTests -d /dev/sg<#> --twoMinuteGeneric
+	SeaChest_GenericTests -d /dev/sg<#> --bufferTest
+	SeaChest_GenericTests -d /dev/sg<#> --userGenericStart 1000 --userGenericRange 65535
+	SeaChest_GenericTests -d /dev/sg<#> --longGeneric --genericMode verify
+	SeaChest_GenericTests -d /dev/sg<#> --randomTest --hours 1
+	SeaChest_GenericTests -d /dev/sg<#> --butterflyTest --minutes 15
+	SeaChest_GenericTests -d /dev/sg<#> --longGeneric --genericMode verify --repairAtEnd
+	SeaChest_GenericTests -d /dev/sg<#> --longGeneric --stopOnError read
 
 Return codes
 ============
@@ -3998,10 +4046,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	--displayLBA [LBA]
 		This option will read and display the contents of
@@ -4031,7 +4084,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -4197,7 +4250,7 @@ A read at the Outer Diameter (OD) of the drive for 45
 		error, repair flags, and/or error limit flags to further
 		customize this test.
 
-	--userGenericRange [range]
+	--userGenericRange [range in # of LBAs]
 		Use this option to specify the range for a 
 		generic read test. See the --userGenericStart
 		help for additional information about using
@@ -4389,7 +4442,10 @@ v2.2.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      a crash or the tool to list no devices found.
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
-                     Fixed some big endian compatibility issues discovered on AIX.SeaChest_Info                                              Revision: 01-Mar-2023
+                     Fixed some big endian compatibility issues discovered on AIX.
+v2.2.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+SeaChest_Info                                              Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Info - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -4483,9 +4539,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Info - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Info Version: 2.3.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_Info Version: 2.3.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4495,13 +4551,13 @@ Usage
 Examples
 ========
 	SeaChest_Info --scan
-	SeaChest_Info -d /dev/sg? -i
-	SeaChest_Info -d /dev/sg? --SATInfo
-	SeaChest_Info -d /dev/sg? --llInfo
-	SeaChest_Info -d /dev/sg? --showConcurrentRanges
-	SeaChest_Info -d /dev/sg? --deviceStatistics
-	SeaChest_Info -d /dev/sg? --smartAttributes hybrid
-	SeaChest_Info -d /dev/sg? --showSCSIDefects g --defectFormat bfi
+	SeaChest_Info -d /dev/sg<#> -i
+	SeaChest_Info -d /dev/sg<#> --SATInfo
+	SeaChest_Info -d /dev/sg<#> --llInfo
+	SeaChest_Info -d /dev/sg<#> --showConcurrentRanges
+	SeaChest_Info -d /dev/sg<#> --deviceStatistics
+	SeaChest_Info -d /dev/sg<#> --smartAttributes hybrid
+	SeaChest_Info -d /dev/sg<#> --showSCSIDefects g --defectFormat bfi
 
 Return codes
 ============
@@ -4607,10 +4663,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -4634,7 +4695,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -4871,7 +4932,10 @@ v2.3.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      a crash or the tool to list no devices found.
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
-                     Fixed some big endian compatibility issues discovered on AIX.SeaChest_Lite                                              Revision: 01-Mar-2023
+                     Fixed some big endian compatibility issues discovered on AIX.
+v2.3.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+SeaChest_Lite                                              Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Lite - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -4941,9 +5005,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Lite - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Lite Version: 1.9.0-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_Lite Version: 1.9.0-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -4952,7 +5016,7 @@ Usage
 Examples
 ========
 	SeaChest_Lite --scan
-	SeaChest_Lite -d /dev/sg? -i
+	SeaChest_Lite -d /dev/sg<#> -i
 
 Utility Arguments
 =================
@@ -4961,7 +5025,7 @@ Utility Arguments
 		the device handle (target drive) on which to
 		perform an operation.
 
-		Example: -d /dev/sg? (case sensitive)
+		Example: -d /dev/sg<#> (case sensitive)
 
 	-i, --deviceInfo
 		Show information and features for the storage device. USB
@@ -5194,7 +5258,10 @@ v1.9.0  28-Feb-2023  New acceptance string for low-level format options that are
                      a crash or the tool to list no devices found.
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
-                     Fixed some big endian compatibility issues discovered on AIX.SeaChest_NVMe                                              Revision: 01-Mar-2023
+                     Fixed some big endian compatibility issues discovered on AIX.
+v1.9.0  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+SeaChest_NVMe                                              Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_NVMe - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -5266,9 +5333,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_NVMe - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_NVMe Version: 2.2.2-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_NVMe Version: 2.2.2-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -5277,29 +5344,29 @@ Usage
 Examples
 ========
 	SeaChest_NVMe --scan
-	SeaChest_NVMe -d /dev/sg? -i
-	SeaChest_NVMe -d /dev/sg? --SATInfo
-	SeaChest_NVMe -d /dev/sg? --llInfo
+	SeaChest_NVMe -d /dev/sg<#> -i
+	SeaChest_NVMe -d /dev/sg<#> --SATInfo
+	SeaChest_NVMe -d /dev/sg<#> --llInfo
 	Updating firmware:
-	SeaChest_NVMe -d /dev/sg? --downloadFW file.bin
+	SeaChest_NVMe -d /dev/sg<#> --downloadFW file.bin
 	Updating firmware with deferred download and activating:
-	SeaChest_NVMe -d /dev/sg? --downloadFW file.bin --downloadMode deferred --activateFW
+	SeaChest_NVMe -d /dev/sg<#> --downloadFW file.bin --downloadMode deferred --activateFW
 	Updating firmware and specifying a firmware slot (NVMe)
-	SeaChest_NVMe -d /dev/sg? --downloadFW file.bin --downloadMode deferred
+	SeaChest_NVMe -d /dev/sg<#> --downloadFW file.bin --downloadMode deferred
 	  +
-	SeaChest_NVMe -d /dev/sg? --activateFW --firmwareSlot 2
+	SeaChest_NVMe -d /dev/sg<#> --activateFW --firmwareSlot 2
 	Formatting an NVMe device:
-	SeaChest_NVMe -d /dev/sg? --showSupportedFormats
-	SeaChest_NVMe -d /dev/sg? --nvmFormat current --poll
-	SeaChest_NVMe -d /dev/sg? --nvmFormat 4096 --poll
-	SeaChest_NVMe -d /dev/sg? --nvmFormat current --poll --nvmFmtSecErase user
-	SeaChest_NVMe -d /dev/sg? --nvmFormat current --poll --nvmFmtPI 1
+	SeaChest_NVMe -d /dev/sg<#> --showSupportedFormats
+	SeaChest_NVMe -d /dev/sg<#> --nvmFormat current --poll
+	SeaChest_NVMe -d /dev/sg<#> --nvmFormat 4096 --poll
+	SeaChest_NVMe -d /dev/sg<#> --nvmFormat current --poll --nvmFmtSecErase user
+	SeaChest_NVMe -d /dev/sg<#> --nvmFormat current --poll --nvmFmtPI 1
 	Checking and changing power states:
-	SeaChest_NVMe -d /dev/sg? --checkPowerMode
-	SeaChest_NVMe -d /dev/sg? --transitionPowerState 1
+	SeaChest_NVMe -d /dev/sg<#> --checkPowerMode
+	SeaChest_NVMe -d /dev/sg<#> --transitionPowerState 1
 	Pulling the Telemetry log:
-	SeaChest_NVMe -d /dev/sg? --getTelemetry host
-	SeaChest_NVMe -d /dev/sg? --getTelemetry host, --telemetryDataArea 2 --logMode bin
+	SeaChest_NVMe -d /dev/sg<#> --getTelemetry host
+	SeaChest_NVMe -d /dev/sg<#> --getTelemetry host, --telemetryDataArea 2 --logMode bin
 Return codes
 ============
 	Generic/Common exit codes
@@ -5372,7 +5439,7 @@ Utility Arguments
 =================
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -5392,10 +5459,15 @@ Utility Arguments
 
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-i, --deviceInfo
 		Show information and features for the storage device
@@ -5724,7 +5796,10 @@ v2.2.2  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      Added --logLength option to specify an expected number of bytes
                      when reading an NVMe log since it is not possible to determine
                      this for all logs, especially vendor unique log pages.
-                     SeaChest_PowerControl                                      Revision: 01-Mar-2023
+v2.2.2  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+                     
+SeaChest_PowerControl                                      Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_PowerControl - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -5824,9 +5899,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_PowerControl - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 3.3.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_PowerControl Version: 3.3.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -5835,27 +5910,27 @@ Usage
 Examples
 ========
 	SeaChest_PowerControl --scan
-	SeaChest_PowerControl -d /dev/sg? -i
-	SeaChest_PowerControl -d /dev/sg? --SATInfo
-	SeaChest_PowerControl -d /dev/sg? --llInfo
-	SeaChest_PowerControl -d /dev/sg? --checkPowerMode
-	SeaChest_PowerControl -d /dev/sg? --showEPCSettings
-	SeaChest_PowerControl -d /dev/sg? --idle_a 5000
-	SeaChest_PowerControl -d /dev/sg? --idle_b disable
-	SeaChest_PowerControl -d /dev/sg? --transitionPower standby_z
-	SeaChest_PowerControl -d /dev/sg? --spinDown
-	SeaChest_PowerControl -d /dev/sg? --transitionPowerState 1
-	SeaChest_PowerControl -d /dev/sg? --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
-	SeaChest_PowerControl -d /dev/sg? --showPowerTelemetry
-	SeaChest_PowerControl -d /dev/sg? --requestPowerMeasurement 120 --powerMeasurementMode 12
-	SeaChest_PowerControl -d /dev/sg? --EPCfeature enable
-	SeaChest_PowerControl -d /dev/sg? --standby 15000
-	SeaChest_PowerControl -d /dev/sg? --idle 5000
-	SeaChest_PowerControl -d /dev/sg? --showAPMLevel
-	SeaChest_PowerControl -d /dev/sg? --setAPMLevel 128
-	SeaChest_PowerControl -d /dev/sg? --showPowerConsumption
-	SeaChest_PowerControl -d /dev/sg? --setPowerConsumption 12
-	SeaChest_PowerControl -d /dev/sg? --setPowerConsumption lowest
+	SeaChest_PowerControl -d /dev/sg<#> -i
+	SeaChest_PowerControl -d /dev/sg<#> --SATInfo
+	SeaChest_PowerControl -d /dev/sg<#> --llInfo
+	SeaChest_PowerControl -d /dev/sg<#> --checkPowerMode
+	SeaChest_PowerControl -d /dev/sg<#> --showEPCSettings
+	SeaChest_PowerControl -d /dev/sg<#> --idle_a 5000
+	SeaChest_PowerControl -d /dev/sg<#> --idle_b disable
+	SeaChest_PowerControl -d /dev/sg<#> --transitionPower standby_z
+	SeaChest_PowerControl -d /dev/sg<#> --spinDown
+	SeaChest_PowerControl -d /dev/sg<#> --transitionPowerState 1
+	SeaChest_PowerControl -d /dev/sg<#> --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
+	SeaChest_PowerControl -d /dev/sg<#> --showPowerTelemetry
+	SeaChest_PowerControl -d /dev/sg<#> --requestPowerMeasurement 120 --powerMeasurementMode 12
+	SeaChest_PowerControl -d /dev/sg<#> --EPCfeature enable
+	SeaChest_PowerControl -d /dev/sg<#> --standby 15000
+	SeaChest_PowerControl -d /dev/sg<#> --idle 5000
+	SeaChest_PowerControl -d /dev/sg<#> --showAPMLevel
+	SeaChest_PowerControl -d /dev/sg<#> --setAPMLevel 128
+	SeaChest_PowerControl -d /dev/sg<#> --showPowerConsumption
+	SeaChest_PowerControl -d /dev/sg<#> --setPowerConsumption 12
+	SeaChest_PowerControl -d /dev/sg<#> --setPowerConsumption lowest
 
 Return codes
 ============
@@ -5961,10 +6036,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -5988,7 +6068,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -6533,7 +6613,10 @@ v3.3.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      a crash or the tool to list no devices found.
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
-                     Fixed some big endian compatibility issues discovered on AIX.SeaChest_Security                                          Revision: 01-Mar-2023
+                     Fixed some big endian compatibility issues discovered on AIX.
+v3.3.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+SeaChest_Security                                          Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Security - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -6601,9 +6684,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Security - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Security Version: 3.2.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_Security Version: 3.2.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -6613,13 +6696,13 @@ Usage
 Examples
 ========
 	SeaChest_Security --scan
-	SeaChest_Security -d /dev/sg? -i
-	SeaChest_Security -d /dev/sg? --SATInfo
-	SeaChest_Security -d /dev/sg? --llInfo
-	SeaChest_Security -d /dev/sg? --ataSecurityInfo
-	SeaChest_Security -d /dev/sg? --ataSecureErase enhanced
-	SeaChest_Security -d /dev/sg? --ataSecureErase enhanced --ataSecPassword AutoATAWindowsString12345678901 --ataSecPassType user
-	SeaChest_Security -d /dev/sg? --disableATASecPW --ataSecPassword AutoATAWindowsString12345678901 --ataSecPassType user
+	SeaChest_Security -d /dev/sg<#> -i
+	SeaChest_Security -d /dev/sg<#> --SATInfo
+	SeaChest_Security -d /dev/sg<#> --llInfo
+	SeaChest_Security -d /dev/sg<#> --ataSecurityInfo
+	SeaChest_Security -d /dev/sg<#> --ataSecureErase enhanced
+	SeaChest_Security -d /dev/sg<#> --ataSecureErase enhanced --ataSecPassword AutoATAWindowsString12345678901 --ataSecPassType user
+	SeaChest_Security -d /dev/sg<#> --disableATASecPW --ataSecPassword AutoATAWindowsString12345678901 --ataSecPassType user
 
 Return codes
 ============
@@ -6725,10 +6808,15 @@ Utility arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	--displayLBA [LBA]
 		This option will read and display the contents of
@@ -6758,7 +6846,7 @@ Utility arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -7152,7 +7240,10 @@ v3.2.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      Added date of manufacture info to the -i output when available.
                      Fixed some big endian compatibility issues discovered on AIX.
                      Fixed a bug that caused this to display a different tool's help.
-SeaChest_SMART                                             Revision: 01-Mar-2023
+v3.2.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+
+SeaChest_SMART                                             Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_SMART - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -7261,9 +7352,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_SMART - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_SMART Version: 2.3.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_SMART Version: 2.3.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -7272,29 +7363,29 @@ Usage
 Examples
 ========
 	SeaChest_SMART --scan
-	SeaChest_SMART -d /dev/sg? -i
-	SeaChest_SMART -d /dev/sg? --SATInfo
-	SeaChest_SMART -d /dev/sg? --llInfo
-	SeaChest_SMART -d /dev/sg? --smartCheck
-	SeaChest_SMART -d /dev/sg? --shortDST --captive
-	SeaChest_SMART -d /dev/sg? --conveyanceDST --poll
-	SeaChest_SMART -d /dev/sg? --longDST --poll
-	SeaChest_SMART -d /dev/sg? --idd short
-	SeaChest_SMART -d /dev/sg? --idd long --captive
-	SeaChest_SMART -d /dev/sg? --abortDST
-	SeaChest_SMART -d /dev/sg? --showDSTLog
-	SeaChest_SMART -d /dev/sg? --smartAttributes hybrid
-	SeaChest_SMART -d /dev/sg? --showNvmeHealth
-	SeaChest_SMART -d /dev/sg? --deviceStatistics
-	SeaChest_SMART -d /dev/sg? --smartFeature enable
-	SeaChest_SMART -d /dev/sg? --setMRIE 6
-	SeaChest_SMART -d /dev/sg? --smartInfo
-	SeaChest_SMART -d /dev/sg? --smartAttributeAutosave disable
-	SeaChest_SMART -d /dev/sg? --smartAutoOffline enable
-	SeaChest_SMART -d /dev/sg? --showSMARTErrorLog comprehensive
-	SeaChest_SMART -d /dev/sg? --showSMARTErrorLog summary --smartErrorLogFormat raw
-	SeaChest_SMART -d /dev/sg? --showSCSIDefects g --defectFormat bfi
-	SeaChest_SMART -d /dev/sg? --dstAndClean --errorLimit 40
+	SeaChest_SMART -d /dev/sg<#> -i
+	SeaChest_SMART -d /dev/sg<#> --SATInfo
+	SeaChest_SMART -d /dev/sg<#> --llInfo
+	SeaChest_SMART -d /dev/sg<#> --smartCheck
+	SeaChest_SMART -d /dev/sg<#> --shortDST --captive
+	SeaChest_SMART -d /dev/sg<#> --conveyanceDST --poll
+	SeaChest_SMART -d /dev/sg<#> --longDST --poll
+	SeaChest_SMART -d /dev/sg<#> --idd short
+	SeaChest_SMART -d /dev/sg<#> --idd long --captive
+	SeaChest_SMART -d /dev/sg<#> --abortDST
+	SeaChest_SMART -d /dev/sg<#> --showDSTLog
+	SeaChest_SMART -d /dev/sg<#> --smartAttributes hybrid
+	SeaChest_SMART -d /dev/sg<#> --showNvmeHealth
+	SeaChest_SMART -d /dev/sg<#> --deviceStatistics
+	SeaChest_SMART -d /dev/sg<#> --smartFeature enable
+	SeaChest_SMART -d /dev/sg<#> --setMRIE 6
+	SeaChest_SMART -d /dev/sg<#> --smartInfo
+	SeaChest_SMART -d /dev/sg<#> --smartAttributeAutosave disable
+	SeaChest_SMART -d /dev/sg<#> --smartAutoOffline enable
+	SeaChest_SMART -d /dev/sg<#> --showSMARTErrorLog comprehensive
+	SeaChest_SMART -d /dev/sg<#> --showSMARTErrorLog summary --smartErrorLogFormat raw
+	SeaChest_SMART -d /dev/sg<#> --showSCSIDefects g --defectFormat bfi
+	SeaChest_SMART -d /dev/sg<#> --dstAndClean --errorLimit 40
 
 Return codes
 ============
@@ -7405,10 +7496,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -7445,7 +7541,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -7889,7 +7985,13 @@ v2.3.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      SFF-8035i since definitions on mandatory and optional requirements
                      have changed a bit over time.
                      Fixed a bug when listing SCSI defects that would cause it to crash
-                     instead of outputting information.================
+                     instead of outputting information.
+v2.3.1  27-Mar-2023  opensea-operations library updated to fix hybrid smart attribute
+                     counters output. Also added note about DST log display order and
+                     fixed attribute 198 name for Seagate HDDs.
+                     opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+================
 Tool Usage Hints
 ================
 See Sample Output examples below.

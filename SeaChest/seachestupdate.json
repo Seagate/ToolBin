@@ -4,7 +4,7 @@
          {
             "name":"SeaChest_Basics",
             "version":"3.5.2",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Basics/v3.5.2/Windows/",
                "32bit":"not_available_at_this_time",
@@ -19,7 +19,7 @@
          {
             "name":"SeaChest_Configure",
             "version":"2.3.1",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Configure/v2.3.1/Windows/",
                "32bit":"not_available_at_this_time",
@@ -34,7 +34,7 @@
          {
             "name":"SeaChest_Erase",
             "version":"4.1.0",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Erase/v4.1.0/Windows/",
                "32bit":"not_available_at_this_time",
@@ -49,7 +49,7 @@
          {
             "name":"SeaChest_Firmware",
             "version":"3.4.0",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Firmware/v3.4.0/Windows/",
                "32bit":"not_available_at_this_time",
@@ -64,7 +64,7 @@
          {
             "name":"SeaChest_Format",
             "version":"3.0.0",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Format/v3.0.0/Windows/",
                "32bit":"not_available_at_this_time",
@@ -79,7 +79,7 @@
          {
             "name":"SeaChest_GenericTests",
             "version":"2.2.1",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"GenericTests/v2.2.1/Windows/",
                "32bit":"not_available_at_this_time",
@@ -94,7 +94,7 @@
          {
             "name":"SeaChest_Info",
             "version":"2.3.1",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Info/v2.3.1/Windows/",
                "32bit":"not_available_at_this_time.exe",
@@ -109,7 +109,7 @@
          {
             "name":"SeaChest_Lite",
             "version":"1.9.0",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Lite/v1.9.0/Windows/",
                "32bit":"not_available_at_this_time",
@@ -124,7 +124,7 @@
          {
             "name":"SeaChest_NVMe",
             "version":"2.2.2",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"NVMe/v2.2.2/Windows/",
                "32bit":"not_available_at_this_time",
@@ -139,7 +139,7 @@
          {
             "name":"SeaChest_PowerControl",
             "version":"3.3.1",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"PowerControl/v3.3.1/Windows/",
                "32bit":"not_available_at_this_time",
@@ -154,7 +154,7 @@
          {
             "name":"SeaChest_Reservations",
             "version":"0.2.1",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Reservations/v0.2.1/Windows/",
                "32bit":"not_available_at_this_time",
@@ -169,7 +169,7 @@
          {
             "name":"SeaChest_Security",
             "version":"3.2.1",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"Security/v3.2.1/Windows/",
                "32bit":"not_available_at_this_time",
@@ -184,7 +184,7 @@
          {
             "name":"SeaChest_SMART",
             "version":"2.3.1",
-            "date":"Mar-01-2023",
+            "date":"Mar-27-2023",
             "win":{
                "app_path":"SMART/v2.3.1/Windows/",
                "32bit":"not_available_at_this_time",
@@ -197,7 +197,7 @@
             }
          },
          {
-            "touch_date":"2023-03-06"
+            "touch_date":"2023-04-06"
          },
          {
             "git_path":"https://raw.githubusercontent.com/Seagate/ToolBin/master/SeaChest/"

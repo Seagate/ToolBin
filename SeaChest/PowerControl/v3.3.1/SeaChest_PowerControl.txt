@@ -1,4 +1,4 @@
-SeaChest_PowerControl                                      Revision: 01-Mar-2023
+SeaChest_PowerControl                                      Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_PowerControl - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -98,9 +98,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_PowerControl - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_PowerControl Version: 3.3.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_PowerControl Version: 3.3.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -109,27 +109,27 @@ Usage
 Examples
 ========
 	SeaChest_PowerControl --scan
-	SeaChest_PowerControl -d /dev/sg? -i
-	SeaChest_PowerControl -d /dev/sg? --SATInfo
-	SeaChest_PowerControl -d /dev/sg? --llInfo
-	SeaChest_PowerControl -d /dev/sg? --checkPowerMode
-	SeaChest_PowerControl -d /dev/sg? --showEPCSettings
-	SeaChest_PowerControl -d /dev/sg? --idle_a 5000
-	SeaChest_PowerControl -d /dev/sg? --idle_b disable
-	SeaChest_PowerControl -d /dev/sg? --transitionPower standby_z
-	SeaChest_PowerControl -d /dev/sg? --spinDown
-	SeaChest_PowerControl -d /dev/sg? --transitionPowerState 1
-	SeaChest_PowerControl -d /dev/sg? --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
-	SeaChest_PowerControl -d /dev/sg? --showPowerTelemetry
-	SeaChest_PowerControl -d /dev/sg? --requestPowerMeasurement 120 --powerMeasurementMode 12
-	SeaChest_PowerControl -d /dev/sg? --EPCfeature enable
-	SeaChest_PowerControl -d /dev/sg? --standby 15000
-	SeaChest_PowerControl -d /dev/sg? --idle 5000
-	SeaChest_PowerControl -d /dev/sg? --showAPMLevel
-	SeaChest_PowerControl -d /dev/sg? --setAPMLevel 128
-	SeaChest_PowerControl -d /dev/sg? --showPowerConsumption
-	SeaChest_PowerControl -d /dev/sg? --setPowerConsumption 12
-	SeaChest_PowerControl -d /dev/sg? --setPowerConsumption lowest
+	SeaChest_PowerControl -d /dev/sg<#> -i
+	SeaChest_PowerControl -d /dev/sg<#> --SATInfo
+	SeaChest_PowerControl -d /dev/sg<#> --llInfo
+	SeaChest_PowerControl -d /dev/sg<#> --checkPowerMode
+	SeaChest_PowerControl -d /dev/sg<#> --showEPCSettings
+	SeaChest_PowerControl -d /dev/sg<#> --idle_a 5000
+	SeaChest_PowerControl -d /dev/sg<#> --idle_b disable
+	SeaChest_PowerControl -d /dev/sg<#> --transitionPower standby_z
+	SeaChest_PowerControl -d /dev/sg<#> --spinDown
+	SeaChest_PowerControl -d /dev/sg<#> --transitionPowerState 1
+	SeaChest_PowerControl -d /dev/sg<#> --idle_a 5000 --standby_z 30000 --idle_b enable --idle_c disable
+	SeaChest_PowerControl -d /dev/sg<#> --showPowerTelemetry
+	SeaChest_PowerControl -d /dev/sg<#> --requestPowerMeasurement 120 --powerMeasurementMode 12
+	SeaChest_PowerControl -d /dev/sg<#> --EPCfeature enable
+	SeaChest_PowerControl -d /dev/sg<#> --standby 15000
+	SeaChest_PowerControl -d /dev/sg<#> --idle 5000
+	SeaChest_PowerControl -d /dev/sg<#> --showAPMLevel
+	SeaChest_PowerControl -d /dev/sg<#> --setAPMLevel 128
+	SeaChest_PowerControl -d /dev/sg<#> --showPowerConsumption
+	SeaChest_PowerControl -d /dev/sg<#> --setPowerConsumption 12
+	SeaChest_PowerControl -d /dev/sg<#> --setPowerConsumption lowest
 
 Return codes
 ============
@@ -235,10 +235,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -262,7 +267,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -1401,7 +1406,10 @@ v3.3.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      a crash or the tool to list no devices found.
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
-                     Fixed some big endian compatibility issues discovered on AIX.=======================================
+                     Fixed some big endian compatibility issues discovered on AIX.
+v3.3.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface

@@ -1,4 +1,4 @@
-SeaChest_Configure                                         Revision: 01-Mar-2023
+SeaChest_Configure                                         Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Configure - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -67,9 +67,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Configure - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Configure Version: 2.3.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_Configure Version: 2.3.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -79,35 +79,35 @@ Usage
 Examples
 ========
 	SeaChest_Configure --scan
-	SeaChest_Configure -d /dev/sg? -i
-	SeaChest_Configure -d /dev/sg? --SATInfo
-	SeaChest_Configure -d /dev/sg? --llInfo
-	SeaChest_Configure -d /dev/sg? --phySpeed 2
-	SeaChest_Configure -d /dev/sg? --phySpeed 3 --sasPhy 1
-	SeaChest_Configure -d /dev/sg? --readLookAhead enable
-	SeaChest_Configure -d /dev/sg? --nvCache info
-	SeaChest_Configure -d /dev/sg? --writeCache disable
-	SeaChest_Configure -d /dev/sg? --sctWriteCache default
-	SeaChest_Configure -d /dev/sg? --sctWriteCacheReordering enable
-	SeaChest_Configure -d /dev/sg? --freeFall 0
-	SeaChest_Configure -d /dev/sg? --lowCurrentSpinup low
-	SeaChest_Configure -d /dev/sg? --puisFeature disable
-	SeaChest_Configure -d /dev/sg? --sscFeature enable
-	SeaChest_Configure -d /dev/sg? --readyLED info
-	SeaChest_Configure -d /dev/sg? --readyLED on
-	SeaChest_Configure -d /dev/sg? --sctReadTimer 5s
-	SeaChest_Configure -d /dev/sg? --sctWriteTimer 0
-	SeaChest_Configure -d /dev/sg? --scsiLPReset all --scsiLPResetPage 06h
-	SeaChest_Configure -d /dev/sg? --scsiLPReset cumulative --scsiLPResetPage 02h --volatile
-	SeaChest_Configure -d /dev/sg? --showSCSIMP 0Ah
-	SeaChest_Configure -d /dev/sg? --showSCSIMP 0Ah --showSCSIMPControl saved
-	SeaChest_Configure -d /dev/sg? --showSCSIMP 0Ah --showMPOutputMode classic
-	SeaChest_Configure -d /dev/sg? --scsiMPReset 3Fh-FFh
-	SeaChest_Configure -d /dev/sg? --scsiMPSave 3Fh-FFh
-	SeaChest_Configure -d /dev/sg? --scsiMPRestore 3Fh-FFh
-	SeaChest_Configure -d /dev/sg? --setSCSIMP 08:2:2:1=0
-	SeaChest_Configure -d /dev/sg? --setSCSIMP file=modePageToChange.txt
-	SeaChest_Configure -d /dev/sg? --provision 134217728
+	SeaChest_Configure -d /dev/sg<#> -i
+	SeaChest_Configure -d /dev/sg<#> --SATInfo
+	SeaChest_Configure -d /dev/sg<#> --llInfo
+	SeaChest_Configure -d /dev/sg<#> --phySpeed 2
+	SeaChest_Configure -d /dev/sg<#> --phySpeed 3 --sasPhy 1
+	SeaChest_Configure -d /dev/sg<#> --readLookAhead enable
+	SeaChest_Configure -d /dev/sg<#> --nvCache info
+	SeaChest_Configure -d /dev/sg<#> --writeCache disable
+	SeaChest_Configure -d /dev/sg<#> --sctWriteCache default
+	SeaChest_Configure -d /dev/sg<#> --sctWriteCacheReordering enable
+	SeaChest_Configure -d /dev/sg<#> --freeFall 0
+	SeaChest_Configure -d /dev/sg<#> --lowCurrentSpinup low
+	SeaChest_Configure -d /dev/sg<#> --puisFeature disable
+	SeaChest_Configure -d /dev/sg<#> --sscFeature enable
+	SeaChest_Configure -d /dev/sg<#> --readyLED info
+	SeaChest_Configure -d /dev/sg<#> --readyLED on
+	SeaChest_Configure -d /dev/sg<#> --sctReadTimer 5s
+	SeaChest_Configure -d /dev/sg<#> --sctWriteTimer 0
+	SeaChest_Configure -d /dev/sg<#> --scsiLPReset all --scsiLPResetPage 06h
+	SeaChest_Configure -d /dev/sg<#> --scsiLPReset cumulative --scsiLPResetPage 02h --volatile
+	SeaChest_Configure -d /dev/sg<#> --showSCSIMP 0Ah
+	SeaChest_Configure -d /dev/sg<#> --showSCSIMP 0Ah --showSCSIMPControl saved
+	SeaChest_Configure -d /dev/sg<#> --showSCSIMP 0Ah --showMPOutputMode classic
+	SeaChest_Configure -d /dev/sg<#> --scsiMPReset 3Fh-FFh
+	SeaChest_Configure -d /dev/sg<#> --scsiMPSave 3Fh-FFh
+	SeaChest_Configure -d /dev/sg<#> --scsiMPRestore 3Fh-FFh
+	SeaChest_Configure -d /dev/sg<#> --setSCSIMP 08:2:2:1=0
+	SeaChest_Configure -d /dev/sg<#> --setSCSIMP file=modePageToChange.txt
+	SeaChest_Configure -d /dev/sg<#> --provision 134217728
 
 Return codes
 ============
@@ -213,10 +213,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -240,7 +245,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -1285,7 +1290,10 @@ v2.0.2  16-Jun-2021  Minor USB compatibility improvements and more products adde
 v2.3.1  28-Feb-2023  Includes new --noBanner option and new fast discovery option
                      that can be used in situations where super critical performance
                      is required at a loss of information about a drive's capabilities.
-                     Help now has many more examples of the options in the tool.=======================================
+                     Help now has many more examples of the options in the tool.
+v2.3.1  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface

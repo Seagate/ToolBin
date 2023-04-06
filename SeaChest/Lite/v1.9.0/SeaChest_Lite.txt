@@ -1,4 +1,4 @@
-SeaChest_Lite                                              Revision: 01-Mar-2023
+SeaChest_Lite                                              Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_Lite - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -68,9 +68,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_Lite - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_Lite Version: 1.9.0-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:58 2023	User: tyler
+ SeaChest_Lite Version: 1.9.0-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -79,7 +79,7 @@ Usage
 Examples
 ========
 	SeaChest_Lite --scan
-	SeaChest_Lite -d /dev/sg? -i
+	SeaChest_Lite -d /dev/sg<#> -i
 
 Utility Arguments
 =================
@@ -88,7 +88,7 @@ Utility Arguments
 		the device handle (target drive) on which to
 		perform an operation.
 
-		Example: -d /dev/sg? (case sensitive)
+		Example: -d /dev/sg<#> (case sensitive)
 
 	-i, --deviceInfo
 		Show information and features for the storage device. USB
@@ -889,7 +889,10 @@ v1.9.0  28-Feb-2023  New acceptance string for low-level format options that are
                      a crash or the tool to list no devices found.
                      Added option to dump low-level info to assist with debugging.
                      Added date of manufacture info to the -i output when available.
-                     Fixed some big endian compatibility issues discovered on AIX.=======================================
+                     Fixed some big endian compatibility issues discovered on AIX.
+v1.9.0  27-Mar-2023  opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface

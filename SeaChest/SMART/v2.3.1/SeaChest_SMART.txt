@@ -1,4 +1,4 @@
-SeaChest_SMART                                             Revision: 01-Mar-2023
+SeaChest_SMART                                             Revision: 29-Mar-2023
 ===============================================================================
  SeaChest_SMART - Seagate drive utilities
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
@@ -107,9 +107,9 @@ Examples - Windows
 ==========================================================================================
  SeaChest_SMART - Seagate drive utilities - NVMe Enabled
  Copyright (c) 2014-2023 Seagate Technology LLC and/or its Affiliates, All Rights Reserved
- SeaChest_SMART Version: 2.3.1-4_0_4 X86_64
- Build Date: Mar  1 2023
- Today: Wed Mar  1 17:01:59 2023	User: tyler
+ SeaChest_SMART Version: 2.3.1-4_1_1 X86_64
+ Build Date: Mar 29 2023
+ Today: Wed Mar 29 12:24:46 2023	User: tyler
 ==========================================================================================
 Usage
 =====
@@ -118,29 +118,29 @@ Usage
 Examples
 ========
 	SeaChest_SMART --scan
-	SeaChest_SMART -d /dev/sg? -i
-	SeaChest_SMART -d /dev/sg? --SATInfo
-	SeaChest_SMART -d /dev/sg? --llInfo
-	SeaChest_SMART -d /dev/sg? --smartCheck
-	SeaChest_SMART -d /dev/sg? --shortDST --captive
-	SeaChest_SMART -d /dev/sg? --conveyanceDST --poll
-	SeaChest_SMART -d /dev/sg? --longDST --poll
-	SeaChest_SMART -d /dev/sg? --idd short
-	SeaChest_SMART -d /dev/sg? --idd long --captive
-	SeaChest_SMART -d /dev/sg? --abortDST
-	SeaChest_SMART -d /dev/sg? --showDSTLog
-	SeaChest_SMART -d /dev/sg? --smartAttributes hybrid
-	SeaChest_SMART -d /dev/sg? --showNvmeHealth
-	SeaChest_SMART -d /dev/sg? --deviceStatistics
-	SeaChest_SMART -d /dev/sg? --smartFeature enable
-	SeaChest_SMART -d /dev/sg? --setMRIE 6
-	SeaChest_SMART -d /dev/sg? --smartInfo
-	SeaChest_SMART -d /dev/sg? --smartAttributeAutosave disable
-	SeaChest_SMART -d /dev/sg? --smartAutoOffline enable
-	SeaChest_SMART -d /dev/sg? --showSMARTErrorLog comprehensive
-	SeaChest_SMART -d /dev/sg? --showSMARTErrorLog summary --smartErrorLogFormat raw
-	SeaChest_SMART -d /dev/sg? --showSCSIDefects g --defectFormat bfi
-	SeaChest_SMART -d /dev/sg? --dstAndClean --errorLimit 40
+	SeaChest_SMART -d /dev/sg<#> -i
+	SeaChest_SMART -d /dev/sg<#> --SATInfo
+	SeaChest_SMART -d /dev/sg<#> --llInfo
+	SeaChest_SMART -d /dev/sg<#> --smartCheck
+	SeaChest_SMART -d /dev/sg<#> --shortDST --captive
+	SeaChest_SMART -d /dev/sg<#> --conveyanceDST --poll
+	SeaChest_SMART -d /dev/sg<#> --longDST --poll
+	SeaChest_SMART -d /dev/sg<#> --idd short
+	SeaChest_SMART -d /dev/sg<#> --idd long --captive
+	SeaChest_SMART -d /dev/sg<#> --abortDST
+	SeaChest_SMART -d /dev/sg<#> --showDSTLog
+	SeaChest_SMART -d /dev/sg<#> --smartAttributes hybrid
+	SeaChest_SMART -d /dev/sg<#> --showNvmeHealth
+	SeaChest_SMART -d /dev/sg<#> --deviceStatistics
+	SeaChest_SMART -d /dev/sg<#> --smartFeature enable
+	SeaChest_SMART -d /dev/sg<#> --setMRIE 6
+	SeaChest_SMART -d /dev/sg<#> --smartInfo
+	SeaChest_SMART -d /dev/sg<#> --smartAttributeAutosave disable
+	SeaChest_SMART -d /dev/sg<#> --smartAutoOffline enable
+	SeaChest_SMART -d /dev/sg<#> --showSMARTErrorLog comprehensive
+	SeaChest_SMART -d /dev/sg<#> --showSMARTErrorLog summary --smartErrorLogFormat raw
+	SeaChest_SMART -d /dev/sg<#> --showSCSIDefects g --defectFormat bfi
+	SeaChest_SMART -d /dev/sg<#> --dstAndClean --errorLimit 40
 
 Return codes
 ============
@@ -251,10 +251,15 @@ Utility Arguments
 =================
 	-d, --device [deviceHandle | all]
 		Use this option with most commands to specify the device
-		handle on which to perform an operation. Example: /dev/sg?
+		handle on which to perform an operation. Example: /dev/sg<#>
 		To run across all devices detected in the system, use the
 		"all" argument instead of a device handle.
 		Example: -d all
+		NOTE: The "all" argument is handled by running the
+		      specified options on each drive detected in the
+		      OS sequentially. For parallel operations, please
+		      use a script opening a separate instance for each
+		      device handle.
 
 	-F, --scanFlags [option list]
 		Use this option to control the output from scan with the
@@ -291,7 +296,7 @@ Utility Arguments
 
 	-s, --scan
 		Scan the system and list all storage devices with logical
-		/dev/sg? assignments. Shows model, serial and firmware
+		/dev/sg<#> assignments. Shows model, serial and firmware
 		numbers.  If your device is not listed on a scan  immediately
 		after booting, then wait 10 seconds and run it again.
 
@@ -1334,7 +1339,13 @@ v2.3.1  28-Feb-2023  Includes new --noBanner option and new fast discovery optio
                      SFF-8035i since definitions on mandatory and optional requirements
                      have changed a bit over time.
                      Fixed a bug when listing SCSI defects that would cause it to crash
-                     instead of outputting information.=======================================
+                     instead of outputting information.
+v2.3.1  27-Mar-2023  opensea-operations library updated to fix hybrid smart attribute
+                     counters output. Also added note about DST log display order and
+                     fixed attribute 198 name for Seagate HDDs.
+                     opensea-transport updated to fix CSMI scan duplicating devices 
+                     found in certain scenarios.
+=======================================
 About SeaChest Command Line Diagnostics
 =======================================
 Seagate offers both graphical user interface (GUI) and command line interface
